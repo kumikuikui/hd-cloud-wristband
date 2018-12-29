@@ -1,0 +1,31 @@
+spring.datasource:
+  url: jdbc:mysql://mysql:3306/ydp_ad?characterEncoding=UTF-8&allowMultiQueries=true
+  username: ydp_admin
+  password: ydp@#654321
+  type: com.zaxxer.hikari.HikariDataSource
+  driver-class-name: com.mysql.jdbc.Driver
+  maxActive: 20
+  initialSize: 1
+  maxWait: 60000
+  minIdle: 1
+  hikari:
+   connectionTimeout: 30000
+   idleTimeout: 600000
+   maxLifetime: 1800000
+   maximumPoolSize: 50
+   minimumIdle: 10
+   validationTimeout: 5000
+rsa.json:
+   publicKey: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDGEqgxPcplChqP4syeQi8ngRZ24vSQHtCntMn536xx2pbm8Pa2FicBNLizVPuCZwWfKxmIrLU6FbWijNH5Oi3xbWAwh+IikDLp5HzT7S1Famw0ge/TCSxp8O3kVcpknrMGvBZlgRlXSiHfdU63rERXGHURJgGumNrQ03rjDXh96QIDAQAB
+   privateKey: MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAMYSqDE9ymUKGo/izJ5CLyeBFnbi9JAe0Ke0yfnfrHHalubw9rYWJwE0uLNU+4JnBZ8rGYistToVtaKM0fk6LfFtYDCH4iKQMunkfNPtLUVqbDSB79MJLGnw7eRVymSeswa8FmWBGVdKId91TresRFcYdREmAa6Y2tDTeuMNeH3pAgMBAAECgYAKpo4st6nebQCopAVkrSJj+Wj/04xbA40st2f067YWGS7sFCDwAZjvU6pq2jL7/BYtTN/+nWrRSMGPkArqX9qAfK0I5ljR/JX/T1tZrSgdpuiL6M7YOzhZNKLs9cxc8wIXyL4swntSEcnEBDgasmC2zMsaf5QmimN/TBb9TFd2UQJBAORHaW1FDWeV2yuinRqt/9TrGfjDC09IdH4VDDowG/kc+4BNZbBEECmp71rMtUIqqdZDF5uoAV6BiCxiVnsEMR8CQQDeIDfku0dTns78p5QPrdnZoXGccZJmc8OwJlAQduyUOJCxnizOyxFKCIPdL9q3JYFFizvjXZdAAyZk9+dIAsf3AkEAnukvdQea2z8wwWGEKCx0aY34GHn+h4SSw6p3RpJzBqmsUpaOcXQQJFDN9NGIZLU6YZN2/b6opVdaqjsSpLQ4VQJAaMRreH/4qXErEbH8vNRz/xkNnAtZUOdjMi8v7kQZW+O+I3iGi9btxax0fZv3nhCbg3Cjg57+GtwhfNgMh0OAiwJAG4SyyQkzd9lTM1BzjjVy2FIoMVSvcIV/FYRSnQAO9+xU4kua0wU/q2WZgn0gRl3MFqKaypHTb/GfKlT9ce5TOQ==
+   aesKey: fe96b52790adaefe
+obo.json:
+   ip: http://172.31.23.95:8545
+   contractAddress: '0xc98d2181a532ed4038f41c9fd34a1e9d6ebed655'
+   mainWalletAddress: '0x2df4af34bfc05bdf449b7a263c8178dc4b815d70'
+   password: 'YDP@123456789'
+   path: /tmp/
+   pubKey: '12638904603932461405367950950636338290117055348878197940265446149122830341194993000132138546820334996664911924720775399409492606603000426437007043222353935'
+   privateKey: '105861429955134913151851580106361904261929172946891941558210557335864092106590'   
+task.json:
+   summary: 0 */20 * * * ?
