@@ -3,6 +3,7 @@ package com.coins.cloud.service.impl;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -48,7 +49,8 @@ public class UserNricServiceImpl implements UserNricService {
 			// 遍历读取的CSV文件
 			UserNricVo userNricVo = null;
 		    for (int row = 0; row < csvFileList.size(); row++) {
-		        String nric = csvFileList.get(row)[0];
+		        BigDecimal bd = new BigDecimal(csvFileList.get(row)[0]);
+		        String nric = String.valueOf(Long.parseLong(bd.toPlainString()));
 				String name = csvFileList.get(row)[1];
 				String oldIc = csvFileList.get(row)[2];
 				String birthDate = csvFileList.get(row)[3];
@@ -187,4 +189,16 @@ public class UserNricServiceImpl implements UserNricService {
 		return userNricDao.updateUserNric(userNricVo);
 	}
 
+	public static void main(String[] args) {
+		String str = "8.80124E+11";
+		if(str.contains("E")){
+			int i = str.indexOf("E");
+			String a = str.substring(0, i);
+			String b = str.substring(i + 1, str.length());
+			
+		}
+		BigDecimal bd = new BigDecimal(str);
+		
+		System.out.println(Long.parseLong(bd.toPlainString()));
+	}
 }
