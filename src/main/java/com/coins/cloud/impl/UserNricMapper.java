@@ -108,4 +108,7 @@ public interface UserNricMapper {
 			@Result(property = "indicatorStatus",column = "user_base_indicator_status", javaType = String.class, jdbcType = JdbcType.VARCHAR)
 	})
 	public List<UserNricBo> getAllUserNric();
+	
+	@Select("SELECT COUNT(1) FROM user_user_base_sb WHERE active_flag = 'y' AND user_base_nric = #{nric}")
+	public int existByNricNum(@Param("nric") String nric);
 }

@@ -46,4 +46,9 @@ public class UserNricDaoMybatisImpl implements UserNricDao {
 		return userNricMapper.getAllUserNric();
 	}
 
+	@Override
+	public int existByNricNum(String nric) {
+		return userNricMapper.existByNricNum(nric);
+	}
+
 }

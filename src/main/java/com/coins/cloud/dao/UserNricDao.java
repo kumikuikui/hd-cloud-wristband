@@ -62,4 +62,13 @@ public interface UserNricDao {
 	* @return List<UserNricBo>
 	 */
 	public List<UserNricBo> getAllUserNric();
+	
+	/**
+	 * 
+	* @Title: existByNricNum 
+	* @param: 
+	* @Description: 验证身份证号是否存在
+	* @return int
+	 */
+	public int existByNricNum(String nric);
 }

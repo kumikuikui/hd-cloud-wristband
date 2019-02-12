@@ -72,8 +72,11 @@ public class UserNricServiceImpl implements UserNricService {
 						.citizenship(citizenship).issueDate(issueDate)
 						.emorigin(emorigin).handcode(handcode).mimageUrl(mimageUrl)
 						.cameraUrl(cameraUrl).indicatorStatus(indicatorStatus).build();
-				userNricDao.save(userNricVo);
-				total++;
+				int existResu = userNricDao.existByNricNum(nric);
+				if(existResu == 0){//不存在，才新增
+					userNricDao.save(userNricVo);
+					total++;
+				}
 		    }
 		} catch (IOException e) {
 			e.printStackTrace();
