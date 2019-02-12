@@ -298,12 +298,8 @@ app.controller("RecordController",  ['utils','$q','$scope','Upload', function(ut
 	        url: '/nric/batch',
 	        fileFormDataName: 'uploadFile',
 	        file: file
-	    }).progress(function (evt) {
-	        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-	        console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
 	    }).success(function (data, status, headers, config) {
 	    	var total=data.data.total;
-	    	alert("一共上传"+total+"条记录,上传成功"+total+"条记录");
 	    	window.location.reload();
 	    	console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
 	    }).error(function (data, status, headers, config) {
