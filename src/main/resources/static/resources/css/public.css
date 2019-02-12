@@ -1,0 +1,132 @@
+.body{ margin-top: 51px; }
+
+a,a:hover{
+  color: #f4d5a4;
+}
+
+input{
+  outline: none;
+}
+/*  sidebar begin  */
+.bs-docs-sidenav a {
+  color: #666;
+  border-bottom: solid 1px rgba(255,255,255,.3);
+}
+
+.bs-docs-sidenav .open a{
+  color: #f8f8f8;
+  background-color: rgb(209, 194, 225);
+  padding-left: 10px;
+}
+
+.bs-docs-sidenav a:focus,
+.bs-docs-sidenav a:hover,
+.bs-docs-sidenav .nav a:hover,
+.bs-docs-sidenav .nav a:focus
+{
+  background-color:#ececec;
+}
+.nav > li.select{background-color:#fff;}
+.bs-docs-sidenav .nav .open a:hover,
+.bs-docs-sidenav .nav .open a{
+  background-color: #f4d5a4;
+  border-color: none;
+  border-bottom-color: #f4d5a4;
+}
+
+/*  层级关系  */
+.bs-docs-sidenav .nav{
+  background-color: #f7f7f7;
+}
+
+.bs-docs-sidenav .nav .nav{
+  background-color: #323b4e;
+}
+
+.bs-docs-sidenav .nav .nav .nav{
+  background-color: #1d2536;
+}
+/*  /层级关系  */
+
+.bs-docs-sidenav .toggle .nav{
+  display:none;
+}
+.bs-docs-sidenav .toggle.open .nav{
+  display:block;
+}
+
+
+.bs-docs-sidenav .fa{
+  padding-right:0.2em;
+}
+
+.bs-docs-sidenav .fa.space{
+  margin-right: 1em;
+}
+
+/*  sidebar end  */
+
+
+
+@media (min-width: 768px){
+  .navbar-header{
+    float: none;
+  }
+}
+.nickname{
+  float: right;
+  padding: 14px;
+  color: #fff;
+}
+.nickname i{
+  font-style: normal;
+}
+.table{
+  margin-top:20px;
+}
+
+.ter{
+  text-align: right;
+}
+.title{
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+.fr{
+  float: right;
+}
+.red{
+  color: red;
+}
+.disable{
+  background: #e6e6e6;
+  padding-left: 10px;
+}
+.textwidth{
+  width:150px;
+  word-break: break-all;
+}
+.margint15{
+  margin-top:15px;
+}
+.modal-body{
+  padding:0;
+}
+.navbar-inverse{background: #794422;}
+.table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td{
+  vertical-align: middle;
+}
+.navbar-inverse .navbar-brand{color:#face9d;}
+
+/*#btnPrimary .btn-primary {
+    color: #fff;
+    background-color: #F0C37E;
+    border-color: #F0C37E;
+    outline: none;
+}
+#btnPrimary .btn-primary:hover{
+    background-color: #f4d5a4;
+    border-color: #f4d5a4;
+}*/
+.pagination > li > a, .pagination > li > span{color: #F0C37E;}
+.pagination > li > a:hover, .pagination > li > span:hover, .pagination > li > a:focus, .pagination > li > span:focus{color: #f4d5a4;}

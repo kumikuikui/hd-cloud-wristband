@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>上传身份信息</title>
+<!-- META -->
+<meta name="description" content="">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- /META -->
+<!-- FONTS -->
+<link rel="stylesheet" href="resources/css/font-awesome.min.css">
+<!-- /FONTS -->
+<!-- CSS -->
+<link rel="stylesheet" href="resources/css/bootstrap.css">
+<link rel="stylesheet" href="resources/css/public.css">
+
+	<style>
+.showoutLayer {
+	display: block;
+}
+.btn-userSelect {
+    color: #333;
+    background-color: #ececec;
+    border-color: #f3f3f3;
+}
+
+</style>
+<script type="text/javascript">
+    function createXHR(){
+        if(typeof XMLHttpRequest != 'undefined'){ //ie7+
+          return new XMLHttpRequest();
+        }else if(typeof ActiveXObject != 'undefined'){
+          if(typeof arguments.callee.activeXString != 'string'){
+            var versions = ['MSXML2.XMLHttp.6.0', 'MSXML2.XMLHttp.3.0',
+            'MSXML2.XMLHttp'], i, len;
+            for(i=0,len=versions.length; i<len; i++){
+              try{
+                new ActiveXObject(versions[i]);
+                arguments.callee.activeXString = versions[i];
+                break;
+              }catch(ex){
+
+              }
+            }
+          }
+          return new ActiveXOBject(argument.callee.activeXString); //当前函数的属性 activeXString
+        }else{
+          throw new Error('no xhr object available.');
+        }
+   }
+    
+  </script>
+</head>
+<body>
+	<div class="body container-fluid"
+		ng-controller="RecordController as vm">
+
+		<!-- 正文 -->
+		<div class="container-fluid left-border col-sm-12">
+			<div class="navbar-form" role="search" ng-form name="giftForm" style="background:#f2f2f2;padding:15px;">
+		        <div class="form-group">
+		        	<button class="btn btn-primary" data-toggle="modal" data-target="#myModalImport">NRIC IMPORT</button>
+		        </div>
+	        </div>
+		
+			<table class="table table-bordered margint15">
+				<thead>
+					<tr>
+						<th>Num</th>
+						<th>NRIC</th>
+						<th>Name</th>
+						<th>Date Of Birth</th>
+						<th>Place Of Birth</th>
+						<th>Gender</th>
+						<th>Address 1</th>
+						<th>Address 2</th>
+						<th>Address 3</th>
+						<th>Postcode</th>
+						<th>City</th>
+						<th>State</th>
+						<th>Race</th>
+						<th>Religion</th>
+						<th>Citizenship</th>
+						<th>Oper</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="list in vm.payRecordList">
+						<td>{{$index+1+(vm.currentPage-1)*10}}</td>
+						<td ng-bind="list.nric"></td>
+						<td ng-bind="list.name"></td>
+						<td ng-bind="list.birthDate"></td>
+						<td ng-bind="list.birthPlace"></td>
+						<td ng-bind="list.gender"></td>
+						<td ng-bind="list.address1"></td>
+						<td ng-bind="list.address2"></td>
+						<td ng-bind="list.address3"></td>
+						<td ng-bind="list.postcode"></td>
+						<td ng-bind="list.city"></td>
+						<td ng-bind="list.state"></td>
+						<td ng-bind="list.race"></td>
+						<td ng-bind="list.religion"></td>
+						<td ng-bind="list.citizenship"></td>
+						<td><a href="/nricinfo.html?id={{list.userId}}">View</a></td>
+					</tr>
+					<tr>
+						<th colspan="16">Total<span style="text-decoration: underline;"
+							ng-bind="vm.totalItems"></span>Records
+						</th>
+					</tr>
+				</tbody>
+			</table>
+      <div class="text-center">
+        <div class="pagination pagination4"></div>
+      </div>
+			</div>
+			
+			<!-- 会员导入 -->
+		<div class="modal fade" id="myModalImport" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabelImport">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" id="myModalLabel">IMPORT INCR</h4>
+					</div>
+					<div class="modal-body">
+						<div id="import_step1">
+							<div class="container-fluid">
+								<div class="form-horizontal">
+									<div class="form-group">
+										<label class="col-sm-2 control-label"><span
+											style="color: red;">*</span>Select the file：</label>
+										<div class="col-sm-4">
+											<div class="col-xs-5 col-md-5">
+												<input class="input-sm" ng-model="vm.excel"
+													disabled="disabled"> <input type="button"
+													class="button" ngf-select
+													ngf-change="vm.uploadExcel($file)" value="IMPORT INCR" />
+											</div>
+										</div>
+									</div>
+									<hr />
+									<!-- <div class="form-group">
+										<div class="col-sm-offset-2 col-sm-10">
+											<a target="_href" href="/INCR.xlsx" class="btn btn-userSelect">身份导入模板下载</a>
+										</div>
+									</div> -->
+								</div>
+							</div>
+						</div> 
+ 
+					</div>
+
+				</div>
+			</div>
+		</div>
+		</div>
+		<!-- /正文 -->
+		
+		
+	<script src="/resources/js/jquery.js"></script>	
+	<script src="/resources/angular/angular.js"></script>
+	<script src="/resources/js/cms.auth.js"></script>
+  
+  <!-- main code -->
+  <script src="resources/js/page.js"></script>
+
+	<script src="resources/js/bootstrap.js"></script>
+	<script src="resources/js/ng-file-upload/ng-file-upload-shim.js"></script>
+	<script src="resources/js/ng-file-upload/ng-file-upload.js"></script>
+	
+	<script>
+
+var app = angular.module('myApp', ['ngFileUpload','cms.auth']);
+
+app.factory('utils', ['$http', '$q','$filter',function($http, $q, $filter){
+    return {
+    	recordList: recordList
+    }
+
+    function recordList(query){
+        var deferred = $q.defer();
+        var defaultQuery = {},q = {};
+        angular.forEach(defaultQuery, function(item, key){
+          q[key] = query[key] == undefined ? defaultQuery[key] : query[key];
+        }) 
+        $http.get('/nric/list', {params: q})
+        .then(function(response){  // 请求成功
+          if(response.data.result){
+            deferred.resolve({
+              totalItems:response.data.data.totalItems,
+              data:response.data.data.list
+            });
+          } else{
+            deferred.resolve([])
+          }
+        })
+        .catch(function(response){
+          deferred.reject('网络故障');
+        });
+
+        return deferred.promise;
+      }
+}]);
+
+app.controller("RecordController",  ['utils','$q','$scope','Upload', function(utils,$q,$scope,Upload){
+    var vm = this;
+    vm.nav = 3;
+    vm.recordList = recordList;
+    vm.page = 1;
+    vm.uploadExcel=uploadExcel;
+     
+    //当前页面
+    vm.currentPage=1;
+    vm.numPages = [];
+	
+
+    //上一页
+    vm.btnPrevious = function(){
+    	if(vm.currentPage <= 1){ return false;} //如果是第一页，不执行操作
+    	vm.getNewList(vm.currentPage - 1);
+    }
+
+    //下一页
+    vm.btnNext = function(){
+    	if(vm.currentPage >= vm.numPages.length){ return false;} //如果是最后一页，不执行操作
+    	vm.getNewList(vm.currentPage + 1);
+    }
+    
+    //对应页面
+    vm.getNewList = function(currentPage){ //获取分页数据
+      if(!vm.currentPage){ return false;}else{ vm.currentPage = currentPage;}
+      utils.recordList({
+    	  page:vm.currentPage,
+      }).then(function(response){
+    	  vm.totalItems = response.totalItems;
+    	  vm.numPages  = (function(){
+              var i = Math.ceil(response.totalItems / 10);
+              var arr = [];
+              for(var j = 0; j < i; j++){
+            	  arr[j] = {a: j+1};
+              }
+              return arr;
+            }());
+          vm.payRecordList = response.data;
+          $('.pagination4').bsPagination({
+              totalRecord: response.totalItems,
+              recordPerPage: 10,
+              pagePerBatch: 10,
+              showFirstPage: true,
+              showLastPage: true,
+              firstPageWord: '首页',
+              lastPageWord: '末页',
+              currentPage: currentPage
+          });
+      })
+    }
+
+    recordList({page:1});
+
+    function recordList(query){
+      utils.recordList(query).then(function(response){
+    	  vm.totalItems = response.totalItems;
+    	  vm.numPages  = (function(){
+              var i = Math.ceil(response.totalItems / 10);
+              var arr = [];
+              for(var j = 0; j < i; j++){
+            	  arr[j] = {a: j+1};
+              }
+              return arr;
+            }());
+          vm.payRecordList = response.data;
+          $('.pagination4').bsPagination({
+              totalRecord: response.totalItems,
+              recordPerPage: 10,
+              pagePerBatch: 10,
+              showFirstPage: true,
+              showLastPage: true,
+              firstPageWord: '首页',
+              lastPageWord: '末页',
+              currentPage: 1,
+            });
+      }).catch(function(){
+      });
+    }
+    $('.pagination4').on('click', 'a', function () {
+        vm.getNewList($(this).data('page'));
+    });
+  
+    
+    function uploadExcel(file){ 
+		Upload.upload({
+	        url: '/nric/batch',
+	        fileFormDataName: 'uploadFile',
+	        file: file
+	    }).progress(function (evt) {
+	        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+	        console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+	    }).success(function (data, status, headers, config) {
+	    	var total=data.data.total;
+	    	alert("一共上传"+total+"条记录,上传成功"+total+"条记录");
+	    	window.location.reload();
+	    	console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+	    }).error(function (data, status, headers, config) {
+	    	alert("上传失败");
+	        console.log('error status: ' + status);
+	    })
+	}
+    
+}]);
+</script>
+</body>
+</html>

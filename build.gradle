@@ -152,6 +152,9 @@ dependencies {
     	 exclude group: 'com.fasterxml.jackson.core'
     }
     
+    compile "org.apache.poi:poi:3.12"
+    compile "org.apache.poi:poi-ooxml:3.12"
+    compile "net.sourceforge.javacsv:javacsv:2.0"
     compile "cloopen:httpclient:1.0"
     
     compile "com.google.code.gson:gson:2.4"

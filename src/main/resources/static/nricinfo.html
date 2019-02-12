@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>身份信息详情</title>
+<!-- META -->
+<meta name="description" content="">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- /META -->
+<!-- FONTS -->
+<link rel="stylesheet" href="resources/css/font-awesome.min.css">
+<!-- /FONTS -->
+<!-- CSS -->
+<link rel="stylesheet" href="resources/css/bootstrap.css">
+<link rel="stylesheet" href="resources/css/public.css">
+<script type="text/javascript">
+    function createXHR(){
+        if(typeof XMLHttpRequest != 'undefined'){ //ie7+
+          return new XMLHttpRequest();
+        }else if(typeof ActiveXObject != 'undefined'){
+          if(typeof arguments.callee.activeXString != 'string'){
+            var versions = ['MSXML2.XMLHttp.6.0', 'MSXML2.XMLHttp.3.0',
+            'MSXML2.XMLHttp'], i, len;
+            for(i=0,len=versions.length; i<len; i++){
+              try{
+                new ActiveXObject(versions[i]);
+                arguments.callee.activeXString = versions[i];
+                break;
+              }catch(ex){
+
+              }
+            }
+          }
+          return new ActiveXOBject(argument.callee.activeXString); //当前函数的属性 activeXString
+        }else{
+          throw new Error('no xhr object available.');
+        }
+   }
+    
+  </script>
+</head>
+<body>
+<style>
+.showoutLayer {
+	display: block;
+}
+</style>
+	<div class="body container-fluid"
+		ng-controller="ActualController as vm">
+		<!-- 正文 -->
+		<div class="container-fluid left-border col-sm-10" >
+		<input type="hidden" id="fileUploadDomain" />
+		<h4 class="title">详情</h4>
+		<div class="form-horizontal col-sm-6" >
+			<input type="hidden"  ng-model="vm.userId" >
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">NRIC：</label>
+					<div class="col-sm-9">
+						<input class="form-control"  ng-model="vm.nric" >
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">Name：</label>
+					<div class="col-sm-9">
+						<input class="form-control"  ng-model="vm.name" >
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">Old IC：</label>
+					<div class="col-sm-9">
+						<input class="form-control"  ng-model="vm.oldIc" >
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">Date Of Birth：</label>
+					<div class="col-sm-9">
+						<p class="form-control-static" ng-bind="vm.birthDate"></p>
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">Place Of Birth：</label>
+					<div class="col-sm-9">
+						<input class="form-control"  ng-model="vm.birthPlace" >
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">Gender：</label>
+					<div class="col-sm-9">
+						<input class="form-control"  ng-model="vm.gender" >
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">Address 1：</label>
+					<div class="col-sm-9">
+						<input class="form-control"  ng-model="vm.address1" >
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">Address 2：</label>
+					<div class="col-sm-9">
+						<input class="form-control"  ng-model="vm.address2" >
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">Address 3：</label>
+					<div class="col-sm-9">
+						<input class="form-control"  ng-model="vm.address3" >
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">Postcode：</label>
+					<div class="col-sm-9">
+						<input class="form-control-static" ng-model="vm.postcode">
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">City：</label>
+					<div class="col-sm-9">
+						<input class="form-control-static" ng-model="vm.city">
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">State：</label>
+					<div class="col-sm-9">
+						<input class="form-control-static" ng-model="vm.state">
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">Race：</label>
+					<div class="col-sm-9">
+						<input class="form-control-static" ng-model="vm.race">
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">Religion：</label>
+					<div class="col-sm-9">
+						<input class="form-control-static" ng-model="vm.religion">
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">Citizenship：</label>
+					<div class="col-sm-9">
+						<input class="form-control-static" ng-model="vm.citizenship">
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">Date Of Issuance：</label>
+					<div class="col-sm-9">
+						<p class="form-control-static" ng-bind="vm.issueDate"></p>
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">E.M.Origin：</label>
+					<div class="col-sm-9">
+						<input class="form-control-static" ng-model="vm.emorigin">
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">Hand Code：</label>
+					<div class="col-sm-9">
+						<input class="form-control-static" ng-model="vm.handcode">
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">MyKad Image path：</label>
+					<div class="col-sm-9">
+						<p class="form-control-static">
+							<input class="form-control-static" ng-model="vm.mimageUrl">
+							<img alt="MyKad Image" src="{{vm.mimageUrl}}" style="width:500px; border:1px solid #ccc">
+						</p>
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">Camera Path：</label>
+					<div class="col-sm-9">
+						<p class="form-control-static">
+							<input class="form-control-static" ng-model="vm.cameraUrl">
+							<img alt="Camera" src="{{vm.cameraUrl}}" style="width:500px; border:1px solid #ccc">
+						</p>
+					</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-3 control-label">Indicator Status：</label>
+					<div class="col-sm-9">
+						<input class="form-control"  ng-model="vm.indicatorStatus" >
+					</div>
+			</div>
+			<div class="form-group">
+					<div class="col-sm-2">
+						<input type="button" class="btn btn-default" value="Update" ng-click="vm.actual(vm);" />
+					</div>
+					<div class="col-sm-1">
+						<a class="btn btn-default" href="/uploadnric.html">Return</a>
+					</div>
+			</div>
+		</div>
+	</div>
+		<!-- /正文 -->
+
+	</div>
+	<script src="/resources/angular/angular.js"></script>
+	<script src="/resources/js/cms.auth.js"></script>
+<script>
+var app = angular.module('myApp', ['cms.auth']);
+app.factory('utils', ['$http', '$q','$filter',function($http, $q, $filter){
+    return {
+    	initDetail: initDetail,
+    	actual: actual
+    }
+    
+    function initDetail() {
+		var deferred = $q.defer();
+		var id = 0;
+		location.search.replace(/.*id=(\d+).*/, function (m, $1) {
+			id = parseInt($1);
+		});
+		$http.get('/nric/detail?id=' + id)
+			.then(function (response) {  // 请求成功
+				if (response.data.result) {
+					deferred.resolve(response.data.data);
+				} else {
+					deferred.resolve([])
+				}
+			})
+			.catch(function (response) {
+				deferred.reject(lang.sl.Network_fault || '网络故障');
+			});
+
+		return deferred.promise;
+	}
+    
+    function actual(query){
+	    var deferred = $q.defer();
+	    var defaultQuery = {
+	    		userId: 0,
+	    		nric: '',
+	    		name: '',
+	    		oldIc: '',
+	    		birthPlace: '',
+	    		gender: '',
+	    		address1: '',
+	    		address2: '',
+	    		address3: '',
+	    		postcode: '',
+	    		city: '',
+	    		state: '',
+	    		race: '',
+	    		religion: '',
+	    		citizenship: '',
+	    		emorigin: '',
+	    		handcode: '',
+	    		indicatorStatus: ''
+         },q = {};
+         angular.forEach(defaultQuery, function(item, key){
+           q[key] = query[key] == undefined ? defaultQuery[key] : query[key];
+         })
+		$http.put('/nric/modify', q)
+		   .then(function(response){  // 请求成功
+		     if(response.data.result){
+		       deferred.resolve(response.data);
+		     } else{
+		       deferred.reject(response.data)
+		     }
+		   })
+		   .catch(function(response){
+		     deferred.reject('网络故障');
+		   });
+	   return deferred.promise;
+	}
+}]);
+
+app.controller("ActualController", ['utils','$q',function(utils,$q){
+    var vm = this;
+    vm.nav = 2;
+    vm.actual = actual;
+    vm.initDetail = initDetail;
+    
+    var id = 0;
+	location.search.replace(/.*id=(\d+).*/, function (m, $1) {
+		id = parseInt($1);
+	});
+	if(id>0){
+		initDetail();
+	}
+	
+	function initDetail() {
+		var deferred = $q.defer();
+		utils.initDetail().then(function (data) {
+			deferred.resolve(data);
+			angular.forEach(data, function (item, key) {
+				vm[key] = item;
+			})
+		}).catch(function () {
+			deferred.reject();
+		});
+		return deferred.promise;
+	}
+    
+    
+    function actual(egc){
+	    utils.actual(egc).then(function(data){
+	       alert(data.msg);
+	       window.location.href="/uploadnric.html";
+	    }).catch(function(reason){
+	      alert('提交失败，服务器提示：'+ '\n' + reason.msg);
+	    });
+	}
+}]);
+</script>
+</body>
+</html>
