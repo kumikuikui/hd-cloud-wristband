@@ -60,7 +60,7 @@
 		<div class="container-fluid left-border col-sm-12">
 			<div class="navbar-form" role="search" ng-form name="giftForm" style="background:#f2f2f2;padding:15px;">
 		        <div class="form-group">
-		        	<button class="btn btn-primary" data-toggle="modal" data-target="#myModalImport">NRIC IMPORT</button>
+		        	<button class="btn btn-primary" data-toggle="modal" data-target="#myModalImport">NRIC INFO IMPORT</button>
 		        </div>
 	        </div>
 		
@@ -105,8 +105,8 @@
 						<td><a href="/nricinfo.html?id={{list.userId}}">View</a></td>
 					</tr>
 					<tr>
-						<th colspan="16">Total<span style="text-decoration: underline;"
-							ng-bind="vm.totalItems"></span>Records
+						<th colspan="16">Total <span style="text-decoration: underline;"
+							ng-bind="vm.totalItems"></span> Records
 						</th>
 					</tr>
 				</tbody>
@@ -126,7 +126,7 @@
 							aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
-						<h4 class="modal-title" id="myModalLabel">IMPORT INCR</h4>
+						<h4 class="modal-title" id="myModalLabel">IMPORT INCR INFO</h4>
 					</div>
 					<div class="modal-body">
 						<div id="import_step1">
@@ -140,7 +140,7 @@
 												<input class="input-sm" ng-model="vm.excel"
 													disabled="disabled"> <input type="button"
 													class="button" ngf-select
-													ngf-change="vm.uploadExcel($file)" value="IMPORT INCR" />
+													ngf-change="vm.uploadExcel($file)" value="IMPORT INCR INFO" />
 											</div>
 										</div>
 									</div>
