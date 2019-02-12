@@ -1,24 +1,16 @@
 package com.coins.cloud.service.impl;
 
-import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Service;
 
 import com.coins.cloud.bo.UserNricBo;
@@ -26,6 +18,7 @@ import com.coins.cloud.dao.UserNricDao;
 import com.coins.cloud.service.UserNricService;
 import com.coins.cloud.vo.UserNricVo;
 import com.csvreader.CsvReader;
+import com.hlb.cloud.util.CSVUtils;
 
 @Service
 public class UserNricServiceImpl implements UserNricService {
@@ -98,87 +91,6 @@ public class UserNricServiceImpl implements UserNricService {
 		return userNricDao.getTotal();
 	}
 
-	
-	/**
-	 * 
-	 * @Title: importExcle
-	 * @param:
-	 * @Description: 读取解析excel内容
-	 * @return List<Shop>
-	 */
-	private int importExcle(InputStream inputStream) {
-		int total=0;
-		try {
-			Workbook workbook = new HSSFWorkbook(inputStream);
-			//Workbook workbook = WorkbookFactory.create(inputStream);
-			UserNricVo userNricVo = null;
-			for (int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++) {
-				Sheet hssfSheet = workbook.getSheetAt(numSheet);
-				if (hssfSheet == null) {
-					continue;
-				}
-				for (int rowNum = 1; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
-					Row hssfRow = hssfSheet.getRow(rowNum);
-					Cell nric = hssfRow.getCell(0);
-					Cell name = hssfRow.getCell(1);
-					Cell oldIc = hssfRow.getCell(2);
-					Cell birthDate = hssfRow.getCell(3);
-					Cell birthPlace = hssfRow.getCell(4);
-					Cell gender = hssfRow.getCell(5);
-					Cell address1 = hssfRow.getCell(6);
-					Cell address2 = hssfRow.getCell(7);
-					Cell address3 = hssfRow.getCell(8);
-					Cell postcode = hssfRow.getCell(9);
-					Cell city = hssfRow.getCell(10);
-					Cell state = hssfRow.getCell(11);
-					Cell race = hssfRow.getCell(12);
-					Cell religion = hssfRow.getCell(13);
-					Cell citizenship = hssfRow.getCell(14);
-					Cell issueDate = hssfRow.getCell(15);
-					Cell emorigin = hssfRow.getCell(16);
-					Cell handcode = hssfRow.getCell(17);
-					Cell mimageUrl = hssfRow.getCell(18);
-					Cell cameraUrl = hssfRow.getCell(19);
-					Cell indicatorStatus = hssfRow.getCell(20);
-					userNricVo = UserNricVo.builder().nric(getValue(nric)).name(getValue(name))
-							.oldIc(getValue(oldIc)).birthDate(getValue(birthDate)).birthPlace(getValue(birthPlace))
-							.gender(getValue(gender)).address1(getValue(address1)).address2(getValue(address2))
-							.address3(getValue(address3)).postcode(getValue(postcode)).city(getValue(city))
-							.state(getValue(state)).race(getValue(race)).religion(getValue(religion))
-							.citizenship(getValue(citizenship)).issueDate(getValue(issueDate))
-							.emorigin(getValue(emorigin)).handcode(getValue(handcode)).mimageUrl(getValue(mimageUrl))
-							.cameraUrl(getValue(cameraUrl)).indicatorStatus(getValue(indicatorStatus)).build();
-					userNricDao.save(userNricVo);
-					total++;
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return total;
-	}
-	
-	private static String getValue(Cell no) {
-		if(no==null) {
-			return "";
-		}
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		if (no.getCellType() == no.CELL_TYPE_BOOLEAN) {
-			return String.valueOf(no.getBooleanCellValue());
-		} else if (no.getCellType() == no.CELL_TYPE_NUMERIC) {
-			if (DateUtil.isCellDateFormatted(no)) {// 日期格式
-				Date theDate = no.getDateCellValue();
-				return simpleDateFormat.format(theDate);
-			} else {
-				DecimalFormat df = new DecimalFormat("0");
-				String whatYourWant = df.format(no.getNumericCellValue());
-				return whatYourWant;// String.valueOf((int)no.getNumericCellValue());
-			}
-		} else {
-			return String.valueOf(no.getStringCellValue());
-		}
-	}
-
 	@Override
 	public UserNricBo getUserNricDetail(int id) {
 		return userNricDao.getUserNricDetail(id);
@@ -189,16 +101,37 @@ public class UserNricServiceImpl implements UserNricService {
 		return userNricDao.updateUserNric(userNricVo);
 	}
 
-	public static void main(String[] args) {
-		String str = "8.80124E+11";
-		if(str.contains("E")){
-			int i = str.indexOf("E");
-			String a = str.substring(0, i);
-			String b = str.substring(i + 1, str.length());
-			
+	@Override
+	public File reportUserNric(String csvFilePath, String fileName) {
+		List<UserNricBo> userNricList = userNricDao.getAllUserNric();
+		try {
+			LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+			map.put("nric", "NRIC");
+			map.put("name", "Name");
+			map.put("oldIc", "Old IC");
+			map.put("birthDate", "Date Of Birth");
+			map.put("birthPlace", "Place Of Birth");
+			map.put("gender", "Gender");
+			map.put("address1", "Address 1");
+			map.put("address2", "Address 2");
+			map.put("address3", "Address 3");
+			map.put("postcode", "Postcode");
+			map.put("city", "City");
+			map.put("state", "State");
+			map.put("race", "Race");
+			map.put("religion", "Religion");
+			map.put("citizenship", "Citizenship");
+			map.put("issueDate", "Date Of Issuance");
+			map.put("emorigin", "E.M. Origin");
+			map.put("handcode", "Hand Code");
+			map.put("mimageUrl", "MyKad Image path");
+			map.put("cameraUrl", "Camera Path");
+			map.put("indicatorStatus", "Indicator Status");
+			File file = CSVUtils.createCSVFile(userNricList, map, csvFilePath, fileName);
+			return file;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		BigDecimal bd = new BigDecimal(str);
-		
-		System.out.println(Long.parseLong(bd.toPlainString()));
+		return null;
 	}
 }

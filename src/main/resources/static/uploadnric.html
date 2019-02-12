@@ -61,6 +61,8 @@
 			<div class="navbar-form" role="search" ng-form name="giftForm" style="background:#f2f2f2;padding:15px;">
 		        <div class="form-group">
 		        	<button class="btn btn-primary" data-toggle="modal" data-target="#myModalImport">NRIC INFO IMPORT</button>
+		       		<button type="button" class="btn btn-primary" id="enterListener"
+						ng-click="vm.getDownloadOrderList(vm)">EXPORT NRIC INFO</button>
 		        </div>
 	        </div>
 		
@@ -102,7 +104,7 @@
 						<td ng-bind="list.race"></td>
 						<td ng-bind="list.religion"></td>
 						<td ng-bind="list.citizenship"></td>
-						<td><a href="/nricinfo.html?id={{list.userId}}">View</a></td>
+						<td><a href="/nricinfo.html?id={{list.userId}}">Edit</a></td>
 					</tr>
 					<tr>
 						<th colspan="16">Total <span style="text-decoration: underline;"
@@ -180,7 +182,8 @@ var app = angular.module('myApp', ['ngFileUpload','cms.auth']);
 
 app.factory('utils', ['$http', '$q','$filter',function($http, $q, $filter){
     return {
-    	recordList: recordList
+    	recordList: recordList,
+    	getDownloadOrderList:getDownloadOrderList
     }
 
     function recordList(query){
@@ -206,6 +209,16 @@ app.factory('utils', ['$http', '$q','$filter',function($http, $q, $filter){
 
         return deferred.promise;
       }
+    
+    function getDownloadOrderList(query){
+		var deferred = $q.defer();
+        var defaultQuery = {},q = {};
+        angular.forEach(defaultQuery, function(item, key){
+          q[key] = query[key] == undefined ? defaultQuery[key] : query[key];
+        })
+		var url="/nric/download";
+		window.open(url); 
+	}
 }]);
 
 app.controller("RecordController",  ['utils','$q','$scope','Upload', function(utils,$q,$scope,Upload){
@@ -214,7 +227,7 @@ app.controller("RecordController",  ['utils','$q','$scope','Upload', function(ut
     vm.recordList = recordList;
     vm.page = 1;
     vm.uploadExcel=uploadExcel;
-     
+    vm.getDownloadOrderList = getDownloadOrderList;
     //当前页面
     vm.currentPage=1;
     vm.numPages = [];
@@ -306,6 +319,13 @@ app.controller("RecordController",  ['utils','$q','$scope','Upload', function(ut
 	    	alert("上传失败");
 	        console.log('error status: ' + status);
 	    })
+	}
+    
+    function getDownloadOrderList(query){
+		return utils.getDownloadOrderList(query).then(function(batch){
+		}).catch(function(reason){
+			alert( reason.msg);
+		});
 	}
     
 }]);

@@ -2,17 +2,21 @@ package com.coins.cloud.rest;
 
 import io.swagger.annotations.ApiOperation;
 
-import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.poi.util.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +30,7 @@ import com.coins.cloud.bo.UserNricBo;
 import com.coins.cloud.service.UserNricService;
 import com.coins.cloud.vo.UserNricVo;
 import com.hlb.cloud.bo.BoUtil;
+import com.hlb.cloud.util.CSVUtils;
 
 @RefreshScope
 @RestController
@@ -34,6 +39,9 @@ public class UserNricResource {
 	
 	@Inject
 	private UserNricService userNricService;
+	
+	@Autowired
+	private HttpServletResponse response;
 	
 	/**
 	 * 
@@ -117,6 +125,30 @@ public class UserNricResource {
 			bo = BoUtil.getDefaultFalseBo();
 			bo.setMsg("update faild");
 			return bo;
+		}
+	}
+	
+	/**
+	 * 
+	* @Title: downloadUserNricList 
+	* @param: 
+	* @Description: 导出报表
+	* @return void
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/download", method = RequestMethod.GET)
+	public void downloadUserNricList() {
+		try {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			String date = dateFormat.format(new Date());
+			String fileName = "USER_NRIC_RECORD" + date + ".csv";
+			String csvFilePath = "/tmp/";
+			File file = userNricService.reportUserNric(csvFilePath,fileName);
+			CSVUtils.exportFile(response, file.getPath(), file.getName());
+			CSVUtils.deleteFile(file.getParent(), file.getName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
 		}
 	}
 

@@ -41,4 +41,9 @@ public class UserNricDaoMybatisImpl implements UserNricDao {
 		return userNricMapper.updateUserNric(userNricVo);
 	}
 
+	@Override
+	public List<UserNricBo> getAllUserNric() {
+		return userNricMapper.getAllUserNric();
+	}
+
 }

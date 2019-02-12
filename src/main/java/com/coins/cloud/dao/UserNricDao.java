@@ -53,4 +53,13 @@ public interface UserNricDao {
 	* @return int
 	 */
 	int updateUserNric(UserNricVo userNricVo);
+	
+	/**
+	 * 
+	* @Title: getAllUserNric 
+	* @param: 
+	* @Description: 获取列表
+	* @return List<UserNricBo>
+	 */
+	public List<UserNricBo> getAllUserNric();
 }

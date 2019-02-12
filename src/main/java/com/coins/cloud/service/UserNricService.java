@@ -53,4 +53,13 @@ public interface UserNricService {
 	* @return int
 	 */
 	int updateUserNric(UserNricVo userNricVo);
+	
+	/**
+	 * 
+	* @Title: reportUserNric 
+	* @param: 
+	* @Description: 导出报表
+	* @return void
+	 */
+	File reportUserNric(String csvFilePath, String fileName);
 }
