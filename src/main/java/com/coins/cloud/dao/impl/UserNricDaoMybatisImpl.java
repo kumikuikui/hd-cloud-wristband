@@ -1,4 +1,4 @@
-package com.coins.cloud.impl;
+package com.coins.cloud.dao.impl;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.coins.cloud.impl;
+package com.coins.cloud.dao.impl;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.type.JdbcType;
 
 import com.coins.cloud.bo.UserNricBo;
-import com.coins.cloud.sql.UserNricProvider;
+import com.coins.cloud.dao.sql.UserNricProvider;
 import com.coins.cloud.vo.UserNricVo;
 
 

@@ -1,4 +1,4 @@
-package com.coins.cloud.sql;
+package com.coins.cloud.dao.sql;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
