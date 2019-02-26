@@ -1,4 +1,4 @@
-package com.coins.cloud.vo;
+package com.coins.cloud.bo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +18,7 @@ import lombok.experimental.Builder;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WristbandVo {
+public class WristbandBo {
 	//用户Id
 	private int userId;
 	//手环mac
@@ -57,4 +57,8 @@ public class WristbandVo {
 	private String totalWater;
 	//饮水量
 	private String drinkWater;
+	//BMI
+	private String bmi;
+	//距离M
+	private double distance;
 }
