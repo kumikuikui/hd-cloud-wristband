@@ -94,4 +94,35 @@ public interface WristbandMapper {
 	 */
 	@UpdateProvider(type = WristbandProvider.class,method = "update")
 	public int modifyInfo(UserBaseVo userBaseVo);
+	
+	/**
+	 * 
+	* @Title: save 
+	* @param: 
+	* @Description: 保存用户设备记录
+	* @return int
+	 */
+	@InsertProvider(type = WristbandProvider.class,method = "saveTarget")
+	public int saveTarget(UserDeviceVo userDeviceVo);
+	
+	/**
+	 * 
+	* @Title: save 
+	* @param: 
+	* @Description: 保存用户设备记录
+	* @return int
+	 */
+	@InsertProvider(type = WristbandProvider.class,method = "updateTarget")
+	public int updateTarget(UserDeviceVo userDeviceVo);
+	
+	@Select("SELECT COUNT(1) FROM user_device_target_bt WHERE user_device_base_sb_seq = #{userId} "
+		  + " AND user_device_bind_sr_seq = #{bindId} AND active_flag = 'y'")
+	public int getTargetExist(@Param("userId") int userId,@Param("bindId") int bindId);
+	
+	@Select("SELECT * FROM user_device_target_bt WHERE user_device_base_sb_seq = #{userId} AND user_device_bind_sr_seq = #{bindId} AND active_flag = 'y'")
+	@Results(value = {
+			@Result(property = "configCode", column = "device_config_internal_code", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "value", column = "device_target_value", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "time", column = "update_time", javaType = String.class, jdbcType = JdbcType.DATE) })
+	public List<UserDeviceBo> getTarget(@Param("userId") int userId,@Param("bindId") int bindId);
 }

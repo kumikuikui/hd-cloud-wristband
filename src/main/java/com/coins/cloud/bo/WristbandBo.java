@@ -53,12 +53,25 @@ public class WristbandBo {
 	private String sleepStartTime;
 	//睡眠结束时间
 	private String sleepEndTime;
-	//需摄水量
-	private String totalWater;
 	//饮水量
 	private String drinkWater;
 	//BMI
 	private String bmi;
 	//距离M
 	private double distance;
+	//步数
+	private String targetStep;
+	//卡路里消耗
+	private String targetCalorie;
+	//体重KG
+	private String targetWeight;
+	//目标重量设定时间
+	private String targetWeightTime;
+	//睡眠
+	private String targetSleep;
+	//卡路里摄入
+	private String targetCalorieIntake;
+	//饮水量
+	private String targetWater;
+
 }

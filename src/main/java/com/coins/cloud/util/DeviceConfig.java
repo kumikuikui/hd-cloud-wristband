@@ -1,7 +1,8 @@
 package com.coins.cloud.util;
 
 public class DeviceConfig {
-	
+	public static String con000_1 = "con000_1";//距离
+	public static String con000_2 = "con000_2";//BMI
 	public static String con001 = "con001";//脚步
 	public static String con002 = "con002";//卡路里燃烧
 	public static String con003 = "con003";//血压

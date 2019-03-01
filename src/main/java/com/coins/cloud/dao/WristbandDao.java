@@ -2,6 +2,8 @@ package com.coins.cloud.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.coins.cloud.bo.UserBaseBo;
 import com.coins.cloud.bo.UserDeviceBo;
 import com.coins.cloud.vo.UserBaseVo;
@@ -80,4 +82,40 @@ public interface WristbandDao {
 	* @return int
 	 */
 	public int modifyInfo(UserBaseVo userBaseVo);
+	
+	/**
+	 * 
+	* @Title: save 
+	* @param: 
+	* @Description: 保存目标数据
+	* @return int
+	 */
+	public int saveTarget(UserDeviceVo userDeviceVo);
+	
+	/**
+	 * 
+	* @Title: updateTarget 
+	* @param: 
+	* @Description: 修改目标数据
+	* @return int
+	 */
+	public int updateTarget(UserDeviceVo userDeviceVo);
+	
+	/**
+	 * 
+	* @Title: getTargetExist 
+	* @param: 
+	* @Description: 查询目标是否存在
+	* @return int
+	 */
+	public int getTargetExist(int userId,int bindId);
+	
+	/**
+	 * 
+	* @Title: getTarget 
+	* @param: 
+	* @Description:查询目标数据
+	* @return List<UserDeviceBo>
+	 */
+	public List<UserDeviceBo> getTarget(int userId,int bindId);
 }

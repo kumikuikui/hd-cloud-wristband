@@ -72,5 +72,41 @@ public interface WristbandService {
 	* @return int
 	 */
 	public int modifyInfo(UserBaseVo userBaseVo);
+	
+	/**
+	 * 
+	* @Title: save 
+	* @param: 
+	* @Description: 保存目标数据
+	* @return int
+	 */
+	public int saveTarget(UserDeviceVo userDeviceVo);
+	
+	/**
+	 * 
+	* @Title: updateTarget 
+	* @param: 
+	* @Description: 修改目标数据
+	* @return int
+	 */
+	public int updateTarget(UserDeviceVo userDeviceVo);
+	
+	/**
+	 * 
+	* @Title: getTargetExist 
+	* @param: 
+	* @Description: 查询目标是否存在
+	* @return int
+	 */
+	public int getTargetExist(int userId,int bindId);
+	
+	/**
+	 * 
+	* @Title: getTarget 
+	* @param: 
+	* @Description:查询目标数据
+	* @return List<UserDeviceBo>
+	 */
+	public WristbandBo getTarget(int userId,String mac);
 
 }

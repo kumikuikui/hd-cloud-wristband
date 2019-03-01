@@ -53,8 +53,6 @@ public class WristbandVo {
 	private String sleepStartTime;
 	//睡眠结束时间
 	private String sleepEndTime;
-	//需摄水量
-	private String totalWater;
 	//饮水量
 	private String drinkWater;
 }

@@ -60,4 +60,24 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 		return wristbandMapper.modifyInfo(userBaseVo);
 	}
 
+	@Override
+	public int saveTarget(UserDeviceVo userDeviceVo) {
+		return wristbandMapper.saveTarget(userDeviceVo);
+	}
+
+	@Override
+	public int updateTarget(UserDeviceVo userDeviceVo) {
+		return wristbandMapper.updateTarget(userDeviceVo);
+	}
+
+	@Override
+	public int getTargetExist(int userId, int bindId) {
+		return wristbandMapper.getTargetExist(userId, bindId);
+	}
+
+	@Override
+	public List<UserDeviceBo> getTarget(int userId, int bindId) {
+		return wristbandMapper.getTarget(userId, bindId);
+	}
+
 }

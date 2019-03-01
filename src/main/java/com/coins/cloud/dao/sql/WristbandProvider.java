@@ -58,4 +58,41 @@ public class WristbandProvider {
 			}
 		}.toString();
 	}
+	
+	public String saveTarget(UserDeviceVo userDeviceVo) {
+		String sql = new SQL() {
+			{
+				INSERT_INTO("user_device_target_bt");
+				VALUES("user_device_base_sb_seq", "#{userId}");
+				VALUES("user_device_bind_sr_seq", "#{bindId}");
+				VALUES("device_config_internal_code", "#{configCode}");
+				VALUES("device_target_value", "#{value}");
+				VALUES("device_target_remark", "#{remark}");
+				VALUES("create_by", "#{userId}");
+				VALUES("create_time", "now()");
+				VALUES("update_by", "#{userId}");
+				VALUES("update_time", "now()");
+				VALUES("active_flag", "'y'");
+			}
+		}.toString();
+		return sql;
+	}
+	
+	/**
+	 * 
+	 * @Title: update
+	 * @param:
+	 * @Description: 编辑
+	 * @return String
+	 */
+	public String updateTarget(UserDeviceVo userDeviceVo) {
+		return new SQL() {
+			{
+				UPDATE("user_device_target_bt ");
+				SET("device_target_value = #{value}");
+				SET("update_time = now()");
+				WHERE("user_device_base_sb_seq = #{userId} and user_device_bind_sr_seq = #{bindId} and device_config_internal_code = #{configCode}");
+			}
+		}.toString();
+	}
 }
