@@ -71,8 +71,8 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 	}
 
 	@Override
-	public int getTargetExist(int userId, int bindId) {
-		return wristbandMapper.getTargetExist(userId, bindId);
+	public int getTargetExist(int userId, int bindId,String configCode) {
+		return wristbandMapper.getTargetExist(userId, bindId,configCode);
 	}
 
 	@Override

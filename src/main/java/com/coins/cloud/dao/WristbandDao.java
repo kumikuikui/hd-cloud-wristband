@@ -108,7 +108,7 @@ public interface WristbandDao {
 	* @Description: 查询目标是否存在
 	* @return int
 	 */
-	public int getTargetExist(int userId,int bindId);
+	public int getTargetExist(int userId,int bindId,String configCode);
 	
 	/**
 	 * 

@@ -206,8 +206,8 @@ public class WristbandServiceImpl implements WristbandService {
 	}
 
 	@Override
-	public int getTargetExist(int userId, int bindId) {
-		return wristbandDao.getTargetExist(userId, bindId);
+	public int getTargetExist(int userId, int bindId,String configCode) {
+		return wristbandDao.getTargetExist(userId, bindId,configCode);
 	}
 
 	@Override

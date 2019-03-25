@@ -116,8 +116,8 @@ public interface WristbandMapper {
 	public int updateTarget(UserDeviceVo userDeviceVo);
 	
 	@Select("SELECT COUNT(1) FROM user_device_target_bt WHERE user_device_base_sb_seq = #{userId} "
-		  + " AND user_device_bind_sr_seq = #{bindId} AND active_flag = 'y'")
-	public int getTargetExist(@Param("userId") int userId,@Param("bindId") int bindId);
+		  + " AND user_device_bind_sr_seq = #{bindId} AND active_flag = 'y' AND device_config_internal_code = #{configCode}")
+	public int getTargetExist(@Param("userId") int userId,@Param("bindId") int bindId,@Param("configCode") String configCode);
 	
 	@Select("SELECT * FROM user_device_target_bt WHERE user_device_base_sb_seq = #{userId} AND user_device_bind_sr_seq = #{bindId} AND active_flag = 'y'")
 	@Results(value = {

@@ -501,7 +501,7 @@ public class WristbandResource {
 		}
 		if(!StringUtil.isBlank(wristbandTargetVo.getTargetStep())){//步数
 			//是否存在目标数据
-			int exist = wristbandService.getTargetExist(userId, bindId);
+			int exist = wristbandService.getTargetExist(userId, bindId,DeviceConfig.con001);
 			if(exist > 0){//存在，更新数据
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
 						.bindId(bindId).configCode(DeviceConfig.con001)
@@ -516,7 +516,7 @@ public class WristbandResource {
 		}
 		if(!StringUtil.isBlank(wristbandTargetVo.getTargetCalorie())){//卡路里消耗
 			//是否存在目标数据
-			int exist = wristbandService.getTargetExist(userId, bindId);
+			int exist = wristbandService.getTargetExist(userId, bindId,DeviceConfig.con002);
 			if(exist > 0){//存在，更新数据
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
 						.bindId(bindId).configCode(DeviceConfig.con002)
@@ -531,7 +531,7 @@ public class WristbandResource {
 		}
 		if(!StringUtil.isBlank(wristbandTargetVo.getTargetWeight())){//体重KG
 			//是否存在目标数据
-			int exist = wristbandService.getTargetExist(userId, bindId);
+			int exist = wristbandService.getTargetExist(userId, bindId,DeviceConfig.con004);
 			if(exist > 0){//存在，更新数据
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
 						.bindId(bindId).configCode(DeviceConfig.con004)
@@ -546,7 +546,7 @@ public class WristbandResource {
 		}
 		if(!StringUtil.isBlank(wristbandTargetVo.getTargetSleep())){//睡眠
 			//是否存在目标数据
-			int exist = wristbandService.getTargetExist(userId, bindId);
+			int exist = wristbandService.getTargetExist(userId, bindId,DeviceConfig.con005);
 			if(exist > 0){//存在，更新数据
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
 						.bindId(bindId).configCode(DeviceConfig.con005)
@@ -561,7 +561,7 @@ public class WristbandResource {
 		}
 		if(!StringUtil.isBlank(wristbandTargetVo.getTargetCalorieIntake())){//卡路里摄入
 			//是否存在目标数据
-			int exist = wristbandService.getTargetExist(userId, bindId);
+			int exist = wristbandService.getTargetExist(userId, bindId,DeviceConfig.con006);
 			if(exist > 0){//存在，更新数据
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
 						.bindId(bindId).configCode(DeviceConfig.con006)
@@ -576,7 +576,7 @@ public class WristbandResource {
 		}
 		if(!StringUtil.isBlank(wristbandTargetVo.getTargetWater())){//饮水量
 			//是否存在目标数据
-			int exist = wristbandService.getTargetExist(userId, bindId);
+			int exist = wristbandService.getTargetExist(userId, bindId,DeviceConfig.con007);
 			if(exist > 0){//存在，更新数据
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
 						.bindId(bindId).configCode(DeviceConfig.con007)
