@@ -314,7 +314,7 @@ public class WristbandResource {
 					+ wristbandVo.getFat();
 			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
 					.bindId(bindId).configCode(DeviceConfig.con004)
-					.value(value).time(time).build();
+					.value(value).time(wristbandVo.getWeightTime()).build();
 			int resu = wristbandService.save(userDeviceVo);
 			if (resu > 0) {
 				i = 1;
@@ -345,7 +345,7 @@ public class WristbandResource {
 		if (!StringUtil.isBlank(wristbandVo.getDrinkWater())) {
 			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
 					.bindId(bindId).configCode(DeviceConfig.con007)
-					.value(wristbandVo.getDrinkWater()).time(time).build();
+					.value(wristbandVo.getDrinkWater()).time(wristbandVo.getDrinkTime()).build();
 			int resu = wristbandService.save(userDeviceVo);
 			if (resu > 0) {
 				i = 1;

@@ -49,12 +49,16 @@ public class WristbandVo {
 	private String weight;
 	//体脂 百分比
 	private String fat;
+	//称重时间
+	private String weightTime;
 	//睡眠开始时间
 	private String sleepStartTime;
 	//睡眠结束时间
 	private String sleepEndTime;
 	//饮水量
 	private String drinkWater;
+	//饮水时间
+	private String drinkTime;
 	//卡路里摄入量
 	private String calorieIntake;
 	//卡路里摄入时间
