@@ -118,4 +118,31 @@ public interface WristbandDao {
 	* @return List<UserDeviceBo>
 	 */
 	public List<UserDeviceBo> getTarget(int userId,int bindId);
+	
+	/**
+	 * 
+	* @Title: regist 
+	* @param: 
+	* @Description: 注册
+	* @return int
+	 */
+	int regist(UserBaseVo userBaseVo);
+	
+	/**
+	 * 
+	* @Title: login 
+	* @param: 
+	* @Description: 登录
+	* @return int
+	 */
+	int login(UserBaseVo userBaseVo);
+	
+	/**
+	 * 
+	* @Title: existAccount 
+	* @param: 
+	* @Description: 验证账号是否已注册
+	* @return int
+	 */
+	int existAccount(String account);
 }

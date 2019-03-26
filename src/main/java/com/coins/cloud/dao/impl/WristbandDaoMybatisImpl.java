@@ -80,4 +80,19 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 		return wristbandMapper.getTarget(userId, bindId);
 	}
 
+	@Override
+	public int regist(UserBaseVo userBaseVo) {
+		return wristbandMapper.regist(userBaseVo);
+	}
+
+	@Override
+	public int login(UserBaseVo userBaseVo) {
+		return wristbandMapper.login(userBaseVo);
+	}
+
+	@Override
+	public int existAccount(String account) {
+		return wristbandMapper.existAccount(account);
+	}
+
 }

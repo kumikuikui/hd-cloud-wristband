@@ -114,7 +114,9 @@ public class WristbandServiceImpl implements WristbandService {
 				wristbandBo.setTargetSleep(map.get(userDeviceBo.getConfigCode()));
 			}
 			if(userDeviceBo.getConfigCode().equals(DeviceConfig.con006)){//卡路里摄入量
-				
+				wristbandBo.setCalorieIntake(userDeviceBo.getValue());
+				wristbandBo.setCalorieIntakeTime(userDeviceBo.getTime());
+				wristbandBo.setTargetCalorieIntake(map.get(userDeviceBo.getConfigCode()));
 			}
 			if(userDeviceBo.getConfigCode().equals(DeviceConfig.con007)){//水
 				wristbandBo.setDrinkWater(userDeviceBo.getValue());
@@ -230,12 +232,27 @@ public class WristbandServiceImpl implements WristbandService {
 				wristbandBo.setTargetSleep(userDeviceBo.getValue());
 			}
 			if(userDeviceBo.getConfigCode().equals(DeviceConfig.con006)){//卡路里摄入量
-				
+				wristbandBo.setTargetCalorieIntake(userDeviceBo.getValue());
 			}
 			if(userDeviceBo.getConfigCode().equals(DeviceConfig.con007)){//水
 				wristbandBo.setTargetWater(userDeviceBo.getValue());
 			}
 		}
 		return wristbandBo;
+	}
+
+	@Override
+	public int regist(UserBaseVo userBaseVo) {
+		return wristbandDao.regist(userBaseVo);
+	}
+
+	@Override
+	public int login(UserBaseVo userBaseVo) {
+		return wristbandDao.login(userBaseVo);
+	}
+
+	@Override
+	public int existAccount(String account) {
+		return wristbandDao.existAccount(account);
 	}
 }

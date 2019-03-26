@@ -15,3 +15,5 @@ spring.datasource:
    maximumPoolSize: 50
    minimumIdle: 10
    validationTimeout: 5000
+rsa.json:
+   aeskey: fe96b52790adaefe

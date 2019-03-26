@@ -51,11 +51,17 @@ public interface WristbandMapper {
 			@Result(property = "userId", column = "user_device_base_sb_seq", javaType = int.class, jdbcType = JdbcType.INTEGER),
 			@Result(property = "name", column = "device_base_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "avatar", column = "device_base_avatar_url", javaType = String.class, jdbcType = JdbcType.VARCHAR),
-			@Result(property = "account", column = "entity_wallet_account", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "walletAccount", column = "entity_wallet_account", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "balance", column = "entity_wallet_cnt", javaType = double.class, jdbcType = JdbcType.DECIMAL),
 			@Result(property = "height", column = "device_base_height", javaType = int.class, jdbcType = JdbcType.INTEGER),
 			@Result(property = "birthdate", column = "device_base_birthdate", javaType = String.class, jdbcType = JdbcType.DATE),
-			@Result(property = "genderType", column = "device_base_gender_itype", javaType = int.class, jdbcType = JdbcType.INTEGER) 
+			@Result(property = "genderType", column = "device_base_gender_itype", javaType = int.class, jdbcType = JdbcType.INTEGER),
+			@Result(property = "firstName", column = "device_base_first_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "lastName", column = "device_base_last_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "insuranceNo", column = "device_base_insurance_no", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "insuranceName", column = "device_base_insurance_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "idcard", column = "device_base_idcard", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "idcardUrl", column = "device_base_idcard_urls", javaType = String.class, jdbcType = JdbcType.VARCHAR)
 	})
 	public UserBaseBo getUserById(@Param("userId") int userId);
 	
@@ -125,4 +131,35 @@ public interface WristbandMapper {
 			@Result(property = "value", column = "device_target_value", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "time", column = "update_time", javaType = String.class, jdbcType = JdbcType.DATE) })
 	public List<UserDeviceBo> getTarget(@Param("userId") int userId,@Param("bindId") int bindId);
+	
+	/**
+	 * 
+	* @Title: regist 
+	* @param: 
+	* @Description: 注册
+	* @return int
+	 */
+	@InsertProvider(type = WristbandProvider.class,method = "regist")
+	public int regist(UserBaseVo userBaseVo);
+	
+	/**
+	 * 
+	* @Title: login 
+	* @param: 
+	* @Description: 登录
+	* @return int
+	 */
+	@Select("SELECT user_device_base_sb_seq FROM user_device_base_sb "
+			+" WHERE device_base_account = #{account} AND device_base_password = #{password} AND active_flag = 'y'")
+	int login(UserBaseVo userBaseVo);
+	
+	/**
+	 * 
+	* @Title: existAccount 
+	* @param: 
+	* @Description: 验证账号是否已注册
+	* @return int
+	 */
+	@Select("SELECT user_device_base_sb_seq FROM user_device_base_sb WHERE device_base_account = #{account} AND active_flag = 'y'")
+	int existAccount(@Param("account") String account);
 }

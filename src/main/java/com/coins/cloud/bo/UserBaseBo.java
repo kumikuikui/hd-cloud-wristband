@@ -28,7 +28,7 @@ public class UserBaseBo {
 	//头像
 	private String avatar;
 	//钱包帐户id
-	private String account;
+	private String walletAccount;
 	//钱包余额
 	private double balance;
 	//身高,cm
@@ -39,4 +39,17 @@ public class UserBaseBo {
 	private int genderType;
 	//绑定设备数量
 	private int bindCount;
+	//First name
+	private String firstName;
+	//Last name
+	private String lastName;
+	//保险号
+	private String insuranceNo;
+	//保险公司的名字
+	private String insuranceName;
+	//身份识别号
+	private String idcard;
+	//身份识别图片,多张图用|分隔
+	private String idcardUrl;
+
 }

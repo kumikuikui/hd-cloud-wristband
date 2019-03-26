@@ -3,12 +3,16 @@ package com.coins.cloud;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Data;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -62,5 +66,15 @@ public class WristbandServiceApplication extends WebMvcConfigurerAdapter {
 		supportedMediaTypes.add(MediaType.TEXT_XML);
 		faConverter.setSupportedMediaTypes(supportedMediaTypes);
 		return new HttpMessageConverters(faConverter);
+	}
+	
+	@Data
+	public static class RSAData {
+		private String aeskey;
+	}
+
+	@Component
+	@ConfigurationProperties(prefix = "rsa.json")
+	public static class RSAConfig extends RSAData {
 	}
 }

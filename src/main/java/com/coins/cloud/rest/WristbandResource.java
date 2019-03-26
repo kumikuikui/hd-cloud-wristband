@@ -21,13 +21,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.coins.cloud.WristbandServiceApplication.RSAConfig;
 import com.coins.cloud.bo.UserBaseBo;
 import com.coins.cloud.bo.UserDeviceBo;
 import com.coins.cloud.bo.WristbandBo;
 import com.coins.cloud.service.WristbandService;
+import com.coins.cloud.util.AESUtil;
 import com.coins.cloud.util.DeviceConfig;
 import com.coins.cloud.util.FileUtil;
 import com.coins.cloud.util.HttpClientUtil;
+import com.coins.cloud.vo.RequestVo;
 import com.coins.cloud.vo.UserBaseVo;
 import com.coins.cloud.vo.UserDeviceVo;
 import com.coins.cloud.vo.WristbandTargetVo;
@@ -42,6 +45,9 @@ import com.hlb.cloud.util.StringUtil;
 public class WristbandResource {
 	
 	private final String domain = "http://54.169.80.178:3100/";
+	
+	@Inject
+	private RSAConfig rSAConfig;
 	
 	@Inject
 	private WristbandService wristbandService;
@@ -226,7 +232,7 @@ public class WristbandResource {
 			}
 		}
 		
-		//结果 1成功 0失败  数据格式例如 1:1:1:0:1:1:1:1  步数|心率|卡路里|血氧|血压|重量|睡眠|饮水
+		//结果 1成功 0失败  数据格式例如 1:1:1:0:1:1:1:1  步数|心率|卡路里消耗|血氧|血压|重量|睡眠|饮水|卡路里摄入
 		String result = "";
 		int i = 0;
 		//步数上传
@@ -340,6 +346,21 @@ public class WristbandResource {
 			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
 					.bindId(bindId).configCode(DeviceConfig.con007)
 					.value(wristbandVo.getDrinkWater()).time(time).build();
+			int resu = wristbandService.save(userDeviceVo);
+			if (resu > 0) {
+				i = 1;
+			}
+			result += "|" + i;
+			i = 0;
+		} else {
+			result += "|0";
+		}
+		// 卡路里摄入量上传
+		if (!StringUtil.isBlank(wristbandVo.getCalorieIntake())) {
+			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
+					.bindId(bindId).configCode(DeviceConfig.con006)
+					.value(wristbandVo.getCalorieIntake())
+					.time(wristbandVo.getCalorieIntakeTime()).build();
 			int resu = wristbandService.save(userDeviceVo);
 			if (resu > 0) {
 				i = 1;
@@ -590,5 +611,94 @@ public class WristbandResource {
 			}
 		}
 		return boUtil;
+	}
+	
+	/**
+	 * 
+	* @Title: regist 
+	* @param: 
+	* @Description: 注册
+	* @return BoUtil
+	 */
+	@ApiOperation(httpMethod = "POST", value = "regist", notes = "regist")
+	@ResponseBody
+	@RequestMapping(value = "/regist", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public BoUtil regist(final @RequestBody RequestVo requestVo) throws Exception {
+		BoUtil boUtil = BoUtil.getDefaultTrueBo();
+		String regJson = AESUtil.decrypt(requestVo.getSign(), rSAConfig.getAeskey());
+		log.info("##########regJson:{}", regJson);
+		JSONObject regObj = JSONObject.fromObject(regJson);
+		UserBaseVo userBaseVo = (UserBaseVo) JSONObject.toBean(regObj, UserBaseVo.class);
+		
+		int userId = wristbandService.existAccount(userBaseVo.getAccount());
+		if(userId > 0){
+			boUtil = BoUtil.getDefaultFalseBo();
+			boUtil.setMsg("Account registered");
+			return boUtil;
+		}
+		int result = wristbandService.regist(userBaseVo);
+		if(result > 0){
+			return boUtil;
+		}else{
+			boUtil = BoUtil.getDefaultFalseBo();
+			return boUtil;
+		}
+	}
+	
+	/**
+	 * 
+	* @Title: login 
+	* @param: 
+	* @Description: 登录
+	* @return BoUtil
+	 */
+	@ApiOperation(httpMethod = "POST", value = "login", notes = "login")
+	@ResponseBody
+	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public BoUtil login(final @RequestBody RequestVo requestVo) throws Exception {
+		BoUtil boUtil = BoUtil.getDefaultTrueBo();
+		String regJson = AESUtil.decrypt(requestVo.getSign(), rSAConfig.getAeskey());
+		log.info("##########regJson:{}", regJson);
+		JSONObject regObj = JSONObject.fromObject(regJson);
+		UserBaseVo userBaseVo = (UserBaseVo) JSONObject.toBean(regObj, UserBaseVo.class);
+		int result = wristbandService.login(userBaseVo);
+		if(result > 0){
+			return boUtil;
+		}else{
+			boUtil = BoUtil.getDefaultFalseBo();
+			return boUtil;
+		}
+	}
+	
+	/**
+	 * 
+	* @Title: bindWristband 
+	* @param: 
+	* @Description: 绑定手环
+	* @return BoUtil
+	 */
+	@ApiOperation(httpMethod = "POST", value = "bind", notes = "bind")
+	@ResponseBody
+	@RequestMapping(value = "/bind", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	public BoUtil bindWristband(final @RequestBody WristbandTargetVo wristbandTargetVo) throws Exception {
+		BoUtil boUtil = BoUtil.getDefaultTrueBo();
+		int userId = wristbandTargetVo.getUserId();
+		// 查询绑定设备id
+		int bindId = wristbandService.getBandId(userId,
+				wristbandTargetVo.getMac());
+		if (bindId == 0) {// 绑定设备
+			int result = wristbandService.userBindDevice(userId,
+					wristbandTargetVo.getMac());
+			if (result > 0) {
+				return boUtil;
+			} else {
+				boUtil = BoUtil.getDefaultFalseBo();
+				return boUtil;
+			}
+		}else{
+			boUtil = BoUtil.getDefaultFalseBo();
+			boUtil.setMsg("已绑定手环设备");
+			return boUtil;
+		}
 	}
 }

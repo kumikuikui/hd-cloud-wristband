@@ -31,7 +31,7 @@ public class WristbandVo {
 	private String heart;
 	//心率时间
 	private String heartTime;
-	//卡路里
+	//卡路里消耗
 	private String calorie;
 	//卡路里时间
 	private String calorieTime;
@@ -55,4 +55,8 @@ public class WristbandVo {
 	private String sleepEndTime;
 	//饮水量
 	private String drinkWater;
+	//卡路里摄入量
+	private String calorieIntake;
+	//卡路里摄入时间
+	private String calorieIntakeTime;
 }

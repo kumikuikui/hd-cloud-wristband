@@ -1,7 +1,5 @@
 package com.coins.cloud.vo;
 
-import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,4 +31,20 @@ public class UserBaseVo {
 	private String birthdate;
 	//性别，1男2女
 	private int genderType;
+	//First name
+	private String firstName;
+	//Last name
+	private String lastName;
+	//保险号
+	private String insuranceNo;
+	//保险公司的名字
+	private String insuranceName;
+	//身份识别号
+	private String idcard;
+	//身份识别图片,多张图用|分隔
+	private String idcardUrl;
+	//帐号
+	private String account;
+	//密码
+	private String password;
 }

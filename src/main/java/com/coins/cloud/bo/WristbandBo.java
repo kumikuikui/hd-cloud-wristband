@@ -31,7 +31,7 @@ public class WristbandBo {
 	private String heart;
 	//心率时间
 	private String heartTime;
-	//卡路里
+	//卡路里消耗
 	private String calorie;
 	//卡路里时间
 	private String calorieTime;
@@ -59,6 +59,10 @@ public class WristbandBo {
 	private String bmi;
 	//距离M
 	private double distance;
+	//卡路里摄入量
+	private String calorieIntake;
+	//卡路里摄入时间
+	private String calorieIntakeTime;
 	//步数
 	private String targetStep;
 	//卡路里消耗
