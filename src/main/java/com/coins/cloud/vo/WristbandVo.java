@@ -63,4 +63,16 @@ public class WristbandVo {
 	private String calorieIntake;
 	//卡路里摄入时间
 	private String calorieIntakeTime;
+	//用户设备记录主键id
+	private int userDeviceId;
+	//食物名称
+	private String foodName;
+	//食物品牌
+	private String foodBrand;
+	//食物规格
+	private String foodSize;
+	//食物脂肪含量
+	private String foodFat;
+	//餐别，1早餐，2中餐，3晚餐，4其它
+	private int eatType;
 }

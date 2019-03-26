@@ -5,6 +5,7 @@ import org.apache.ibatis.jdbc.SQL;
 
 import com.coins.cloud.vo.UserBaseVo;
 import com.coins.cloud.vo.UserDeviceVo;
+import com.coins.cloud.vo.WristbandVo;
 
 public class WristbandProvider {
 
@@ -128,5 +129,26 @@ public class WristbandProvider {
 				WHERE("user_device_base_sb_seq = #{userId} and user_device_bind_sr_seq = #{bindId} and device_config_internal_code = #{configCode}");
 			}
 		}.toString();
+	}
+	
+	public String saveFood(WristbandVo wristbandVo) {
+		String sql = new SQL() {
+			{
+				INSERT_INTO("user_food_intake_bt");
+				VALUES("user_device_record_bt_seq", "#{userDeviceId}");
+				VALUES("food_intake_eat_itype", "#{eatType}");
+				VALUES("food_intake_name", "#{foodName}");
+				VALUES("food_intake_brand", "#{foodBrand}");
+				VALUES("food_intake_size", "#{foodSize}");
+				VALUES("food_intake_cal", "#{calorieIntake}");
+				VALUES("food_intake_fat", "#{foodFat}");
+				VALUES("create_by", "#{userId}");
+				VALUES("create_time", "#{calorieIntakeTime}");
+				VALUES("update_by", "#{userId}");
+				VALUES("update_time", "#{calorieIntakeTime}");
+				VALUES("active_flag", "'y'");
+			}
+		}.toString();
+		return sql;
 	}
 }

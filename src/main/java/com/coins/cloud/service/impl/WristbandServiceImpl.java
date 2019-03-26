@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import org.apache.ibatis.annotations.Case;
 import org.springframework.stereotype.Service;
 
+import com.coins.cloud.bo.CalFoodBo;
 import com.coins.cloud.bo.UserBaseBo;
 import com.coins.cloud.bo.UserDeviceBo;
 import com.coins.cloud.bo.WristbandBo;
@@ -21,6 +22,7 @@ import com.coins.cloud.service.WristbandService;
 import com.coins.cloud.util.DeviceConfig;
 import com.coins.cloud.vo.UserBaseVo;
 import com.coins.cloud.vo.UserDeviceVo;
+import com.coins.cloud.vo.WristbandVo;
 
 @Service
 public class WristbandServiceImpl implements WristbandService {
@@ -181,6 +183,17 @@ public class WristbandServiceImpl implements WristbandService {
 			if(temp.equals(DeviceConfig.con004)){//重量
 				userDeviceBo.setValue(userDeviceBo.getValue().split("\\|")[0]);
 			}
+			if(temp.equals(DeviceConfig.con006)){//卡路里摄入量
+				List<CalFoodBo> foodList = wristbandDao.getCalFoodList(userDeviceBo.getUserDeviceId());
+				for (CalFoodBo calFoodBo : foodList) {
+					try {
+						calFoodBo.setCalorieIntakeTime(sdf.format(sdf.parse(calFoodBo.getCalorieIntakeTime())));
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				userDeviceBo.setFoodList(foodList);
+			}
 			String time = "";
 			try {
 				time = sdf.format(sdf.parse(userDeviceBo.getTime()));
@@ -254,5 +267,21 @@ public class WristbandServiceImpl implements WristbandService {
 	@Override
 	public int existAccount(String account) {
 		return wristbandDao.existAccount(account);
+	}
+
+	@Override
+	public UserDeviceBo getCalIntakeByToday(int userId, int bindId,
+			String configCode) {
+		return wristbandDao.getCalIntakeByToday(userId, bindId, configCode);
+	}
+
+	@Override
+	public int updateCalIntake(int userDeviceId, String value) {
+		return wristbandDao.updateCalIntake(userDeviceId, value);
+	}
+
+	@Override
+	public int saveFood(WristbandVo wristbandVo) {
+		return wristbandDao.saveFood(wristbandVo);
 	}
 }

@@ -2,12 +2,12 @@ package com.coins.cloud.dao;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
+import com.coins.cloud.bo.CalFoodBo;
 import com.coins.cloud.bo.UserBaseBo;
 import com.coins.cloud.bo.UserDeviceBo;
 import com.coins.cloud.vo.UserBaseVo;
 import com.coins.cloud.vo.UserDeviceVo;
+import com.coins.cloud.vo.WristbandVo;
 
 public interface WristbandDao {
 	
@@ -145,4 +145,40 @@ public interface WristbandDao {
 	* @return int
 	 */
 	int existAccount(String account);
+	
+	/**
+	 * 
+	* @Title: getCalIntakeByToday 
+	* @param: 
+	* @Description: 查询今日卡路里摄入量
+	* @return UserDeviceBo
+	 */
+	UserDeviceBo getCalIntakeByToday(int userId,int bindId,String configCode);
+	
+	/**
+	 * 
+	* @Title: updateCalIntake 
+	* @param: 
+	* @Description: 更新卡路里摄入量
+	* @return int
+	 */
+	int updateCalIntake(int userDeviceId,String value);
+	
+	/**
+	 * 
+	* @Title: saveFood 
+	* @param: 
+	* @Description: 保存食物
+	* @return int
+	 */
+	int saveFood(WristbandVo wristbandVo);
+	
+	/**
+	 * 
+	* @Title: getCalFoodList 
+	* @param: 
+	* @Description: 获取食物记录
+	* @return List<CalFoodBo>
+	 */
+	List<CalFoodBo> getCalFoodList(int userDeviceId);
 }

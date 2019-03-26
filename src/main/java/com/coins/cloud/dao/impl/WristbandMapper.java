@@ -1,6 +1,5 @@
 package com.coins.cloud.dao.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
@@ -10,20 +9,26 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectKey;
+import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.type.JdbcType;
 
+import com.coins.cloud.bo.CalFoodBo;
 import com.coins.cloud.bo.UserBaseBo;
 import com.coins.cloud.bo.UserDeviceBo;
 import com.coins.cloud.dao.sql.WristbandProvider;
 import com.coins.cloud.vo.UserBaseVo;
 import com.coins.cloud.vo.UserDeviceVo;
+import com.coins.cloud.vo.WristbandVo;
 
 
 @Mapper
 public interface WristbandMapper {
 
 	@InsertProvider(type = WristbandProvider.class,method = "save")
+	@SelectKey(keyProperty = "userDeviceId", before = false, resultType = int.class, statement = {
+	"SELECT LAST_INSERT_ID() AS user_device_record_bt_seq " })
 	int save(UserDeviceVo userDeviceVo);
 	
 	@Insert("INSERT INTO user_device_bind_sr "
@@ -65,7 +70,7 @@ public interface WristbandMapper {
 	})
 	public UserBaseBo getUserById(@Param("userId") int userId);
 	
-	@Select("select a.device_record_value,a.create_time "
+	@Select("select a.device_record_value,a.create_time,a.user_device_record_bt_seq "
 		   +" from user_device_record_bt a inner join "
 		   +" (select DATE_FORMAT(create_time,'%Y-%m-%d') date1,max(create_time) time1 "
 		   +" FROM user_device_record_bt "
@@ -74,6 +79,7 @@ public interface WristbandMapper {
 		   +" group by DATE_FORMAT(create_time,'%Y-%m-%d') ORDER BY create_time DESC LIMIT #{pageIndex},#{pageSize}) b "
 		   +" on a.create_time = b.time1")
 	@Results(value = {
+			@Result(property = "userDeviceId", column = "user_device_record_bt_seq", javaType = int.class, jdbcType = JdbcType.INTEGER),
 			@Result(property = "value", column = "device_record_value", javaType = String.class, jdbcType = JdbcType.DATE),
 			@Result(property = "time", column = "create_time", javaType = String.class, jdbcType = JdbcType.DATE) 
 	})
@@ -162,4 +168,61 @@ public interface WristbandMapper {
 	 */
 	@Select("SELECT user_device_base_sb_seq FROM user_device_base_sb WHERE device_base_account = #{account} AND active_flag = 'y'")
 	int existAccount(@Param("account") String account);
+	
+	/**
+	 * 
+	* @Title: getCalIntakeByToday 
+	* @param: 
+	* @Description: 查询今日卡路里摄入量
+	* @return UserDeviceBo
+	 */
+	@Select("SELECT * FROM user_device_record_bt WHERE user_device_base_sb_seq = #{userId} "
+			+" AND user_device_bind_sr_seq = #{bindId} AND device_config_internal_code = #{configCode} "
+			+" AND DATE_FORMAT(create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')")
+	@Results(value = {
+			@Result(property = "userDeviceId", column = "user_device_record_bt_seq", javaType = int.class, jdbcType = JdbcType.INTEGER),
+			@Result(property = "value", column = "device_target_value", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "time", column = "update_time", javaType = String.class, jdbcType = JdbcType.DATE) })
+	UserDeviceBo getCalIntakeByToday(@Param("userId") int userId,
+			@Param("bindId") int bindId, @Param("configCode") String configCode);
+	
+	/**
+	 * 
+	* @Title: updateCalIntake 
+	* @param: 
+	* @Description: 更新卡路里摄入量
+	* @return int
+	 */
+	@Update("UPDATE user_device_record_bt SET device_record_value = #{value} WHERE user_device_record_bt_seq = #{userDeviceId}")
+	int updateCalIntake(@Param("userDeviceId") int userDeviceId,@Param("value") String value);
+	
+	/**
+	 * 
+	* @Title: saveFood 
+	* @param: 
+	* @Description: 保存食物
+	* @return int
+	 */
+	@InsertProvider(type = WristbandProvider.class,method = "saveFood")
+	int saveFood(WristbandVo wristbandVo);
+	
+	/**
+	 * 
+	* @Title: getCalFoodList 
+	* @param: 
+	* @Description: 获取食物记录
+	* @return List<CalFoodBo>
+	 */
+	@Select("SELECT * FROM user_food_intake_bt WHERE user_device_record_bt_seq = #{userDeviceId} "
+			+ "AND active_flag = 'y' ORDER BY food_intake_eat_itype ASC")
+	@Results(value = {
+			@Result(property = "userDeviceId", column = "user_device_record_bt_seq", javaType = int.class, jdbcType = JdbcType.INTEGER),
+			@Result(property = "eatType", column = "food_intake_eat_itype", javaType = int.class, jdbcType = JdbcType.INTEGER),
+			@Result(property = "foodName", column = "food_intake_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "foodBrand", column = "food_intake_brand", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "foodSize", column = "food_intake_size", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "calorieIntake", column = "food_intake_cal", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "foodFat", column = "food_intake_fat", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "calorieIntakeTime", column = "create_time", javaType = String.class, jdbcType = JdbcType.DATE) })
+	List<CalFoodBo> getCalFoodList(@Param("userDeviceId") int userDeviceId);
 }

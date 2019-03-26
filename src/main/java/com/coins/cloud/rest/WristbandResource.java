@@ -212,6 +212,7 @@ public class WristbandResource {
 	@ResponseBody
 	@RequestMapping(value = "save", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public BoUtil uploadDevice(final @RequestBody WristbandVo wristbandVo){
+		log.info(" wristbandVo : {} ",wristbandVo);
 		BoUtil boUtil = BoUtil.getDefaultTrueBo();
 		int userId = wristbandVo.getUserId();
 		String mac = wristbandVo.getMac();
@@ -231,7 +232,7 @@ public class WristbandResource {
 				return boUtil;
 			}
 		}
-		
+		log.info(" bindId : {} ",bindId);
 		//结果 1成功 0失败  数据格式例如 1:1:1:0:1:1:1:1  步数|心率|卡路里消耗|血氧|血压|重量|睡眠|饮水|卡路里摄入
 		String result = "";
 		int i = 0;
@@ -357,16 +358,35 @@ public class WristbandResource {
 		}
 		// 卡路里摄入量上传
 		if (!StringUtil.isBlank(wristbandVo.getCalorieIntake())) {
-			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-					.bindId(bindId).configCode(DeviceConfig.con006)
-					.value(wristbandVo.getCalorieIntake())
-					.time(wristbandVo.getCalorieIntakeTime()).build();
-			int resu = wristbandService.save(userDeviceVo);
+			//今日是否有摄入卡路里
+			int resu = 0;
+			int userDeviceId = 0;
+			UserDeviceBo userDeviceBo = wristbandService.getCalIntakeByToday(userId, bindId, DeviceConfig.con006);
+			log.info(" userDeviceBo : {} ",userDeviceBo);
+			if(userDeviceBo == null){
+				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
+						.bindId(bindId).configCode(DeviceConfig.con006)
+						.value(wristbandVo.getCalorieIntake())
+						.time(wristbandVo.getCalorieIntakeTime()).build();
+				resu = wristbandService.save(userDeviceVo);
+				userDeviceId = userDeviceVo.getUserDeviceId();
+				log.info(" userDeviceId : {} ",userDeviceId);
+			}else{
+				userDeviceId = userDeviceBo.getUserDeviceId();
+				//更新卡路里摄入量
+				double calIntakeTotal = Double.parseDouble(userDeviceBo
+						.getValue())
+						+ Double.parseDouble(wristbandVo.getCalorieIntake());
+				resu = wristbandService.updateCalIntake(userDeviceBo.getUserDeviceId(), String.valueOf(calIntakeTotal));
+			}
 			if (resu > 0) {
 				i = 1;
 			}
 			result += "|" + i;
 			i = 0;
+			//保存食物
+			wristbandVo.setUserDeviceId(userDeviceId);
+			wristbandService.saveFood(wristbandVo);
 		} else {
 			result += "|0";
 		}
@@ -430,7 +450,7 @@ public class WristbandResource {
 		    }
 	    }
 		log.info("userId: {}, offset: {}, pageSize: {},mac:{},code:{}, ",userId, offset, pageSize,mac,code);
-		List<UserDeviceBo> list = wristbandService.getRecordByCode(userId, mac, code, pageIndex, pageSize);
+		List<UserDeviceBo> list = wristbandService.getRecordByCode(userId, mac, code, offset, pageSize);
 		boUtil.setData(list);
 		return boUtil;
 	}
@@ -463,6 +483,7 @@ public class WristbandResource {
 	@ResponseBody
 	@RequestMapping(value = "/modify", method = RequestMethod.PUT, produces = "application/json", consumes = "application/json")
 	public BoUtil modifyInfo(final @RequestBody UserBaseVo userBaseVo) throws Exception {
+		log.info(" userBaseVo : {} ",userBaseVo);
 		BoUtil boUtil = BoUtil.getDefaultTrueBo();
 		int result = wristbandService.modifyInfo(userBaseVo);
 		if(result > 0){
@@ -502,6 +523,7 @@ public class WristbandResource {
 	@ResponseBody
 	@RequestMapping(value = "target/modify", method = RequestMethod.PUT, produces = "application/json", consumes = "application/json")
 	public BoUtil modifyInfo(final @RequestBody WristbandTargetVo wristbandTargetVo) throws Exception {
+		log.info(" wristbandTargetVo : {} ",wristbandTargetVo);
 		BoUtil boUtil = BoUtil.getDefaultTrueBo();
 		int userId = wristbandTargetVo.getUserId();
 		// 查询绑定设备id
@@ -661,11 +683,13 @@ public class WristbandResource {
 		log.info("##########regJson:{}", regJson);
 		JSONObject regObj = JSONObject.fromObject(regJson);
 		UserBaseVo userBaseVo = (UserBaseVo) JSONObject.toBean(regObj, UserBaseVo.class);
-		int result = wristbandService.login(userBaseVo);
-		if(result > 0){
+		int userId = wristbandService.login(userBaseVo);
+		if(userId > 0){
+			boUtil.setData(userId);
 			return boUtil;
 		}else{
 			boUtil = BoUtil.getDefaultFalseBo();
+			boUtil.setMsg("Account password is wrong");
 			return boUtil;
 		}
 	}
@@ -681,6 +705,7 @@ public class WristbandResource {
 	@ResponseBody
 	@RequestMapping(value = "/bind", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public BoUtil bindWristband(final @RequestBody WristbandTargetVo wristbandTargetVo) throws Exception {
+		log.info(" wristbandTargetVo : {} ",wristbandTargetVo);
 		BoUtil boUtil = BoUtil.getDefaultTrueBo();
 		int userId = wristbandTargetVo.getUserId();
 		// 查询绑定设备id

@@ -6,11 +6,13 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Repository;
 
+import com.coins.cloud.bo.CalFoodBo;
 import com.coins.cloud.bo.UserBaseBo;
 import com.coins.cloud.bo.UserDeviceBo;
 import com.coins.cloud.dao.WristbandDao;
 import com.coins.cloud.vo.UserBaseVo;
 import com.coins.cloud.vo.UserDeviceVo;
+import com.coins.cloud.vo.WristbandVo;
 
 @Repository
 public class WristbandDaoMybatisImpl implements WristbandDao {
@@ -93,6 +95,27 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 	@Override
 	public int existAccount(String account) {
 		return wristbandMapper.existAccount(account);
+	}
+
+	@Override
+	public UserDeviceBo getCalIntakeByToday(int userId, int bindId,
+			String configCode) {
+		return wristbandMapper.getCalIntakeByToday(userId, bindId, configCode);
+	}
+
+	@Override
+	public int updateCalIntake(int userDeviceId, String value) {
+		return wristbandMapper.updateCalIntake(userDeviceId, value);
+	}
+
+	@Override
+	public int saveFood(WristbandVo wristbandVo) {
+		return wristbandMapper.saveFood(wristbandVo);
+	}
+
+	@Override
+	public List<CalFoodBo> getCalFoodList(int userDeviceId) {
+		return wristbandMapper.getCalFoodList(userDeviceId);
 	}
 
 }

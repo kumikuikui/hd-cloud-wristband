@@ -19,7 +19,7 @@ import lombok.experimental.Builder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDeviceVo {
-	
+	private int userDeviceId;
 	private int userId;
 	private int bindId;
 	private String configCode;

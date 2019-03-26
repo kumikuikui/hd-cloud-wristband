@@ -1,5 +1,7 @@
 package com.coins.cloud.bo;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +21,9 @@ import lombok.experimental.Builder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDeviceBo {
+	private int userDeviceId;
 	private String configCode;
 	private String value;
 	private String time;
+	private List<CalFoodBo> foodList;
 }
