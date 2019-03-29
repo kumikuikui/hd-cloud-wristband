@@ -41,7 +41,7 @@ public interface WristbandMapper {
 	public int getBandId(@Param("userId") int userId,@Param("mac") String mac);
 	
 	@Select("SELECT device_config_internal_code,device_record_value,MAX(create_time) createTime FROM user_device_record_bt"
-		   +" WHERE user_device_base_sb_seq = #{userId} AND user_device_bind_sr_seq = #{bindId} AND active_flag = 'y' "
+		   +" WHERE user_device_base_sb_seq = #{userId} AND active_flag = 'y' "
 		   +" AND create_time >= curdate() AND create_time < date_add(curdate(),INTERVAL 1 day) "
 		   +" GROUP BY device_config_internal_code")
 	@Results(value = {
@@ -49,7 +49,7 @@ public interface WristbandMapper {
 			@Result(property = "value", column = "device_record_value", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "time", column = "createTime", javaType = String.class, jdbcType = JdbcType.DATE) 
 	})
-	public List<UserDeviceBo> getUserDevice(@Param("userId") int userId,@Param("bindId") int bindId);
+	public List<UserDeviceBo> getUserDevice(@Param("userId") int userId);
 
 	@Select("SELECT * FROM user_device_base_sb WHERE user_device_base_sb_seq = #{userId} AND active_flag = 'y'")
 	@Results(value = {
@@ -74,7 +74,7 @@ public interface WristbandMapper {
 		   +" from user_device_record_bt a inner join "
 		   +" (select DATE_FORMAT(create_time,'%Y-%m-%d') date1,max(create_time) time1 "
 		   +" FROM user_device_record_bt "
-		   +" where user_device_base_sb_seq = #{userId} AND user_device_bind_sr_seq = #{bindId} "
+		   +" where user_device_base_sb_seq = #{userId} "
 		   +" AND active_flag = 'y' AND device_config_internal_code = #{code} "
 		   +" group by DATE_FORMAT(create_time,'%Y-%m-%d') ORDER BY create_time DESC LIMIT #{pageIndex},#{pageSize}) b "
 		   +" on a.create_time = b.time1")
@@ -84,7 +84,7 @@ public interface WristbandMapper {
 			@Result(property = "time", column = "create_time", javaType = String.class, jdbcType = JdbcType.DATE) 
 	})
 	public List<UserDeviceBo> getRecordByCode(@Param("userId") int userId,
-			@Param("bindId") int bindId, @Param("code") String code,
+			@Param("code") String code,
 			@Param("pageIndex") int pageIndex, @Param("pageSize") int pageSize);
 	
 	/**
@@ -128,15 +128,15 @@ public interface WristbandMapper {
 	public int updateTarget(UserDeviceVo userDeviceVo);
 	
 	@Select("SELECT COUNT(1) FROM user_device_target_bt WHERE user_device_base_sb_seq = #{userId} "
-		  + " AND user_device_bind_sr_seq = #{bindId} AND active_flag = 'y' AND device_config_internal_code = #{configCode}")
-	public int getTargetExist(@Param("userId") int userId,@Param("bindId") int bindId,@Param("configCode") String configCode);
+		  + " AND active_flag = 'y' AND device_config_internal_code = #{configCode}")
+	public int getTargetExist(@Param("userId") int userId,@Param("configCode") String configCode);
 	
-	@Select("SELECT * FROM user_device_target_bt WHERE user_device_base_sb_seq = #{userId} AND user_device_bind_sr_seq = #{bindId} AND active_flag = 'y'")
+	@Select("SELECT * FROM user_device_target_bt WHERE user_device_base_sb_seq = #{userId} AND active_flag = 'y'")
 	@Results(value = {
 			@Result(property = "configCode", column = "device_config_internal_code", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "value", column = "device_target_value", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "time", column = "update_time", javaType = String.class, jdbcType = JdbcType.DATE) })
-	public List<UserDeviceBo> getTarget(@Param("userId") int userId,@Param("bindId") int bindId);
+	public List<UserDeviceBo> getTarget(@Param("userId") int userId);
 	
 	/**
 	 * 
@@ -179,14 +179,14 @@ public interface WristbandMapper {
 	* @return UserDeviceBo
 	 */
 	@Select("SELECT * FROM user_device_record_bt WHERE user_device_base_sb_seq = #{userId} "
-			+" AND user_device_bind_sr_seq = #{bindId} AND device_config_internal_code = #{configCode} "
+			+" AND device_config_internal_code = #{configCode} "
 			+" AND DATE_FORMAT(create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')")
 	@Results(value = {
 			@Result(property = "userDeviceId", column = "user_device_record_bt_seq", javaType = int.class, jdbcType = JdbcType.INTEGER),
 			@Result(property = "value", column = "device_target_value", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "time", column = "update_time", javaType = String.class, jdbcType = JdbcType.DATE) })
 	UserDeviceBo getCalIntakeByToday(@Param("userId") int userId,
-			@Param("bindId") int bindId, @Param("configCode") String configCode);
+			@Param("configCode") String configCode);
 	
 	/**
 	 * 

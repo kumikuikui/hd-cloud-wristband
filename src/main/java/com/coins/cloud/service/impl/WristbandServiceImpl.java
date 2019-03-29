@@ -48,11 +48,11 @@ public class WristbandServiceImpl implements WristbandService {
 	@Override
 	public WristbandBo getUserDevice(int userId, String mac) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		int bindId = wristbandDao.getBandId(userId, mac);
-		List<UserDeviceBo> list = wristbandDao.getUserDevice(userId, bindId);
+		//int bindId = wristbandDao.getBandId(userId, mac);
+		List<UserDeviceBo> list = wristbandDao.getUserDevice(userId);
 		WristbandBo wristbandBo = WristbandBo.builder().userId(userId).mac(mac).build();
 		//查询目标数据
-		List<UserDeviceBo> targetList = wristbandDao.getTarget(userId, bindId);
+		List<UserDeviceBo> targetList = wristbandDao.getTarget(userId);
 		HashMap<String, String> map = new HashMap<>();
 		String targetWeightTime = "";
 		for (UserDeviceBo userDeviceBo : targetList) {
@@ -151,7 +151,7 @@ public class WristbandServiceImpl implements WristbandService {
 	@Override
 	public List<UserDeviceBo> getRecordByCode(int userId, String mac, String code,
 			int pageIndex, int pageSize) {
-		int bindId = this.getBandId(userId, mac);
+		//int bindId = this.getBandId(userId, mac);
 		String temp = code;
 		if(code.equals(DeviceConfig.con000_1)){//距离
 			code = DeviceConfig.con001;
@@ -163,7 +163,7 @@ public class WristbandServiceImpl implements WristbandService {
 			UserBaseBo userBaseBo = this.getUserById(userId);
 			height = userBaseBo.getHeight();
 		}
-		List<UserDeviceBo> list = wristbandDao.getRecordByCode(userId, bindId, code, pageIndex, pageSize);
+		List<UserDeviceBo> list = wristbandDao.getRecordByCode(userId, code, pageIndex, pageSize);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		for (UserDeviceBo userDeviceBo : list) {
 			if(temp.equals(DeviceConfig.con000_1)){//距离
@@ -221,16 +221,16 @@ public class WristbandServiceImpl implements WristbandService {
 	}
 
 	@Override
-	public int getTargetExist(int userId, int bindId,String configCode) {
-		return wristbandDao.getTargetExist(userId, bindId,configCode);
+	public int getTargetExist(int userId,String configCode) {
+		return wristbandDao.getTargetExist(userId,configCode);
 	}
 
 	@Override
 	public WristbandBo getTarget(int userId, String mac) {
-		int bindId = wristbandDao.getBandId(userId, mac);
+//		int bindId = wristbandDao.getBandId(userId, mac);
 		WristbandBo wristbandBo = WristbandBo.builder().userId(userId).mac(mac).build();
 		//查询目标数据
-		List<UserDeviceBo> targetList = wristbandDao.getTarget(userId, bindId);
+		List<UserDeviceBo> targetList = wristbandDao.getTarget(userId);
 		for (UserDeviceBo userDeviceBo : targetList) {
 			if(userDeviceBo.getConfigCode().equals(DeviceConfig.con001)){//脚步
 				wristbandBo.setTargetStep(userDeviceBo.getValue());
@@ -270,9 +270,8 @@ public class WristbandServiceImpl implements WristbandService {
 	}
 
 	@Override
-	public UserDeviceBo getCalIntakeByToday(int userId, int bindId,
-			String configCode) {
-		return wristbandDao.getCalIntakeByToday(userId, bindId, configCode);
+	public UserDeviceBo getCalIntakeByToday(int userId,String configCode) {
+		return wristbandDao.getCalIntakeByToday(userId,configCode);
 	}
 
 	@Override

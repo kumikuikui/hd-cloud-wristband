@@ -47,4 +47,6 @@ public class UserBaseVo {
 	private String account;
 	//密码
 	private String password;
+	//体重
+	private String weight;
 }

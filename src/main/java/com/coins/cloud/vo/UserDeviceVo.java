@@ -21,7 +21,7 @@ import lombok.experimental.Builder;
 public class UserDeviceVo {
 	private int userDeviceId;
 	private int userId;
-	private int bindId;
+//	private int bindId;
 	private String configCode;
 	private String value;
 	private String remark;

@@ -30,7 +30,6 @@ public class WristbandProvider {
 			{
 				INSERT_INTO("user_device_record_bt");
 				VALUES("user_device_base_sb_seq", "#{userId}");
-				VALUES("user_device_bind_sr_seq", "#{bindId}");
 				VALUES("device_config_internal_code", "#{configCode}");
 				VALUES("device_record_value", "#{value}");
 				VALUES("device_record_remark", "#{remark}");
@@ -99,7 +98,6 @@ public class WristbandProvider {
 			{
 				INSERT_INTO("user_device_target_bt");
 				VALUES("user_device_base_sb_seq", "#{userId}");
-				VALUES("user_device_bind_sr_seq", "#{bindId}");
 				VALUES("device_config_internal_code", "#{configCode}");
 				VALUES("device_target_value", "#{value}");
 				VALUES("device_target_remark", "#{remark}");
@@ -126,7 +124,7 @@ public class WristbandProvider {
 				UPDATE("user_device_target_bt ");
 				SET("device_target_value = #{value}");
 				SET("update_time = now()");
-				WHERE("user_device_base_sb_seq = #{userId} and user_device_bind_sr_seq = #{bindId} and device_config_internal_code = #{configCode}");
+				WHERE("user_device_base_sb_seq = #{userId} and device_config_internal_code = #{configCode}");
 			}
 		}.toString();
 	}

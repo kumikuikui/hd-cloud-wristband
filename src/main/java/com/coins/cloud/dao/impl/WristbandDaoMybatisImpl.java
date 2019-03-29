@@ -36,8 +36,8 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 	}
 
 	@Override
-	public List<UserDeviceBo> getUserDevice(int userId, int bindId) {
-		return wristbandMapper.getUserDevice(userId, bindId);
+	public List<UserDeviceBo> getUserDevice(int userId) {
+		return wristbandMapper.getUserDevice(userId);
 	}
 
 	@Override
@@ -46,9 +46,9 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 	}
 
 	@Override
-	public List<UserDeviceBo> getRecordByCode(int userId, int bindId, String code,
+	public List<UserDeviceBo> getRecordByCode(int userId, String code,
 			int pageIndex, int pageSize) {
-		return wristbandMapper.getRecordByCode(userId, bindId, code, pageIndex,
+		return wristbandMapper.getRecordByCode(userId, code, pageIndex,
 				pageSize);
 	}
 
@@ -73,13 +73,13 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 	}
 
 	@Override
-	public int getTargetExist(int userId, int bindId,String configCode) {
-		return wristbandMapper.getTargetExist(userId, bindId,configCode);
+	public int getTargetExist(int userId,String configCode) {
+		return wristbandMapper.getTargetExist(userId,configCode);
 	}
 
 	@Override
-	public List<UserDeviceBo> getTarget(int userId, int bindId) {
-		return wristbandMapper.getTarget(userId, bindId);
+	public List<UserDeviceBo> getTarget(int userId) {
+		return wristbandMapper.getTarget(userId);
 	}
 
 	@Override
@@ -98,9 +98,8 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 	}
 
 	@Override
-	public UserDeviceBo getCalIntakeByToday(int userId, int bindId,
-			String configCode) {
-		return wristbandMapper.getCalIntakeByToday(userId, bindId, configCode);
+	public UserDeviceBo getCalIntakeByToday(int userId, String configCode) {
+		return wristbandMapper.getCalIntakeByToday(userId, configCode);
 	}
 
 	@Override

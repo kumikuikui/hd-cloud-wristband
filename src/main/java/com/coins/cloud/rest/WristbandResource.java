@@ -220,7 +220,7 @@ public class WristbandResource {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String time = sdf.format(date);
 		//查询绑定设备id
-		int bindId = wristbandService.getBandId(userId, mac);
+		/*int bindId = wristbandService.getBandId(userId, mac);
 		if(bindId == 0){//绑定设备
 			int result = wristbandService.userBindDevice(userId, mac);
 			if(result > 0){
@@ -232,13 +232,13 @@ public class WristbandResource {
 				return boUtil;
 			}
 		}
-		log.info(" bindId : {} ",bindId);
+		log.info(" bindId : {} ",bindId);*/
 		//结果 1成功 0失败  数据格式例如 1:1:1:0:1:1:1:1  步数|心率|卡路里消耗|血氧|血压|重量|睡眠|饮水|卡路里摄入
 		String result = "";
 		int i = 0;
 		//步数上传
 		if(!StringUtil.isBlank(wristbandVo.getStep())){
-			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId).bindId(bindId)
+			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
 					.configCode(DeviceConfig.con001).value(wristbandVo.getStep())
 					.time(wristbandVo.getStepTime()).build();
 			int resu = wristbandService.save(userDeviceVo);
@@ -252,7 +252,7 @@ public class WristbandResource {
 		}
 		// 心率上传
 		if (!StringUtil.isBlank(wristbandVo.getHeart())) {
-			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId).bindId(bindId)
+			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
 					.configCode(DeviceConfig.con009).value(wristbandVo.getHeart())
 					.time(wristbandVo.getHeartTime()).build();
 			int resu = wristbandService.save(userDeviceVo);
@@ -267,7 +267,7 @@ public class WristbandResource {
 		
 		// 消耗卡路里上传
 		if (!StringUtil.isBlank(wristbandVo.getCalorie())) {
-			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId).bindId(bindId)
+			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
 					.configCode(DeviceConfig.con002).value(wristbandVo.getCalorie())
 					.time(wristbandVo.getCalorieTime()).build();
 			int resu = wristbandService.save(userDeviceVo);
@@ -281,7 +281,7 @@ public class WristbandResource {
 		}
 		// 血氧上传
 		if (!StringUtil.isBlank(wristbandVo.getBlood())) {
-			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId).bindId(bindId)
+			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
 					.configCode(DeviceConfig.con010).value(wristbandVo.getBlood())
 					.time(wristbandVo.getBloodTime()).build();
 			int resu = wristbandService.save(userDeviceVo);
@@ -296,7 +296,7 @@ public class WristbandResource {
 		// 血压上传
 		if (!StringUtil.isBlank(wristbandVo.getDiastolic()) && !StringUtil.isBlank(wristbandVo.getSystolic())) {
 			String value = wristbandVo.getDiastolic() + "|" + wristbandVo.getSystolic();
-			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId).bindId(bindId)
+			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
 					.configCode(DeviceConfig.con003).value(value)
 					.time(wristbandVo.getPressureTime()).build();
 			int resu = wristbandService.save(userDeviceVo);
@@ -314,7 +314,7 @@ public class WristbandResource {
 			String value = wristbandVo.getWeight() + "|"
 					+ wristbandVo.getFat();
 			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-					.bindId(bindId).configCode(DeviceConfig.con004)
+					.configCode(DeviceConfig.con004)
 					.value(value).time(wristbandVo.getWeightTime()).build();
 			int resu = wristbandService.save(userDeviceVo);
 			if (resu > 0) {
@@ -331,7 +331,7 @@ public class WristbandResource {
 			String value = wristbandVo.getSleepStartTime() + "|"
 					+ wristbandVo.getSleepEndTime();
 			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-					.bindId(bindId).configCode(DeviceConfig.con005)
+					.configCode(DeviceConfig.con005)
 					.value(value).time(time).build();
 			int resu = wristbandService.save(userDeviceVo);
 			if (resu > 0) {
@@ -345,7 +345,7 @@ public class WristbandResource {
 		// 饮水量上传
 		if (!StringUtil.isBlank(wristbandVo.getDrinkWater())) {
 			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-					.bindId(bindId).configCode(DeviceConfig.con007)
+					.configCode(DeviceConfig.con007)
 					.value(wristbandVo.getDrinkWater()).time(wristbandVo.getDrinkTime()).build();
 			int resu = wristbandService.save(userDeviceVo);
 			if (resu > 0) {
@@ -361,11 +361,11 @@ public class WristbandResource {
 			//今日是否有摄入卡路里
 			int resu = 0;
 			int userDeviceId = 0;
-			UserDeviceBo userDeviceBo = wristbandService.getCalIntakeByToday(userId, bindId, DeviceConfig.con006);
+			UserDeviceBo userDeviceBo = wristbandService.getCalIntakeByToday(userId, DeviceConfig.con006);
 			log.info(" userDeviceBo : {} ",userDeviceBo);
 			if(userDeviceBo == null){
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-						.bindId(bindId).configCode(DeviceConfig.con006)
+						.configCode(DeviceConfig.con006)
 						.value(wristbandVo.getCalorieIntake())
 						.time(wristbandVo.getCalorieIntakeTime()).build();
 				resu = wristbandService.save(userDeviceVo);
@@ -485,6 +485,17 @@ public class WristbandResource {
 	public BoUtil modifyInfo(final @RequestBody UserBaseVo userBaseVo) throws Exception {
 		log.info(" userBaseVo : {} ",userBaseVo);
 		BoUtil boUtil = BoUtil.getDefaultTrueBo();
+		if(!StringUtil.isBlank(userBaseVo.getWeight())){
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String time = sdf.format(date);
+			String value = userBaseVo.getWeight() + "|0";//重量 + 体脂(默认为0)
+			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userBaseVo.getUserId())
+					.configCode(DeviceConfig.con004)
+					.value(value).time(time).build();
+			int resu = wristbandService.save(userDeviceVo);
+			log.info(" 上传体重结果resu : {} ",resu);
+		}
 		int result = wristbandService.modifyInfo(userBaseVo);
 		if(result > 0){
 			return boUtil;
@@ -527,7 +538,7 @@ public class WristbandResource {
 		BoUtil boUtil = BoUtil.getDefaultTrueBo();
 		int userId = wristbandTargetVo.getUserId();
 		// 查询绑定设备id
-		int bindId = wristbandService.getBandId(userId,
+		/*int bindId = wristbandService.getBandId(userId,
 				wristbandTargetVo.getMac());
 		if (bindId == 0) {// 绑定设备
 			int result = wristbandService.userBindDevice(userId,
@@ -541,93 +552,93 @@ public class WristbandResource {
 				boUtil.setMsg("未查询到绑定的设备");
 				return boUtil;
 			}
-		}
+		}*/
 		if(!StringUtil.isBlank(wristbandTargetVo.getTargetStep())){//步数
 			//是否存在目标数据
-			int exist = wristbandService.getTargetExist(userId, bindId,DeviceConfig.con001);
+			int exist = wristbandService.getTargetExist(userId,DeviceConfig.con001);
 			if(exist > 0){//存在，更新数据
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-						.bindId(bindId).configCode(DeviceConfig.con001)
+						.configCode(DeviceConfig.con001)
 						.value(wristbandTargetVo.getTargetStep()).build();
 				wristbandService.updateTarget(userDeviceVo);
 			}else{//不存在，新增数据
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-						.bindId(bindId).configCode(DeviceConfig.con001)
+						.configCode(DeviceConfig.con001)
 						.value(wristbandTargetVo.getTargetStep()).build();
 				wristbandService.saveTarget(userDeviceVo);
 			}
 		}
 		if(!StringUtil.isBlank(wristbandTargetVo.getTargetCalorie())){//卡路里消耗
 			//是否存在目标数据
-			int exist = wristbandService.getTargetExist(userId, bindId,DeviceConfig.con002);
+			int exist = wristbandService.getTargetExist(userId,DeviceConfig.con002);
 			if(exist > 0){//存在，更新数据
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-						.bindId(bindId).configCode(DeviceConfig.con002)
+						.configCode(DeviceConfig.con002)
 						.value(wristbandTargetVo.getTargetCalorie()).build();
 				wristbandService.updateTarget(userDeviceVo);
 			}else{//不存在，新增数据
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-						.bindId(bindId).configCode(DeviceConfig.con002)
+						.configCode(DeviceConfig.con002)
 						.value(wristbandTargetVo.getTargetCalorie()).build();
 				wristbandService.saveTarget(userDeviceVo);
 			}
 		}
 		if(!StringUtil.isBlank(wristbandTargetVo.getTargetWeight())){//体重KG
 			//是否存在目标数据
-			int exist = wristbandService.getTargetExist(userId, bindId,DeviceConfig.con004);
+			int exist = wristbandService.getTargetExist(userId,DeviceConfig.con004);
 			if(exist > 0){//存在，更新数据
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-						.bindId(bindId).configCode(DeviceConfig.con004)
+						.configCode(DeviceConfig.con004)
 						.value(wristbandTargetVo.getTargetWeight()).build();
 				wristbandService.updateTarget(userDeviceVo);
 			}else{//不存在，新增数据
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-						.bindId(bindId).configCode(DeviceConfig.con004)
+						.configCode(DeviceConfig.con004)
 						.value(wristbandTargetVo.getTargetWeight()).build();
 				wristbandService.saveTarget(userDeviceVo);
 			}
 		}
 		if(!StringUtil.isBlank(wristbandTargetVo.getTargetSleep())){//睡眠
 			//是否存在目标数据
-			int exist = wristbandService.getTargetExist(userId, bindId,DeviceConfig.con005);
+			int exist = wristbandService.getTargetExist(userId,DeviceConfig.con005);
 			if(exist > 0){//存在，更新数据
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-						.bindId(bindId).configCode(DeviceConfig.con005)
+						.configCode(DeviceConfig.con005)
 						.value(wristbandTargetVo.getTargetSleep()).build();
 				wristbandService.updateTarget(userDeviceVo);
 			}else{//不存在，新增数据
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-						.bindId(bindId).configCode(DeviceConfig.con005)
+						.configCode(DeviceConfig.con005)
 						.value(wristbandTargetVo.getTargetSleep()).build();
 				wristbandService.saveTarget(userDeviceVo);
 			}
 		}
 		if(!StringUtil.isBlank(wristbandTargetVo.getTargetCalorieIntake())){//卡路里摄入
 			//是否存在目标数据
-			int exist = wristbandService.getTargetExist(userId, bindId,DeviceConfig.con006);
+			int exist = wristbandService.getTargetExist(userId,DeviceConfig.con006);
 			if(exist > 0){//存在，更新数据
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-						.bindId(bindId).configCode(DeviceConfig.con006)
+						.configCode(DeviceConfig.con006)
 						.value(wristbandTargetVo.getTargetCalorieIntake()).build();
 				wristbandService.updateTarget(userDeviceVo);
 			}else{//不存在，新增数据
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-						.bindId(bindId).configCode(DeviceConfig.con006)
+						.configCode(DeviceConfig.con006)
 						.value(wristbandTargetVo.getTargetCalorieIntake()).build();
 				wristbandService.saveTarget(userDeviceVo);
 			}
 		}
 		if(!StringUtil.isBlank(wristbandTargetVo.getTargetWater())){//饮水量
 			//是否存在目标数据
-			int exist = wristbandService.getTargetExist(userId, bindId,DeviceConfig.con007);
+			int exist = wristbandService.getTargetExist(userId,DeviceConfig.con007);
 			if(exist > 0){//存在，更新数据
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-						.bindId(bindId).configCode(DeviceConfig.con007)
+						.configCode(DeviceConfig.con007)
 						.value(wristbandTargetVo.getTargetWater()).build();
 				wristbandService.updateTarget(userDeviceVo);
 			}else{//不存在，新增数据
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-						.bindId(bindId).configCode(DeviceConfig.con007)
+						.configCode(DeviceConfig.con007)
 						.value(wristbandTargetVo.getTargetWater()).build();
 				wristbandService.saveTarget(userDeviceVo);
 			}

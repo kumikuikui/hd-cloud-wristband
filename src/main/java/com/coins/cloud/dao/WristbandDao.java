@@ -45,7 +45,7 @@ public interface WristbandDao {
 	* @Description: 查询设备信息记录
 	* @return List<UserDeviceBo>
 	 */
-	public List<UserDeviceBo> getUserDevice(int userId,int bindId);
+	public List<UserDeviceBo> getUserDevice(int userId);
 	
 	/**
 	 * 
@@ -63,7 +63,7 @@ public interface WristbandDao {
 	* @Description: 查询列表
 	* @return List<String>
 	 */
-	public List<UserDeviceBo> getRecordByCode(int userId,int bindId,String code,int pageIndex,int pageSize);
+	public List<UserDeviceBo> getRecordByCode(int userId,String code,int pageIndex,int pageSize);
 	
 	/**
 	 * 
@@ -108,7 +108,7 @@ public interface WristbandDao {
 	* @Description: 查询目标是否存在
 	* @return int
 	 */
-	public int getTargetExist(int userId,int bindId,String configCode);
+	public int getTargetExist(int userId,String configCode);
 	
 	/**
 	 * 
@@ -117,7 +117,7 @@ public interface WristbandDao {
 	* @Description:查询目标数据
 	* @return List<UserDeviceBo>
 	 */
-	public List<UserDeviceBo> getTarget(int userId,int bindId);
+	public List<UserDeviceBo> getTarget(int userId);
 	
 	/**
 	 * 
@@ -153,7 +153,7 @@ public interface WristbandDao {
 	* @Description: 查询今日卡路里摄入量
 	* @return UserDeviceBo
 	 */
-	UserDeviceBo getCalIntakeByToday(int userId,int bindId,String configCode);
+	UserDeviceBo getCalIntakeByToday(int userId,String configCode);
 	
 	/**
 	 * 

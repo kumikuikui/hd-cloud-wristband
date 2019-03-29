@@ -99,7 +99,7 @@ public interface WristbandService {
 	* @Description: 查询目标是否存在
 	* @return int
 	 */
-	public int getTargetExist(int userId,int bindId,String configCode);
+	public int getTargetExist(int userId,String configCode);
 	
 	/**
 	 * 
@@ -144,7 +144,7 @@ public interface WristbandService {
 	* @Description: 查询今日卡路里摄入量
 	* @return UserDeviceBo
 	 */
-	UserDeviceBo getCalIntakeByToday(int userId,int bindId,String configCode);
+	UserDeviceBo getCalIntakeByToday(int userId,String configCode);
 	
 	/**
 	 * 
