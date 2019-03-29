@@ -135,7 +135,7 @@ public interface WristbandDao {
 	* @Description: 登录
 	* @return int
 	 */
-	int login(UserBaseVo userBaseVo);
+	Integer login(UserBaseVo userBaseVo);
 	
 	/**
 	 * 
@@ -144,7 +144,7 @@ public interface WristbandDao {
 	* @Description: 验证账号是否已注册
 	* @return int
 	 */
-	int existAccount(String account);
+	Integer existAccount(String account);
 	
 	/**
 	 * 

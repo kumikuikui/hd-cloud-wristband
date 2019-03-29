@@ -88,12 +88,12 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 	}
 
 	@Override
-	public int login(UserBaseVo userBaseVo) {
+	public Integer login(UserBaseVo userBaseVo) {
 		return wristbandMapper.login(userBaseVo);
 	}
 
 	@Override
-	public int existAccount(String account) {
+	public Integer existAccount(String account) {
 		return wristbandMapper.existAccount(account);
 	}
 

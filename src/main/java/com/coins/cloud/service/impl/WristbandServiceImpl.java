@@ -261,12 +261,14 @@ public class WristbandServiceImpl implements WristbandService {
 
 	@Override
 	public int login(UserBaseVo userBaseVo) {
-		return wristbandDao.login(userBaseVo);
+		Integer userId = wristbandDao.login(userBaseVo);
+		return userId == null ? 0 : userId.intValue();
 	}
 
 	@Override
 	public int existAccount(String account) {
-		return wristbandDao.existAccount(account);
+		Integer userId =  wristbandDao.existAccount(account);
+		return userId == null ? 0 : userId.intValue();
 	}
 
 	@Override

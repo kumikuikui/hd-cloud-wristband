@@ -159,7 +159,7 @@ public interface WristbandMapper {
 	 */
 	@Select("SELECT user_device_base_sb_seq FROM user_device_base_sb "
 			+" WHERE device_base_account = #{account} AND device_base_password = #{password} AND active_flag = 'y'")
-	int login(UserBaseVo userBaseVo);
+	Integer login(UserBaseVo userBaseVo);
 	
 	/**
 	 * 
@@ -169,7 +169,7 @@ public interface WristbandMapper {
 	* @return int
 	 */
 	@Select("SELECT user_device_base_sb_seq FROM user_device_base_sb WHERE device_base_account = #{account} AND active_flag = 'y'")
-	int existAccount(@Param("account") String account);
+	Integer existAccount(@Param("account") String account);
 	
 	/**
 	 * 
