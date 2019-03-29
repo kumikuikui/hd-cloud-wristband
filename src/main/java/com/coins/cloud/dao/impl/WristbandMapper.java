@@ -146,6 +146,8 @@ public interface WristbandMapper {
 	* @return int
 	 */
 	@InsertProvider(type = WristbandProvider.class,method = "regist")
+	@SelectKey(keyProperty = "userId", before = false, resultType = int.class, statement = {
+	"SELECT LAST_INSERT_ID() AS user_device_base_sb_seq " })
 	public int regist(UserBaseVo userBaseVo);
 	
 	/**

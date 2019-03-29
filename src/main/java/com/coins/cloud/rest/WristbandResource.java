@@ -660,6 +660,7 @@ public class WristbandResource {
 		}
 		int result = wristbandService.regist(userBaseVo);
 		if(result > 0){
+			boUtil.setData(userBaseVo.getUserId());
 			return boUtil;
 		}else{
 			boUtil = BoUtil.getDefaultFalseBo();
