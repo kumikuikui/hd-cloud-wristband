@@ -17,3 +17,6 @@ spring.datasource:
    validationTimeout: 5000
 rsa.json:
    aeskey: fe96b52790adaefe
+spring.fileupload.config:
+   basepath: /opt/imagesdata
+   domain: http://image.hedu.mobi

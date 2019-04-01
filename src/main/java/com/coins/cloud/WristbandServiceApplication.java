@@ -77,4 +77,13 @@ public class WristbandServiceApplication extends WebMvcConfigurerAdapter {
 	@ConfigurationProperties(prefix = "rsa.json")
 	public static class RSAConfig extends RSAData {
 	}
+	
+	@Component
+	@ConfigurationProperties(prefix = "spring.fileupload.config")
+	@Data
+	public static class FileUploadConfig {
+		private String basepath;
+		private String domain;
+	}
+
 }
