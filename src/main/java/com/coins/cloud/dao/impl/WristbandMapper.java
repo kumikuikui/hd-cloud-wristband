@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
+import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.type.JdbcType;
@@ -36,8 +37,7 @@ public interface WristbandMapper {
 		   +" VALUES (#{userId},#{mac},#{userId},NOW(),#{userId},NOW(),'y')")
 	public int userBindDevice(@Param("userId") int userId,@Param("mac") String mac);
 	
-	@Select("SELECT user_device_bind_sr_seq FROM user_device_bind_sr "
-		   +" WHERE user_device_base_sb_seq = #{userId} AND device_bind_address = #{mac} AND active_flag = 'y'")
+	@SelectProvider(type = WristbandProvider.class,method = "getBandId")
 	public Integer getBandId(@Param("userId") int userId,@Param("mac") String mac);
 	
 	@Select("SELECT device_config_internal_code,device_record_value,MAX(create_time) createTime FROM user_device_record_bt"

@@ -1,11 +1,16 @@
 package com.coins.cloud.dao.sql;
 
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.jdbc.SQL;
 
 import com.coins.cloud.vo.UserBaseVo;
 import com.coins.cloud.vo.UserDeviceVo;
 import com.coins.cloud.vo.WristbandVo;
+import com.hlb.cloud.util.StringUtil;
 
 public class WristbandProvider {
 
@@ -145,6 +150,27 @@ public class WristbandProvider {
 				VALUES("update_by", "#{userId}");
 				VALUES("update_time", "#{calorieIntakeTime}");
 				VALUES("active_flag", "'y'");
+			}
+		}.toString();
+		return sql;
+	}
+	
+	public String getBandId(Map<String,Object> map){
+		String mac = map.get("mac").toString();
+		int userId = Integer.parseInt(map.get("userId").toString());
+		String sql = new SQL() {
+			{
+				SELECT("user_device_bind_sr_seq");
+				FROM("user_device_bind_sr");
+				WHERE("active_flag = 'y'");
+				if(userId > 0){
+					AND();
+					WHERE(" user_device_base_sb_seq = " + userId);
+				}
+				if(!StringUtil.isBlank(mac)){
+					AND();
+					WHERE(" device_bind_address = '" + mac + "'");
+				}
 			}
 		}.toString();
 		return sql;

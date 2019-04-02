@@ -720,10 +720,22 @@ public class WristbandResource {
 		log.info(" wristbandTargetVo : {} ",wristbandTargetVo);
 		BoUtil boUtil = BoUtil.getDefaultTrueBo();
 		int userId = wristbandTargetVo.getUserId();
-		// 查询绑定设备id
-		int bindId = wristbandService.getBandId(userId,
-				wristbandTargetVo.getMac());
-		if (bindId == 0) {// 绑定设备
+		// 查询用户是否已绑定手环
+		int userBind = wristbandService.getBandId(userId,"");
+		if(userBind > 0){
+			boUtil = BoUtil.getDefaultFalseBo();
+			boUtil.setMsg("用户已绑定手环");
+			return boUtil;
+		}
+		// 查询手环是否已被其他用户绑定
+		int wristbandBind = wristbandService.getBandId(0,wristbandTargetVo.getMac());
+		if(wristbandBind > 0){
+			boUtil = BoUtil.getDefaultFalseBo();
+			boUtil.setMsg("手环已被其他用户绑定");
+			return boUtil;
+		}
+		log.info(" userBind : {},wristbandBind : {} ",userBind,wristbandBind);
+		if (userBind == 0 && wristbandBind == 0) {// 绑定设备
 			int result = wristbandService.userBindDevice(userId,
 					wristbandTargetVo.getMac());
 			if (result > 0) {
