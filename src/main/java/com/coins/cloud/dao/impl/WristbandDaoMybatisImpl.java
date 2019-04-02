@@ -31,7 +31,7 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 	}
 
 	@Override
-	public int getBandId(int userId, String mac) {
+	public Integer getBandId(int userId, String mac) {
 		return wristbandMapper.getBandId(userId, mac);
 	}
 

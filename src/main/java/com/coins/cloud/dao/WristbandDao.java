@@ -36,7 +36,7 @@ public interface WristbandDao {
 	* @Description: 查询绑定id
 	* @return int
 	 */
-	public int getBandId(int userId,String mac);
+	public Integer getBandId(int userId,String mac);
 	
 	/**
 	 * 

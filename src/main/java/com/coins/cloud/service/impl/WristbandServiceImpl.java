@@ -42,7 +42,8 @@ public class WristbandServiceImpl implements WristbandService {
 
 	@Override
 	public int getBandId(int userId, String mac) {
-		return wristbandDao.getBandId(userId, mac);
+		Integer bandId = wristbandDao.getBandId(userId, mac);
+		return bandId == null ? 0 : bandId.intValue();
 	}
 
 	@Override

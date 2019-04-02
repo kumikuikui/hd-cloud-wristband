@@ -38,7 +38,7 @@ public interface WristbandMapper {
 	
 	@Select("SELECT user_device_bind_sr_seq FROM user_device_bind_sr "
 		   +" WHERE user_device_base_sb_seq = #{userId} AND device_bind_address = #{mac} AND active_flag = 'y'")
-	public int getBandId(@Param("userId") int userId,@Param("mac") String mac);
+	public Integer getBandId(@Param("userId") int userId,@Param("mac") String mac);
 	
 	@Select("SELECT device_config_internal_code,device_record_value,MAX(create_time) createTime FROM user_device_record_bt"
 		   +" WHERE user_device_base_sb_seq = #{userId} AND active_flag = 'y' "
