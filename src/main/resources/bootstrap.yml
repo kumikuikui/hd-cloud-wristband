@@ -29,8 +29,8 @@ spring:
   http:
     multipart:
       enabled: true
-      maxFileSize:10Mb
-      maxRequestSize:10Mb
+      max-file-size: 10MB
+      max-request-size: 10MB
 eureka:
   instance:
     hostname: localhost
@@ -76,8 +76,8 @@ spring:
   http:
     multipart:
       enabled: true
-      maxFileSize:10Mb
-      maxRequestSize:10Mb  
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 logging:
   level:
