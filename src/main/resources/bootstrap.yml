@@ -26,7 +26,10 @@ spring:
     encoding: UTF-8
     content-type: text/html
     cache: false        
-
+  http:
+    multipart:
+      maxFileSize:10Mb
+      maxRequestSize:10Mb
 eureka:
   instance:
     hostname: localhost
@@ -69,7 +72,11 @@ spring:
     encoding: UTF-8
     content-type: text/html
     cache: false
-    
+  http:
+    multipart:
+      maxFileSize:10Mb
+      maxRequestSize:10Mb  
+
 logging:
   level:
     com.hlb.cloud.dao.mapper: trace
