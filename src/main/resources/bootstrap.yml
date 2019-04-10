@@ -28,6 +28,7 @@ spring:
     cache: false        
   http:
     multipart:
+      enabled: true
       maxFileSize:10Mb
       maxRequestSize:10Mb
 eureka:
@@ -74,6 +75,7 @@ spring:
     cache: false
   http:
     multipart:
+      enabled: true
       maxFileSize:10Mb
       maxRequestSize:10Mb  
 
