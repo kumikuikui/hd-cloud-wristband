@@ -28,6 +28,7 @@ import com.coins.cloud.bo.WristbandBo;
 import com.coins.cloud.service.WristbandService;
 import com.coins.cloud.util.AESUtil;
 import com.coins.cloud.util.DeviceConfig;
+import com.coins.cloud.util.ErrorCode;
 import com.coins.cloud.util.FileUtil;
 import com.coins.cloud.util.HttpClientUtil;
 import com.coins.cloud.vo.RequestVo;
@@ -215,7 +216,6 @@ public class WristbandResource {
 		log.info(" wristbandVo : {} ",wristbandVo);
 		BoUtil boUtil = BoUtil.getDefaultTrueBo();
 		int userId = wristbandVo.getUserId();
-		String mac = wristbandVo.getMac();
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String time = sdf.format(date);
@@ -666,6 +666,7 @@ public class WristbandResource {
 		int userId = wristbandService.existAccount(userBaseVo.getAccount());
 		if(userId > 0){
 			boUtil = BoUtil.getDefaultFalseBo();
+			boUtil.setCode(ErrorCode.ACCOUNT_REGISTERED);
 			boUtil.setMsg("Account registered");
 			return boUtil;
 		}
@@ -674,6 +675,7 @@ public class WristbandResource {
 			boUtil.setData(userBaseVo.getUserId());
 			return boUtil;
 		}else{
+			boUtil.setCode(ErrorCode.FAIL);
 			boUtil = BoUtil.getDefaultFalseBo();
 			return boUtil;
 		}
@@ -701,6 +703,7 @@ public class WristbandResource {
 			return boUtil;
 		}else{
 			boUtil = BoUtil.getDefaultFalseBo();
+			boUtil.setCode(ErrorCode.ACCOUNT_PASSWORD_IS_WRONG);
 			boUtil.setMsg("Account password is wrong");
 			return boUtil;
 		}
@@ -724,6 +727,7 @@ public class WristbandResource {
 		int userBind = wristbandService.getBandId(userId,"");
 		if(userBind > 0){
 			boUtil = BoUtil.getDefaultFalseBo();
+			boUtil.setCode(ErrorCode.USER_HAS_BOUND_WRISTBAND);
 			boUtil.setMsg("用户已绑定手环");
 			return boUtil;
 		}
@@ -731,6 +735,7 @@ public class WristbandResource {
 		int wristbandBind = wristbandService.getBandId(0,wristbandTargetVo.getMac());
 		if(wristbandBind > 0){
 			boUtil = BoUtil.getDefaultFalseBo();
+			boUtil.setCode(ErrorCode.WRISTBAND_HAD_BOUND);
 			boUtil.setMsg("手环已被其他用户绑定");
 			return boUtil;
 		}
@@ -742,10 +747,12 @@ public class WristbandResource {
 				return boUtil;
 			} else {
 				boUtil = BoUtil.getDefaultFalseBo();
+				boUtil.setCode(ErrorCode.FAIL);
 				return boUtil;
 			}
 		}else{
 			boUtil = BoUtil.getDefaultFalseBo();
+			boUtil.setCode(ErrorCode.WRISTBAND_RING_DEVICE);
 			boUtil.setMsg("已绑定手环设备");
 			return boUtil;
 		}
