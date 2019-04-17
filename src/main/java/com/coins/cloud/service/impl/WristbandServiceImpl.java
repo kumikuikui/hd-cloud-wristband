@@ -19,6 +19,7 @@ import com.coins.cloud.bo.UserDeviceBo;
 import com.coins.cloud.bo.WristbandBo;
 import com.coins.cloud.dao.WristbandDao;
 import com.coins.cloud.service.WristbandService;
+import com.coins.cloud.util.CommonUtil;
 import com.coins.cloud.util.DeviceConfig;
 import com.coins.cloud.vo.UserBaseVo;
 import com.coins.cloud.vo.UserDeviceVo;
@@ -95,6 +96,7 @@ public class WristbandServiceImpl implements WristbandService {
 				wristbandBo.setDiastolic(userDeviceBo.getValue().split("\\|")[0]);
 				wristbandBo.setSystolic(userDeviceBo.getValue().split("\\|")[1]);
 				wristbandBo.setPressureTime(userDeviceBo.getTime());
+				wristbandBo.setPressureWarn(CommonUtil.checkBloodPressure(userDeviceBo.getValue()));
 			}
 			if(userDeviceBo.getConfigCode().equals(DeviceConfig.con004)){//重量
 				wristbandBo.setWeight(userDeviceBo.getValue().split("\\|")[0]);
@@ -107,6 +109,7 @@ public class WristbandServiceImpl implements WristbandService {
 					double bmi = weight / h / h;
 					BigDecimal bg = new BigDecimal(bmi).setScale(2, RoundingMode.HALF_UP);
 					wristbandBo.setBmi(String.valueOf(bg.doubleValue()));
+					wristbandBo.setBmiWarn(CommonUtil.checkBMI(wristbandBo.getBmi()));
 				}
 				wristbandBo.setTargetWeight(map.get(userDeviceBo.getConfigCode()));
 				wristbandBo.setTargetWeightTime(targetWeightTime);
@@ -130,6 +133,7 @@ public class WristbandServiceImpl implements WristbandService {
 			if(userDeviceBo.getConfigCode().equals(DeviceConfig.con009)){//心率
 				wristbandBo.setHeart(userDeviceBo.getValue());
 				wristbandBo.setHeartTime(userDeviceBo.getTime());
+				wristbandBo.setHeartWarn(CommonUtil.checkHeart(userDeviceBo.getValue()));
 			}
 			if(userDeviceBo.getConfigCode().equals(DeviceConfig.con010)){//血氧
 				wristbandBo.setBlood(userDeviceBo.getValue());

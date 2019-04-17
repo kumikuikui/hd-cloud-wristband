@@ -77,5 +77,11 @@ public class WristbandBo {
 	private String targetCalorieIntake;
 	//饮水量
 	private String targetWater;
+	//心率警告 1:偏低 2:正常 3:偏高
+	private int heartWarn;
+	//血压警告 1:低血压,2:理想血压,3:正常血压,4:正常高值,5:轻度高血压(1级),6:中度高血压(2级),7:重度高血压(3级)
+	private int pressureWarn;
+	//BMI警告 1:偏瘦, 2:正常,3:过重,4:肥胖 
+	private int bmiWarn;
 
 }
