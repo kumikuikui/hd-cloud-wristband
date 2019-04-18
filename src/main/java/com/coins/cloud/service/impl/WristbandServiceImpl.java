@@ -24,6 +24,7 @@ import com.coins.cloud.util.DeviceConfig;
 import com.coins.cloud.vo.UserBaseVo;
 import com.coins.cloud.vo.UserDeviceVo;
 import com.coins.cloud.vo.WristbandVo;
+import com.hlb.cloud.util.StringUtil;
 
 @Service
 public class WristbandServiceImpl implements WristbandService {
@@ -69,9 +70,26 @@ public class WristbandServiceImpl implements WristbandService {
 				targetWeightTime = userDeviceBo.getTime();
 			}
 		}
-		
 		//查询用户信息
 		UserBaseBo userBaseBo = this.getUserById(userId);
+		
+		// 由于体重不会每日更新，体重查询最新的一次
+		String weigAndFat = wristbandDao.getNewWeight(userId,DeviceConfig.con004);
+		wristbandBo.setWeight(weigAndFat.split("\\|")[0]);
+		wristbandBo.setFat(weigAndFat.split("\\|")[1]);
+		// 计算BMI(BMI 体重公斤数除以身高米数平方)
+		int height = userBaseBo.getHeight();
+		if (height > 0) {
+			double h = height / 100.0;
+			double weight = Double.parseDouble(wristbandBo.getWeight());
+			double bmi = weight / h / h;
+			BigDecimal bg = new BigDecimal(bmi).setScale(2,
+					RoundingMode.HALF_UP);
+			wristbandBo.setBmi(String.valueOf(bg.doubleValue()));
+			wristbandBo.setBmiWarn(CommonUtil.checkBMI(wristbandBo.getBmi()));
+		}
+		wristbandBo.setTargetWeight(map.get(DeviceConfig.con004));
+		wristbandBo.setTargetWeightTime(targetWeightTime);
 		for (UserDeviceBo userDeviceBo : list) {
 			try {
 				String time = sdf.format(sdf.parse(userDeviceBo.getTime()));
@@ -99,20 +117,20 @@ public class WristbandServiceImpl implements WristbandService {
 				wristbandBo.setPressureWarn(CommonUtil.checkBloodPressure(userDeviceBo.getValue()));
 			}
 			if(userDeviceBo.getConfigCode().equals(DeviceConfig.con004)){//重量
-				wristbandBo.setWeight(userDeviceBo.getValue().split("\\|")[0]);
-				wristbandBo.setFat(userDeviceBo.getValue().split("\\|")[1]);
-				//计算BMI(BMI 体重公斤数除以身高米数平方)
-				int height = userBaseBo.getHeight();
-				if(height > 0){
-					double h = height / 100.0;
-					double weight =Double.parseDouble(wristbandBo.getWeight());
-					double bmi = weight / h / h;
-					BigDecimal bg = new BigDecimal(bmi).setScale(2, RoundingMode.HALF_UP);
-					wristbandBo.setBmi(String.valueOf(bg.doubleValue()));
-					wristbandBo.setBmiWarn(CommonUtil.checkBMI(wristbandBo.getBmi()));
-				}
-				wristbandBo.setTargetWeight(map.get(userDeviceBo.getConfigCode()));
-				wristbandBo.setTargetWeightTime(targetWeightTime);
+//				wristbandBo.setWeight(userDeviceBo.getValue().split("\\|")[0]);
+//				wristbandBo.setFat(userDeviceBo.getValue().split("\\|")[1]);
+//				//计算BMI(BMI 体重公斤数除以身高米数平方)
+//				int height = userBaseBo.getHeight();
+//				if(height > 0){
+//					double h = height / 100.0;
+//					double weight =Double.parseDouble(wristbandBo.getWeight());
+//					double bmi = weight / h / h;
+//					BigDecimal bg = new BigDecimal(bmi).setScale(2, RoundingMode.HALF_UP);
+//					wristbandBo.setBmi(String.valueOf(bg.doubleValue()));
+//					wristbandBo.setBmiWarn(CommonUtil.checkBMI(wristbandBo.getBmi()));
+//				}
+//				wristbandBo.setTargetWeight(map.get(userDeviceBo.getConfigCode()));
+//				wristbandBo.setTargetWeightTime(targetWeightTime);
 			}
 			if(userDeviceBo.getConfigCode().equals(DeviceConfig.con005)){//睡觉
 				wristbandBo.setSleepStartTime(userDeviceBo.getValue().split("\\|")[0]);
@@ -131,7 +149,16 @@ public class WristbandServiceImpl implements WristbandService {
 			if(userDeviceBo.getConfigCode().equals(DeviceConfig.con008)){//身高
 			}
 			if(userDeviceBo.getConfigCode().equals(DeviceConfig.con009)){//心率
-				wristbandBo.setHeart(userDeviceBo.getValue());
+				//查询今日所有心率，取平均值
+				List<UserDeviceBo> heartList = wristbandDao.getTodayInfo(userId, DeviceConfig.con009);
+				int sum = 0;
+				int size = heartList.size();
+				for (UserDeviceBo userDev : heartList) {
+					int heart = Integer.parseInt(userDev.getValue());
+					sum += heart;
+				}
+				int ave = (int)sum / size;
+				wristbandBo.setHeart(String.valueOf(ave));
 				wristbandBo.setHeartTime(userDeviceBo.getTime());
 				wristbandBo.setHeartWarn(CommonUtil.checkHeart(userDeviceBo.getValue()));
 			}
@@ -147,15 +174,21 @@ public class WristbandServiceImpl implements WristbandService {
 	public UserBaseBo getUserById(int userId) {
 		UserBaseBo userBaseBo = wristbandDao.getUserById(userId);
 		if(userBaseBo != null){
+			//查询手环绑定数量
 			int bindCount = wristbandDao.getBindCountByUserId(userId);
 			userBaseBo.setBindCount(bindCount);
+			//查询最新的体重
+			String value = wristbandDao.getNewWeight(userId, DeviceConfig.con004);
+			if(!StringUtil.isBlank(value)){
+				userBaseBo.setWeight(value.split("\\|")[0]);
+			}
 		}
 		return userBaseBo;
 	}
 
 	@Override
 	public List<UserDeviceBo> getRecordByCode(int userId, String mac, String code,
-			int pageIndex, int pageSize) {
+			String beginTime, String endTime) {
 		//int bindId = this.getBandId(userId, mac);
 		String temp = code;
 		if(code.equals(DeviceConfig.con000_1)){//距离
@@ -168,7 +201,7 @@ public class WristbandServiceImpl implements WristbandService {
 			UserBaseBo userBaseBo = this.getUserById(userId);
 			height = userBaseBo.getHeight();
 		}
-		List<UserDeviceBo> list = wristbandDao.getRecordByCode(userId, code, pageIndex, pageSize);
+		List<UserDeviceBo> list = wristbandDao.getRecordByCode(userId, code, beginTime, endTime);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		for (UserDeviceBo userDeviceBo : list) {
 			if(temp.equals(DeviceConfig.con000_1)){//距离
@@ -277,8 +310,8 @@ public class WristbandServiceImpl implements WristbandService {
 	}
 
 	@Override
-	public UserDeviceBo getCalIntakeByToday(int userId,String configCode) {
-		return wristbandDao.getCalIntakeByToday(userId,configCode);
+	public List<UserDeviceBo> getTodayInfo(int userId,String configCode) {
+		return wristbandDao.getTodayInfo(userId,configCode);
 	}
 
 	@Override
@@ -290,4 +323,15 @@ public class WristbandServiceImpl implements WristbandService {
 	public int saveFood(WristbandVo wristbandVo) {
 		return wristbandDao.saveFood(wristbandVo);
 	}
+
+	@Override
+	public int getHeartCountByToday(int userId, String configCode) {
+		return wristbandDao.getHeartCountByToday(userId, configCode);
+	}
+
+	@Override
+	public int deleteRecord(int userDeviceId) {
+		return wristbandDao.deleteRecord(userDeviceId);
+	}
+
 }

@@ -33,6 +33,8 @@ public class UserBaseBo {
 	private double balance;
 	//身高,cm
 	private int height;
+	//体重
+	private String weight;
 	//生日
 	private String birthdate;
 	//性别，1男2女
@@ -51,5 +53,6 @@ public class UserBaseBo {
 	private String idcard;
 	//身份识别图片,多张图用|分隔
 	private String idcardUrl;
-
+	//认证状态0未认证，1认证中，2认证成功，3认证失败
+	private int authType;
 }

@@ -47,9 +47,9 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 
 	@Override
 	public List<UserDeviceBo> getRecordByCode(int userId, String code,
-			int pageIndex, int pageSize) {
-		return wristbandMapper.getRecordByCode(userId, code, pageIndex,
-				pageSize);
+			String beginTime, String endTime) {
+		return wristbandMapper.getRecordByCode(userId, code, beginTime,
+				endTime);
 	}
 
 	@Override
@@ -98,8 +98,8 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 	}
 
 	@Override
-	public UserDeviceBo getCalIntakeByToday(int userId, String configCode) {
-		return wristbandMapper.getCalIntakeByToday(userId, configCode);
+	public List<UserDeviceBo> getTodayInfo(int userId, String configCode) {
+		return wristbandMapper.getTodayInfo(userId, configCode);
 	}
 
 	@Override
@@ -115,6 +115,21 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 	@Override
 	public List<CalFoodBo> getCalFoodList(int userDeviceId) {
 		return wristbandMapper.getCalFoodList(userDeviceId);
+	}
+
+	@Override
+	public String getNewWeight(int userId, String configCode) {
+		return wristbandMapper.getNewWeight(userId, configCode);
+	}
+
+	@Override
+	public int getHeartCountByToday(int userId, String configCode) {
+		return wristbandMapper.getHeartCountByToday(userId, configCode);
+	}
+
+	@Override
+	public int deleteRecord(int userDeviceId) {
+		return wristbandMapper.deleteRecord(userDeviceId);
 	}
 
 }

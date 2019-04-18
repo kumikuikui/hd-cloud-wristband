@@ -63,7 +63,7 @@ public interface WristbandService {
 	* @Description: 查询列表
 	* @return List<String>
 	 */
-	public List<UserDeviceBo> getRecordByCode(int userId,String mac,String code,int pageIndex,int pageSize);
+	public List<UserDeviceBo> getRecordByCode(int userId,String mac,String code,String beginTime, String endTime);
 	
 	/**
 	 * 
@@ -141,10 +141,10 @@ public interface WristbandService {
 	 * 
 	* @Title: getCalIntakeByToday 
 	* @param: 
-	* @Description: 查询今日卡路里摄入量
+	* @Description: 查询今日某个内码值
 	* @return UserDeviceBo
 	 */
-	UserDeviceBo getCalIntakeByToday(int userId,String configCode);
+	List<UserDeviceBo> getTodayInfo(int userId,String configCode);
 	
 	/**
 	 * 
@@ -163,4 +163,23 @@ public interface WristbandService {
 	* @return int
 	 */
 	int saveFood(WristbandVo wristbandVo);
+	
+	/**
+	 * 
+	* @Title: getHeartCountByToday 
+	* @param: 
+	* @Description: 查询今日心率添加数量
+	* @return int
+	 */
+	int getHeartCountByToday(int userId,String configCode);
+	
+	/**
+	 * 
+	* @Title: deleteRecord 
+	* @param: 
+	* @Description: 删除记录
+	* @return int
+	 */
+	int deleteRecord(int userDeviceId);
+	
 }

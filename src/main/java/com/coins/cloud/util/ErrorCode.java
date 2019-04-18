@@ -46,4 +46,14 @@ public class ErrorCode {
 	 * 已绑定手环设备
 	 */
 	public final static String WRISTBAND_RING_DEVICE = "1000006";
+	
+	/**
+	 * 保险认证已提交，暂不能修改
+	 */
+	public final static String INSURANCE_SUBMITTED = "1000007";
+	
+	/**
+	 * 心率添加已达上限
+	 */
+	public final static String HEART_ADDITION_UPPER_LIMIT = "1000008";
 }

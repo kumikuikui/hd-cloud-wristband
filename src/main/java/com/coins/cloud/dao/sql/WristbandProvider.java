@@ -92,6 +92,9 @@ public class WristbandProvider {
 				if (StringUtils.isNotBlank(userBaseVo.getIdcardUrl())) {
 					SET("device_base_idcard_urls = #{idcardUrl}");
 				}
+				if (userBaseVo.getAuthType() > 0) {
+					SET("device_base_auth_itype = #{authType}");
+				}
 				SET("update_time = now()");
 				WHERE("user_device_base_sb_seq = #{userId}");
 			}

@@ -2,6 +2,7 @@ package com.coins.cloud.dao.impl;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Mapper;
@@ -66,26 +67,29 @@ public interface WristbandMapper {
 			@Result(property = "insuranceNo", column = "device_base_insurance_no", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "insuranceName", column = "device_base_insurance_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "idcard", column = "device_base_idcard", javaType = String.class, jdbcType = JdbcType.VARCHAR),
-			@Result(property = "idcardUrl", column = "device_base_idcard_urls", javaType = String.class, jdbcType = JdbcType.VARCHAR)
+			@Result(property = "idcardUrl", column = "device_base_idcard_urls", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "authType", column = "device_base_auth_itype", javaType = int.class, jdbcType = JdbcType.INTEGER)
 	})
 	public UserBaseBo getUserById(@Param("userId") int userId);
 	
-	@Select("select a.device_record_value,a.create_time,a.user_device_record_bt_seq "
+	@Select("select case when a.device_config_internal_code = 'con009' then x1 else a.device_record_value end record_value,"
+		   +" a.create_time,a.user_device_record_bt_seq "
 		   +" from user_device_record_bt a inner join "
-		   +" (select DATE_FORMAT(create_time,'%Y-%m-%d') date1,max(create_time) time1 "
+		   +" (select DATE_FORMAT(create_time,'%Y-%m-%d') date1,max(create_time) time1,floor(avg(device_record_value)) x1 "
 		   +" FROM user_device_record_bt "
 		   +" where user_device_base_sb_seq = #{userId} "
 		   +" AND active_flag = 'y' AND device_config_internal_code = #{code} "
-		   +" group by DATE_FORMAT(create_time,'%Y-%m-%d') ORDER BY create_time DESC LIMIT #{pageIndex},#{pageSize}) b "
-		   +" on a.create_time = b.time1")
+		   +" AND create_time >= #{beginTime} AND create_time <= #{endTime} "
+		   +" group by DATE_FORMAT(create_time,'%Y-%m-%d') ORDER BY create_time DESC) b "
+		   +" on a.create_time = b.time1 and a.device_config_internal_code = #{code} ")
 	@Results(value = {
 			@Result(property = "userDeviceId", column = "user_device_record_bt_seq", javaType = int.class, jdbcType = JdbcType.INTEGER),
-			@Result(property = "value", column = "device_record_value", javaType = String.class, jdbcType = JdbcType.DATE),
+			@Result(property = "value", column = "record_value", javaType = String.class, jdbcType = JdbcType.DATE),
 			@Result(property = "time", column = "create_time", javaType = String.class, jdbcType = JdbcType.DATE) 
 	})
 	public List<UserDeviceBo> getRecordByCode(@Param("userId") int userId,
 			@Param("code") String code,
-			@Param("pageIndex") int pageIndex, @Param("pageSize") int pageSize);
+			@Param("beginTime") String beginTime, @Param("endTime") String endTime);
 	
 	/**
 	 * 
@@ -175,17 +179,17 @@ public interface WristbandMapper {
 	 * 
 	* @Title: getCalIntakeByToday 
 	* @param: 
-	* @Description: 查询今日卡路里摄入量
+	* @Description: 查询今日某个内码值
 	* @return UserDeviceBo
 	 */
 	@Select("SELECT * FROM user_device_record_bt WHERE user_device_base_sb_seq = #{userId} "
 			+" AND device_config_internal_code = #{configCode} "
-			+" AND DATE_FORMAT(create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')")
+			+" AND DATE_FORMAT(create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d') ORDER BY create_time DESC")
 	@Results(value = {
 			@Result(property = "userDeviceId", column = "user_device_record_bt_seq", javaType = int.class, jdbcType = JdbcType.INTEGER),
 			@Result(property = "value", column = "device_target_value", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "time", column = "update_time", javaType = String.class, jdbcType = JdbcType.DATE) })
-	UserDeviceBo getCalIntakeByToday(@Param("userId") int userId,
+	List<UserDeviceBo> getTodayInfo(@Param("userId") int userId,
 			@Param("configCode") String configCode);
 	
 	/**
@@ -227,4 +231,38 @@ public interface WristbandMapper {
 			@Result(property = "foodFat", column = "food_intake_fat", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "calorieIntakeTime", column = "create_time", javaType = String.class, jdbcType = JdbcType.DATE) })
 	List<CalFoodBo> getCalFoodList(@Param("userDeviceId") int userDeviceId);
+	
+	/**
+	 * 
+	* @Title: getNewWeight 
+	* @param: 
+	* @Description: 查询用户最新的重量
+	* @return String
+	 */
+	@Select("SELECT device_record_value FROM user_device_record_bt "
+		   +" WHERE active_flag = 'y' AND user_device_base_sb_seq = #{userId} AND device_config_internal_code = #{configCode} "
+		   +" ORDER BY create_time DESC LIMIT 1")
+	String getNewWeight(@Param("userId") int userId,@Param("configCode") String configCode);
+	
+	/**
+	 * 
+	* @Title: getHeartCountByToday 
+	* @param: 
+	* @Description: 查询今日心率添加数量
+	* @return int
+	 */
+	@Select("SELECT COUNT(1) FROM user_device_record_bt "
+		   +" WHERE active_flag = 'y' AND user_device_base_sb_seq = #{userId} AND device_config_internal_code = #{configCode} "
+		   +" AND DATE_FORMAT(create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')")
+	int getHeartCountByToday(@Param("userId") int userId,@Param("configCode") String configCode);
+	
+	/**
+	 * 
+	* @Title: deleteRecord 
+	* @param: 
+	* @Description: 删除记录
+	* @return int
+	 */
+	@Delete("DELETE FROM user_device_record_bt WHERE user_device_record_bt_seq = #{userDeviceId}")
+	int deleteRecord(@Param("userDeviceId") int userDeviceId);
 }

@@ -252,6 +252,14 @@ public class WristbandResource {
 		}
 		// 心率上传
 		if (!StringUtil.isBlank(wristbandVo.getHeart())) {
+			//查询今日心率添加次数
+			int count = wristbandService.getHeartCountByToday(userId, DeviceConfig.con009);
+			if(count >= 5){
+				boUtil = BoUtil.getDefaultFalseBo();
+				boUtil.setCode(ErrorCode.HEART_ADDITION_UPPER_LIMIT);
+				boUtil.setMsg("Heart rate has reached the upper limit");
+				return boUtil;
+			}
 			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
 					.configCode(DeviceConfig.con009).value(wristbandVo.getHeart())
 					.time(wristbandVo.getHeartTime()).build();
@@ -361,9 +369,9 @@ public class WristbandResource {
 			//今日是否有摄入卡路里
 			int resu = 0;
 			int userDeviceId = 0;
-			UserDeviceBo userDeviceBo = wristbandService.getCalIntakeByToday(userId, DeviceConfig.con006);
-			log.info(" userDeviceBo : {} ",userDeviceBo);
-			if(userDeviceBo == null){
+			List<UserDeviceBo> calIntakeList = wristbandService.getTodayInfo(userId, DeviceConfig.con006);
+			log.info(" calIntakeList : {} ",calIntakeList);
+			if(calIntakeList == null || calIntakeList.isEmpty()){
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
 						.configCode(DeviceConfig.con006)
 						.value(wristbandVo.getCalorieIntake())
@@ -372,6 +380,7 @@ public class WristbandResource {
 				userDeviceId = userDeviceVo.getUserDeviceId();
 				log.info(" userDeviceId : {} ",userDeviceId);
 			}else{
+				UserDeviceBo userDeviceBo = calIntakeList.get(0);
 				userDeviceId = userDeviceBo.getUserDeviceId();
 				//更新卡路里摄入量
 				double calIntakeTotal = Double.parseDouble(userDeviceBo
@@ -421,36 +430,38 @@ public class WristbandResource {
 	@ApiOperation(httpMethod = "GET", value = "list", notes = "list")
 	@ResponseBody
 	@RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json", consumes = "application/*")
-	public BoUtil getList(@QueryParam("pageIndex") Integer pageIndex,@QueryParam("pageSize") Integer pageSize,
-			@QueryParam("userId") Integer userId,@QueryParam("mac") String mac,@QueryParam("code") String code) throws ParseException {
+	public BoUtil getList(@QueryParam("userId") Integer userId,@QueryParam("mac") String mac,@QueryParam("code") String code,
+			@QueryParam("beginTime") String beginTime,@QueryParam("endTime") String endTime) throws ParseException {
 		BoUtil boUtil = BoUtil.getDefaultTrueBo();
-		pageIndex = pageIndex == null ? 1 : pageIndex;
 		userId = userId == null ? 0 : userId;
-		if (pageIndex <= 0) {
-			pageIndex = 1;
-		}
-	    Calendar c=Calendar.getInstance();
-	    c.setTime(new Date());
-	    int weekday=c.get(Calendar.DAY_OF_WEEK);
-	    pageSize = pageSize == null ? 7 : pageSize;
-	    int offset = 0;
-	    if(pageIndex == 1){
-	    	offset = (pageIndex - 1) * pageSize;
-	    	if(weekday == 1){//当天是周日
-		    	pageSize = 14;//查询这周和上周的数据
-		    }else{
-		    	pageSize = 7 + weekday - 1;
-		    }
-	    }else{
-	    	pageSize = 7;
-	    	if(weekday == 1){//当天是周日
-	    		offset = (pageIndex - 1) * pageSize + 7;
-		    }else{
-		    	offset = (pageIndex - 1) * pageSize + weekday - 1;
-		    }
-	    }
-		log.info("userId: {}, offset: {}, pageSize: {},mac:{},code:{}, ",userId, offset, pageSize,mac,code);
-		List<UserDeviceBo> list = wristbandService.getRecordByCode(userId, mac, code, offset, pageSize);
+//		pageIndex = pageIndex == null ? 1 : pageIndex;
+//		if (pageIndex <= 0) {
+//			pageIndex = 1;
+//		}
+//	    Calendar c=Calendar.getInstance();
+//	    c.setTime(new Date());
+//	    int weekday=c.get(Calendar.DAY_OF_WEEK);
+//	    pageSize = pageSize == null ? 7 : pageSize;
+//	    int offset = 0;
+//	    if(pageIndex == 1){
+//	    	offset = (pageIndex - 1) * pageSize;
+//	    	if(weekday == 1){//当天是周日
+//		    	pageSize = 14;//查询这周和上周的数据
+//		    }else{
+//		    	pageSize = 7 + weekday - 1;
+//		    }
+//	    }else{
+//	    	pageSize = 7;
+//	    	if(weekday == 1){//当天是周日
+//	    		offset = (pageIndex - 1) * pageSize + 7;
+//		    }else{
+//		    	offset = (pageIndex - 1) * pageSize + weekday - 1;
+//		    }
+//	    }
+		beginTime = beginTime + " 00:00:00";
+		endTime = endTime + " 23:59:59";
+		log.info("userId: {}, beginTime: {}, endTime: {},mac:{},code:{}, ",userId, beginTime, endTime,mac,code);
+		List<UserDeviceBo> list = wristbandService.getRecordByCode(userId, mac, code, beginTime, endTime);
 		boUtil.setData(list);
 		return boUtil;
 	}
@@ -485,6 +496,18 @@ public class WristbandResource {
 	public BoUtil modifyInfo(final @RequestBody UserBaseVo userBaseVo) throws Exception {
 		log.info(" userBaseVo : {} ",userBaseVo);
 		BoUtil boUtil = BoUtil.getDefaultTrueBo();
+		//保险号不为空，更新保险认证
+		if(!StringUtil.isBlank(userBaseVo.getInsuranceNo())){
+			//查询认证状态
+			int authType = wristbandService.getUserById(userBaseVo.getUserId()).getAuthType();
+			if(authType == 1 || authType == 2){//保险状态，0未认证，1认证中，2认证成功，3认证失败
+				boUtil = BoUtil.getDefaultFalseBo();
+				boUtil.setCode(ErrorCode.INSURANCE_SUBMITTED);
+				boUtil.setMsg("Insurance has been submitted and cannot be modified");
+				return boUtil;
+			}
+			userBaseVo.setAuthType(1);
+		}
 		if(!StringUtil.isBlank(userBaseVo.getWeight())){
 			Date date = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -754,6 +777,57 @@ public class WristbandResource {
 			boUtil = BoUtil.getDefaultFalseBo();
 			boUtil.setCode(ErrorCode.WRISTBAND_RING_DEVICE);
 			boUtil.setMsg("已绑定手环设备");
+			return boUtil;
+		}
+	}
+	
+	/**
+	 * 
+	* @Title: getTodayHeart 
+	* @param: 
+	* @Description: 查询今日心率数据
+	* @return BoUtil
+	 */
+	@ApiOperation(httpMethod = "GET", value = "heart/today", notes = "heart/today")
+	@ResponseBody
+	@RequestMapping(value = "heart/today", method = RequestMethod.GET, produces = "application/json", consumes = "application/*")
+	public BoUtil getTodayHeart(@QueryParam("userId") Integer userId){
+		BoUtil boUtil = BoUtil.getDefaultTrueBo();
+		userId = userId == null ? 0 : userId;
+		List<UserDeviceBo> list = wristbandService.getTodayInfo(userId, DeviceConfig.con009);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		for (UserDeviceBo userDeviceBo : list) {
+			String time = "";
+			try {
+				time = sdf.format(sdf.parse(userDeviceBo.getTime()));
+				userDeviceBo.setTime(time);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		boUtil.setData(list);
+		return boUtil;
+	}
+	
+	/**
+	 * 
+	* @Title: deleteTodayHeart 
+	* @param: 
+	* @Description: 删除心率
+	* @return BoUtil
+	 */
+	@ApiOperation(httpMethod = "DELETE", value = "heart/delete", notes = "heart/delete")
+	@ResponseBody
+	@RequestMapping(value = "heart/delete", method = RequestMethod.DELETE, produces = "application/json", consumes = "application/*")
+	public BoUtil deleteTodayHeart(@QueryParam("userDeviceId") Integer userDeviceId){
+		BoUtil boUtil = BoUtil.getDefaultTrueBo();
+		userDeviceId = userDeviceId == null ? 0 : userDeviceId;
+		int result = wristbandService.deleteRecord(userDeviceId);
+		if(result > 0){
+			return boUtil;
+		}else{
+			boUtil = BoUtil.getDefaultFalseBo();
+			boUtil.setCode(ErrorCode.FAIL);
 			return boUtil;
 		}
 	}
