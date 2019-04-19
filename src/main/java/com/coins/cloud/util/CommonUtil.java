@@ -87,17 +87,17 @@ public class CommonUtil {
 			中度高血压(2级)   160～179	 100～109
 			重度高血压(3级)	≥180	 ≥110
 		 */
-		// 范围
-		int[][] diastolicArray = { { 59 }, { 60, 80 }, { 81, 85 }, { 86, 89 },
-				{ 90, 99 }, { 100, 109 }, { 110 } };
-		int[][] systolicArray = { { 89 }, { 90, 120 }, { 121, 130 },{ 131, 139 }, 
-				{ 140, 159 }, { 160, 179 }, { 180 } };
-		int diastolicResult = 0;
-		int systolicResult = 0;
 		int result = 0;
 		if (StringUtil.isBlank(value)) {
 			return result;
 		} else {
+			// 范围
+			int[][] diastolicArray = { { 59 }, { 60, 80 }, { 81, 85 }, { 86, 89 },
+					{ 90, 99 }, { 100, 109 }, { 110 } };
+			int[][] systolicArray = { { 89 }, { 90, 120 }, { 121, 130 },{ 131, 139 }, 
+					{ 140, 159 }, { 160, 179 }, { 180 } };
+			int diastolicResult = 0;
+			int systolicResult = 0;
 			//血压伸张值
 			int diastolic = Integer.parseInt(value.split("\\|")[0]);
 			if (diastolic <= diastolicArray[0][0]) {// 低血压
