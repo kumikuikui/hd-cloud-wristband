@@ -187,7 +187,7 @@ public interface WristbandMapper {
 			+" AND DATE_FORMAT(create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d') ORDER BY create_time DESC")
 	@Results(value = {
 			@Result(property = "userDeviceId", column = "user_device_record_bt_seq", javaType = int.class, jdbcType = JdbcType.INTEGER),
-			@Result(property = "value", column = "device_target_value", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "value", column = "device_record_value", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "time", column = "update_time", javaType = String.class, jdbcType = JdbcType.DATE) })
 	List<UserDeviceBo> getTodayInfo(@Param("userId") int userId,
 			@Param("configCode") String configCode);
