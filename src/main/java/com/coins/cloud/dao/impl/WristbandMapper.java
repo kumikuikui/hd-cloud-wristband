@@ -265,4 +265,18 @@ public interface WristbandMapper {
 	 */
 	@Delete("DELETE FROM user_device_record_bt WHERE user_device_record_bt_seq = #{userDeviceId}")
 	int deleteRecord(@Param("userDeviceId") int userDeviceId);
+	
+	/**
+	 * 
+	* @Title: getHints 
+	* @param: 
+	* @Description: 获取系统提示语
+	* @return String
+	 */
+	@Select("SELECT sys_warning_content FROM user_sys_warning_sb WHERE active_flag = 'y' "
+		   +" AND device_config_internal_code = #{code} AND sys_warning_status_itype = #{statusType} "
+		   +" AND sys_warning_language_itype = #{languageType} ORDER BY user_sys_warning_sb_seq DESC LIMIT 1")
+	String getHints(@Param("code") String code,
+			@Param("statusType") int statusType,
+			@Param("languageType") int languageType);
 }

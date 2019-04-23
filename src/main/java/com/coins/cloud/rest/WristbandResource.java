@@ -831,4 +831,26 @@ public class WristbandResource {
 			return boUtil;
 		}
 	}
+	
+	/**
+	 * 
+	* @Title: getHints 
+	* @param: statusType 状态，1正常，2偏低，3偏高
+	* @param: languageType 语种,1英文，2中文，3泰文，4，印度文
+	* @Description: 查询系统提示语
+	* @return BoUtil
+	 */
+	@ApiOperation(httpMethod = "GET", value = "hints", notes = "hints")
+	@ResponseBody
+	@RequestMapping(value = "hints", method = RequestMethod.GET, produces = "application/json", consumes = "application/*")
+	public BoUtil getHints(@QueryParam("code") String code,
+			@QueryParam("statusType") Integer statusType,
+			@QueryParam("languageType") Integer languageType) {
+		BoUtil boUtil = BoUtil.getDefaultTrueBo();
+		statusType = statusType == null ? 0 : statusType;
+		languageType = languageType == null ? 0 : languageType;
+		String content = wristbandService.getHints(code, statusType, languageType);
+		boUtil.setData(content);
+		return boUtil;
+	}
 }

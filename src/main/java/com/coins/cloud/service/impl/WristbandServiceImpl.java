@@ -334,4 +334,9 @@ public class WristbandServiceImpl implements WristbandService {
 		return wristbandDao.deleteRecord(userDeviceId);
 	}
 
+	@Override
+	public String getHints(String code, int statusType, int languageType) {
+		return wristbandDao.getHints(code, statusType, languageType);
+	}
+
 }

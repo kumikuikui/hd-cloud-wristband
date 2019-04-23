@@ -208,4 +208,13 @@ public interface WristbandDao {
 	* @return int
 	 */
 	int deleteRecord(int userDeviceId);
+	
+	/**
+	 * 
+	* @Title: getHints 
+	* @param: 
+	* @Description: 获取系统提示语
+	* @return String
+	 */
+	String getHints(String code,int statusType,int languageType);
 }

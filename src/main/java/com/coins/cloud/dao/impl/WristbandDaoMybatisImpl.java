@@ -132,4 +132,9 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 		return wristbandMapper.deleteRecord(userDeviceId);
 	}
 
+	@Override
+	public String getHints(String code, int statusType, int languageType) {
+		return wristbandMapper.getHints(code, statusType, languageType);
+	}
+
 }
