@@ -208,7 +208,7 @@ public class WristbandServiceImpl implements WristbandService {
 				double distance = Integer.parseInt(userDeviceBo.getValue()) * 0.5;
 				userDeviceBo.setValue(String.valueOf(distance));
 			}
-			if(temp.equals(DeviceConfig.con000_1)){//BMI
+			if(temp.equals(DeviceConfig.con000_2)){//BMI
 				//计算BMI(BMI 体重公斤数除以身高米数平方)
 				if(height > 0){
 					double h = height / 100.0;
