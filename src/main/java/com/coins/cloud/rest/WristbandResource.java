@@ -573,12 +573,12 @@ public class WristbandResource {
 						bir.setTime(sdf.parse(userBaseVo.getBirthdate()));
 						int age = cal.get(Calendar.YEAR) - bir.get(Calendar.YEAR);
 						if(userBaseVo.getGenderType() == 1){//1男2女
-							targetIntakeCal = (int) ((10 * Double.parseDouble(userBaseVo.getWeight()) 
-									+ 6.25 * userBaseVo.getHeight() - 5 * age + 5) * 1.375);
+							targetIntakeCal = (int) (67	+ 13.71 * Double.parseDouble(userBaseVo.getWeight())
+									+ 5 * userBaseVo.getHeight() - 6.9 * age);
 						}
 						if(userBaseVo.getGenderType() == 2){//1男2女
-							targetIntakeCal = (int) ((10 * Double.parseDouble(userBaseVo.getWeight()) 
-									+ 6.25 * userBaseVo.getHeight() - 45 * age - 161) * 1.375);
+							targetIntakeCal = (int) (661 + 9.6 * Double.parseDouble(userBaseVo.getWeight())
+									+ 1.72 * userBaseVo.getHeight() - 4.7 * age);
 						}
 						userDeviceVo.setConfigCode(DeviceConfig.con006);
 						userDeviceVo.setValue(String.valueOf(targetIntakeCal));
