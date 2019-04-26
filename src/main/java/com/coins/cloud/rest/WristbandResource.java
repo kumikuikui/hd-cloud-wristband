@@ -569,7 +569,8 @@ public class WristbandResource {
 						int targetIntakeCal = 0;
 						Calendar cal = Calendar.getInstance();
 						Calendar bir = Calendar.getInstance();
-						bir.setTime(new Date(userBaseVo.getBirthdate()));
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						bir.setTime(sdf.parse(userBaseVo.getBirthdate()));
 						int age = cal.get(Calendar.YEAR) - bir.get(Calendar.YEAR);
 						if(userBaseVo.getGenderType() == 1){//1男2女
 							targetIntakeCal = (int) ((10 * Double.parseDouble(userBaseVo.getWeight()) 
