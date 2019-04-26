@@ -339,4 +339,9 @@ public class WristbandServiceImpl implements WristbandService {
 		return wristbandDao.getHints(code, statusType, languageType);
 	}
 
+	@Override
+	public List<UserDeviceBo> getTarget(int userId) {
+		return wristbandDao.getTarget(userId);
+	}
+
 }

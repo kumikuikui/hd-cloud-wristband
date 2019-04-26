@@ -191,4 +191,12 @@ public interface WristbandService {
 	 */
 	String getHints(String code,int statusType,int languageType);
 	
+	/**
+	 * 
+	* @Title: getTarget 
+	* @param: 
+	* @Description: 查询目标数据
+	* @return List<UserDeviceBo>
+	 */
+	List<UserDeviceBo> getTarget(int userId);
 }

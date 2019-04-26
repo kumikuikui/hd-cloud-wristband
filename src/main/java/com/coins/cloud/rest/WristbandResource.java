@@ -2,11 +2,16 @@ package com.coins.cloud.rest;
 
 import io.swagger.annotations.ApiOperation;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 import javax.ws.rs.QueryParam;
@@ -520,6 +525,71 @@ public class WristbandResource {
 			log.info(" 上传体重结果resu : {} ",resu);
 		}
 		int result = wristbandService.modifyInfo(userBaseVo);
+		
+		// 异步初始化目标默认值
+		ExecutorService threadPool = Executors.newSingleThreadExecutor();
+		threadPool.submit(new Callable<Object>() {
+			@Override
+			public Object call() throws Exception {
+				log.info("===============异步初始化目标默认值开始:{} ==========================");
+				//注册完善信息后，目标数据给予默认值
+				if (!StringUtil.isBlank(userBaseVo.getName())
+						&& !StringUtil.isBlank(userBaseVo.getBirthdate())
+						&& !StringUtil.isBlank(userBaseVo.getWeight())
+						&& userBaseVo.getHeight() > 0 && userBaseVo.getGenderType() > 0) {
+					//查询是否有目标数据
+					List<UserDeviceBo> targetList = wristbandService.getTarget(userBaseVo.getUserId());
+					if(targetList == null || targetList.isEmpty()){
+						UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userBaseVo.getUserId()).build();
+						//默认值步数 8000步
+						userDeviceVo.setConfigCode(DeviceConfig.con001);
+						userDeviceVo.setValue("8000");
+						wristbandService.saveTarget(userDeviceVo);
+						//默认值饮水量 8杯
+						userDeviceVo.setConfigCode(DeviceConfig.con007);
+						userDeviceVo.setValue("8");
+						wristbandService.saveTarget(userDeviceVo);
+						//默认值睡眠 8h
+						userDeviceVo.setConfigCode(DeviceConfig.con005);
+						userDeviceVo.setValue("8");
+						wristbandService.saveTarget(userDeviceVo);
+						//默认值体重
+						//男性：(身高cm－80)×70﹪=标准体重, 女性：(身高cm－70)×60﹪=标准体重
+						int targetWeight = 0;
+						if(userBaseVo.getGenderType() == 1){//1男2女
+							targetWeight = (int) ((userBaseVo.getHeight() - 80) * 0.7);
+						}
+						if(userBaseVo.getGenderType() == 2){//1男2女
+							targetWeight = (int) ((userBaseVo.getHeight() - 70) * 0.6);
+						}
+						userDeviceVo.setConfigCode(DeviceConfig.con004);
+						userDeviceVo.setValue(String.valueOf(targetWeight));
+						wristbandService.saveTarget(userDeviceVo);
+						//默认值卡路里摄入量
+						int targetIntakeCal = 0;
+						Calendar cal = Calendar.getInstance();
+						Calendar bir = Calendar.getInstance();
+						bir.setTime(new Date(userBaseVo.getBirthdate()));
+						int age = cal.get(Calendar.YEAR) - bir.get(Calendar.YEAR);
+						if(userBaseVo.getGenderType() == 1){//1男2女
+							targetIntakeCal = (int) ((10 * Double.parseDouble(userBaseVo.getWeight()) 
+									+ 6.25 * userBaseVo.getHeight() - 5 * age + 5) * 1.375);
+						}
+						if(userBaseVo.getGenderType() == 2){//1男2女
+							targetIntakeCal = (int) ((10 * Double.parseDouble(userBaseVo.getWeight()) 
+									+ 6.25 * userBaseVo.getHeight() - 45 * age - 161) * 1.375);
+						}
+						userDeviceVo.setConfigCode(DeviceConfig.con006);
+						userDeviceVo.setValue(String.valueOf(targetIntakeCal));
+						wristbandService.saveTarget(userDeviceVo);
+					}
+				}else{
+					log.info(" 编辑资料不初始化 ");
+				}
+				log.info("===============异步初始化目标默认值结束:{} ==========================");
+				return null;
+			}
+		});
 		if(result > 0){
 			return boUtil;
 		}else{
