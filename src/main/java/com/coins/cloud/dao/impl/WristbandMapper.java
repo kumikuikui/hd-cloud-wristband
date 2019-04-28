@@ -42,7 +42,7 @@ public interface WristbandMapper {
 	public Integer getBandId(@Param("userId") int userId,@Param("mac") String mac);
 	
 	@Select("SELECT x.device_config_internal_code,x.createTime, "
-		   +" case when y.device_config_internal_code = 'con009' then floor(avg(y.device_record_value)) else max(x.device_record_value) end record_value "
+		   +" case when y.device_config_internal_code = 'con009' then floor(avg(y.device_record_value)) else max(y.device_record_value) end record_value "
 		   +" FROM (SELECT device_config_internal_code,MAX(create_time) createTime,device_record_value "
 		   +" FROM user_device_record_bt "
 		   +" WHERE user_device_base_sb_seq = #{userId} AND active_flag = 'y' "
