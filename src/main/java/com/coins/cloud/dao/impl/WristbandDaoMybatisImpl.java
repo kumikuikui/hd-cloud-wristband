@@ -137,4 +137,10 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 		return wristbandMapper.getHints(code, statusType, languageType);
 	}
 
+	@Override
+	public String getWeightNearByTarget(int userId, String configCode,
+			String time) {
+		return wristbandMapper.getWeightNearByTarget(userId, configCode, time);
+	}
+
 }

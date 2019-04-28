@@ -217,4 +217,13 @@ public interface WristbandDao {
 	* @return String
 	 */
 	String getHints(String code,int statusType,int languageType);
+	
+	/**
+	 * 
+	* @Title: getWeghtNearByTarget 
+	* @param: 
+	* @Description: 查询设定目标体重时的体重
+	* @return String
+	 */
+	String getWeightNearByTarget(int userId,String configCode,String time);
 }

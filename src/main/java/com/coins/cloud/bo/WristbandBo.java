@@ -51,6 +51,8 @@ public class WristbandBo {
 	private String fat;
 	//体重测量时间
 	private String weightTime;
+	//距离目标体重差
+	private double targetWeightDiff;
 	//睡眠开始时间
 	private String sleepStartTime;
 	//睡眠结束时间

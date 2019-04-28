@@ -289,4 +289,17 @@ public interface WristbandMapper {
 	String getHints(@Param("code") String code,
 			@Param("statusType") int statusType,
 			@Param("languageType") int languageType);
+	
+	/**
+	 * 
+	* @Title: getWeghtNearByTarget 
+	* @param: 
+	* @Description: 查询设定目标体重时的体重
+	* @return String
+	 */
+	@Select("SELECT device_record_value FROM user_device_record_bt "
+		   +" WHERE user_device_base_sb_seq = #{userId} AND device_config_internal_code = #{configCode} "
+		   +" AND create_time <= #{time} ORDER BY create_time LIMIT 1")
+	String getWeightNearByTarget(@Param("userId") int userId,
+			@Param("configCode") String configCode, @Param("time") String time);
 }
