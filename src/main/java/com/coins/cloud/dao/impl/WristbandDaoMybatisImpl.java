@@ -98,8 +98,8 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 	}
 
 	@Override
-	public List<UserDeviceBo> getTodayInfo(int userId, String configCode) {
-		return wristbandMapper.getTodayInfo(userId, configCode);
+	public List<UserDeviceBo> getTodayInfo(int userId, String configCode, String date) {
+		return wristbandMapper.getTodayInfo(userId, configCode, date);
 	}
 
 	@Override
@@ -123,8 +123,8 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 	}
 
 	@Override
-	public int getHeartCountByToday(int userId, String configCode) {
-		return wristbandMapper.getHeartCountByToday(userId, configCode);
+	public int getHeartCountByToday(int userId, String configCode,String date) {
+		return wristbandMapper.getHeartCountByToday(userId, configCode,date);
 	}
 
 	@Override

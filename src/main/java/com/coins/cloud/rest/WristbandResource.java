@@ -258,7 +258,7 @@ public class WristbandResource {
 		// 心率上传
 		if (!StringUtil.isBlank(wristbandVo.getHeart())) {
 			//查询今日心率添加次数
-			int count = wristbandService.getHeartCountByToday(userId, DeviceConfig.con009);
+			int count = wristbandService.getHeartCountByToday(userId, DeviceConfig.con009,wristbandVo.getHeartTime());
 			if(count >= 5){
 				boUtil = BoUtil.getDefaultFalseBo();
 				boUtil.setCode(ErrorCode.HEART_ADDITION_UPPER_LIMIT);
@@ -345,7 +345,7 @@ public class WristbandResource {
 					+ wristbandVo.getSleepEndTime();
 			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
 					.configCode(DeviceConfig.con005)
-					.value(value).time(time).build();
+					.value(value).time(wristbandVo.getSleepEndTime()).build();
 			int resu = wristbandService.save(userDeviceVo);
 			if (resu > 0) {
 				i = 1;
@@ -374,7 +374,7 @@ public class WristbandResource {
 			//今日是否有摄入卡路里
 			int resu = 0;
 			int userDeviceId = 0;
-			List<UserDeviceBo> calIntakeList = wristbandService.getTodayInfo(userId, DeviceConfig.con006);
+			List<UserDeviceBo> calIntakeList = wristbandService.getTodayInfo(userId, DeviceConfig.con006,wristbandVo.getCalorieIntakeTime());
 			log.info(" calIntakeList : {} ",calIntakeList);
 			if(calIntakeList == null || calIntakeList.isEmpty()){
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
@@ -862,10 +862,10 @@ public class WristbandResource {
 	@ApiOperation(httpMethod = "GET", value = "heart/today", notes = "heart/today")
 	@ResponseBody
 	@RequestMapping(value = "heart/today", method = RequestMethod.GET, produces = "application/json", consumes = "application/*")
-	public BoUtil getTodayHeart(@QueryParam("userId") Integer userId){
+	public BoUtil getTodayHeart(@QueryParam("userId") Integer userId,@QueryParam("date") String date){
 		BoUtil boUtil = BoUtil.getDefaultTrueBo();
 		userId = userId == null ? 0 : userId;
-		List<UserDeviceBo> list = wristbandService.getTodayInfo(userId, DeviceConfig.con009);
+		List<UserDeviceBo> list = wristbandService.getTodayInfo(userId, DeviceConfig.con009,date);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		for (UserDeviceBo userDeviceBo : list) {
 			String time = "";

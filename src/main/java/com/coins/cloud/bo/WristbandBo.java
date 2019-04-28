@@ -49,12 +49,16 @@ public class WristbandBo {
 	private String weight;
 	//体脂 百分比
 	private String fat;
+	//体重测量时间
+	private String weightTime;
 	//睡眠开始时间
 	private String sleepStartTime;
 	//睡眠结束时间
 	private String sleepEndTime;
 	//饮水量
 	private String drinkWater;
+	//饮水时间
+	private String drinkWaterTime;
 	//BMI
 	private String bmi;
 	//距离M

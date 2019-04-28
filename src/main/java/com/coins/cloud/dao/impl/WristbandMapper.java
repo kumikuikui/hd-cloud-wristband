@@ -41,13 +41,20 @@ public interface WristbandMapper {
 	@SelectProvider(type = WristbandProvider.class,method = "getBandId")
 	public Integer getBandId(@Param("userId") int userId,@Param("mac") String mac);
 	
-	@Select("SELECT device_config_internal_code,device_record_value,MAX(create_time) createTime FROM user_device_record_bt"
+	@Select("SELECT x.device_config_internal_code,x.createTime, "
+		   +" case when y.device_config_internal_code = 'con009' then floor(avg(y.device_record_value)) else max(x.device_record_value) end record_value "
+		   +" FROM (SELECT device_config_internal_code,MAX(create_time) createTime,device_record_value "
+		   +" FROM user_device_record_bt "
 		   +" WHERE user_device_base_sb_seq = #{userId} AND active_flag = 'y' "
-		   +" AND create_time >= curdate() AND create_time < date_add(curdate(),INTERVAL 1 day) "
-		   +" GROUP BY device_config_internal_code")
+		   +" GROUP BY device_config_internal_code ) x "
+		   +" INNER JOIN user_device_record_bt y "
+		   +" ON x.device_config_internal_code = y.device_config_internal_code "
+		   +" AND case when x.device_config_internal_code = 'con009' then DATE_FORMAT(x.createTime,'%Y-%m-%d') "
+		   +" else x.createTime end = case when y.device_config_internal_code = 'con009' then DATE_FORMAT(y.create_time,'%Y-%m-%d') else  y.create_time end "
+		   +" group by x.device_config_internal_code,x.createTime")
 	@Results(value = {
 			@Result(property = "configCode", column = "device_config_internal_code", javaType = String.class, jdbcType = JdbcType.VARCHAR),
-			@Result(property = "value", column = "device_record_value", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "value", column = "record_value", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "time", column = "createTime", javaType = String.class, jdbcType = JdbcType.DATE) 
 	})
 	public List<UserDeviceBo> getUserDevice(@Param("userId") int userId);
@@ -184,13 +191,13 @@ public interface WristbandMapper {
 	 */
 	@Select("SELECT * FROM user_device_record_bt WHERE user_device_base_sb_seq = #{userId} "
 			+" AND device_config_internal_code = #{configCode} "
-			+" AND DATE_FORMAT(create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d') ORDER BY create_time DESC")
+			+" AND DATE_FORMAT(create_time,'%Y-%m-%d') = DATE_FORMAT(#{date},'%Y-%m-%d') ORDER BY create_time DESC")
 	@Results(value = {
 			@Result(property = "userDeviceId", column = "user_device_record_bt_seq", javaType = int.class, jdbcType = JdbcType.INTEGER),
 			@Result(property = "value", column = "device_record_value", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "time", column = "update_time", javaType = String.class, jdbcType = JdbcType.DATE) })
 	List<UserDeviceBo> getTodayInfo(@Param("userId") int userId,
-			@Param("configCode") String configCode);
+			@Param("configCode") String configCode,@Param("date") String date);
 	
 	/**
 	 * 
@@ -253,8 +260,10 @@ public interface WristbandMapper {
 	 */
 	@Select("SELECT COUNT(1) FROM user_device_record_bt "
 		   +" WHERE active_flag = 'y' AND user_device_base_sb_seq = #{userId} AND device_config_internal_code = #{configCode} "
-		   +" AND DATE_FORMAT(create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')")
-	int getHeartCountByToday(@Param("userId") int userId,@Param("configCode") String configCode);
+		   +" AND DATE_FORMAT(create_time,'%Y-%m-%d') = DATE_FORMAT(#{date},'%Y-%m-%d')")
+	int getHeartCountByToday(@Param("userId") int userId,
+			@Param("configCode") String configCode,
+			@Param("date") String date);
 	
 	/**
 	 * 
