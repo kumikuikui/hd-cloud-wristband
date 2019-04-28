@@ -49,6 +49,7 @@ public interface WristbandMapper {
 		   +" GROUP BY device_config_internal_code ) x "
 		   +" INNER JOIN user_device_record_bt y "
 		   +" ON x.device_config_internal_code = y.device_config_internal_code "
+		   +" AND y.user_device_base_sb_seq = #{userId} AND y.active_flag = 'y' "
 		   +" AND case when x.device_config_internal_code = 'con009' then DATE_FORMAT(x.createTime,'%Y-%m-%d') "
 		   +" else x.createTime end = case when y.device_config_internal_code = 'con009' then DATE_FORMAT(y.create_time,'%Y-%m-%d') else  y.create_time end "
 		   +" group by x.device_config_internal_code,x.createTime")
