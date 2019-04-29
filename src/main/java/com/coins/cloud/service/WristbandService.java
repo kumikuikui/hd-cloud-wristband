@@ -148,12 +148,12 @@ public interface WristbandService {
 	
 	/**
 	 * 
-	* @Title: updateCalIntake 
+	* @Title: updateRecord 
 	* @param: 
-	* @Description: 更新卡路里摄入量
+	* @Description: 更新记录
 	* @return int
 	 */
-	int updateCalIntake(int userDeviceId,String value);
+	int updateRecord(int userDeviceId,String value,String time);
 	
 	/**
 	 * 

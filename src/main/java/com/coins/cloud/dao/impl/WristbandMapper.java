@@ -202,13 +202,13 @@ public interface WristbandMapper {
 	
 	/**
 	 * 
-	* @Title: updateCalIntake 
+	* @Title: updateRecord 
 	* @param: 
-	* @Description: 更新卡路里摄入量
+	* @Description: 更新记录
 	* @return int
 	 */
-	@Update("UPDATE user_device_record_bt SET device_record_value = #{value} WHERE user_device_record_bt_seq = #{userDeviceId}")
-	int updateCalIntake(@Param("userDeviceId") int userDeviceId,@Param("value") String value);
+	@Update("UPDATE user_device_record_bt SET device_record_value = #{value},create_time = #{time},update_time = #{time} WHERE user_device_record_bt_seq = #{userDeviceId}")
+	int updateRecord(@Param("userDeviceId") int userDeviceId,@Param("value") String value,@Param("time") String time);
 	
 	/**
 	 * 

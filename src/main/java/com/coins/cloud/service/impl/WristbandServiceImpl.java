@@ -294,8 +294,8 @@ public class WristbandServiceImpl implements WristbandService {
 	}
 
 	@Override
-	public int updateCalIntake(int userDeviceId, String value) {
-		return wristbandDao.updateCalIntake(userDeviceId, value);
+	public int updateRecord(int userDeviceId, String value,String time) {
+		return wristbandDao.updateRecord(userDeviceId, value,time);
 	}
 
 	@Override

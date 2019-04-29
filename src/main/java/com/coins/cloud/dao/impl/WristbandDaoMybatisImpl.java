@@ -103,8 +103,8 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 	}
 
 	@Override
-	public int updateCalIntake(int userDeviceId, String value) {
-		return wristbandMapper.updateCalIntake(userDeviceId, value);
+	public int updateRecord(int userDeviceId, String value,String time) {
+		return wristbandMapper.updateRecord(userDeviceId, value,time);
 	}
 
 	@Override

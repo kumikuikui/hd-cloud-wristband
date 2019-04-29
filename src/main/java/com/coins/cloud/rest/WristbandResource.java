@@ -243,10 +243,26 @@ public class WristbandResource {
 		int i = 0;
 		//步数上传
 		if(!StringUtil.isBlank(wristbandVo.getStep())){
-			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-					.configCode(DeviceConfig.con001).value(wristbandVo.getStep())
-					.time(wristbandVo.getStepTime()).build();
-			int resu = wristbandService.save(userDeviceVo);
+			int resu = 0;
+			int userDeviceId = 0;
+			List<UserDeviceBo> stepList = wristbandService.getTodayInfo(userId, DeviceConfig.con001,wristbandVo.getStepTime());
+			log.info(" stepList : {} ",stepList);
+			if(stepList == null || stepList.isEmpty()){
+				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
+						.configCode(DeviceConfig.con001)
+						.value(wristbandVo.getStep())
+						.time(wristbandVo.getStepTime()).build();
+				resu = wristbandService.save(userDeviceVo);
+				userDeviceId = userDeviceVo.getUserDeviceId();
+				log.info(" userDeviceId : {} ",userDeviceId);
+			}else{
+				UserDeviceBo userDeviceBo = stepList.get(0);
+				userDeviceId = userDeviceBo.getUserDeviceId();
+				//更新步数
+				double stepTotal = Double.parseDouble(userDeviceBo.getValue())
+						+ Double.parseDouble(wristbandVo.getStep());
+				resu = wristbandService.updateRecord(userDeviceId, String.valueOf(stepTotal),wristbandVo.getStepTime());
+			}
 			if(resu > 0){
 				i = 1;
 			}
@@ -277,13 +293,28 @@ public class WristbandResource {
 		}else{
 			result += "|0";
 		}
-		
 		// 消耗卡路里上传
 		if (!StringUtil.isBlank(wristbandVo.getCalorie())) {
-			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-					.configCode(DeviceConfig.con002).value(wristbandVo.getCalorie())
-					.time(wristbandVo.getCalorieTime()).build();
-			int resu = wristbandService.save(userDeviceVo);
+			int resu = 0;
+			int userDeviceId = 0;
+			List<UserDeviceBo> calList = wristbandService.getTodayInfo(userId, DeviceConfig.con002,wristbandVo.getCalorieTime());
+			log.info(" calList : {} ",calList);
+			if(calList == null || calList.isEmpty()){
+				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
+						.configCode(DeviceConfig.con002)
+						.value(wristbandVo.getCalorie())
+						.time(wristbandVo.getCalorieTime()).build();
+				resu = wristbandService.save(userDeviceVo);
+				userDeviceId = userDeviceVo.getUserDeviceId();
+				log.info(" userDeviceId : {} ",userDeviceId);
+			}else{
+				UserDeviceBo userDeviceBo = calList.get(0);
+				userDeviceId = userDeviceBo.getUserDeviceId();
+				//更新卡路里消耗
+				double calTotal = Double.parseDouble(userDeviceBo.getValue())
+						+ Double.parseDouble(wristbandVo.getCalorie());
+				resu = wristbandService.updateRecord(userDeviceId, String.valueOf(calTotal),wristbandVo.getCalorieTime());
+			}
 			if(resu > 0){
 				i = 1;
 			}
@@ -357,10 +388,26 @@ public class WristbandResource {
 		}
 		// 饮水量上传
 		if (!StringUtil.isBlank(wristbandVo.getDrinkWater())) {
-			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-					.configCode(DeviceConfig.con007)
-					.value(wristbandVo.getDrinkWater()).time(wristbandVo.getDrinkTime()).build();
-			int resu = wristbandService.save(userDeviceVo);
+			int resu = 0;
+			int userDeviceId = 0;
+			List<UserDeviceBo> waterList = wristbandService.getTodayInfo(userId, DeviceConfig.con007,wristbandVo.getDrinkTime());
+			log.info(" waterList : {} ",waterList);
+			if(waterList == null || waterList.isEmpty()){
+				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
+						.configCode(DeviceConfig.con007)
+						.value(wristbandVo.getDrinkWater())
+						.time(wristbandVo.getDrinkTime()).build();
+				resu = wristbandService.save(userDeviceVo);
+				userDeviceId = userDeviceVo.getUserDeviceId();
+				log.info(" userDeviceId : {} ",userDeviceId);
+			}else{
+				UserDeviceBo userDeviceBo = waterList.get(0);
+				userDeviceId = userDeviceBo.getUserDeviceId();
+				//更新饮水量
+				double waterTotal = Double.parseDouble(userDeviceBo.getValue())
+						+ Double.parseDouble(wristbandVo.getDrinkWater());
+				resu = wristbandService.updateRecord(userDeviceId, String.valueOf(waterTotal),wristbandVo.getDrinkTime());
+			}
 			if (resu > 0) {
 				i = 1;
 			}
@@ -388,10 +435,9 @@ public class WristbandResource {
 				UserDeviceBo userDeviceBo = calIntakeList.get(0);
 				userDeviceId = userDeviceBo.getUserDeviceId();
 				//更新卡路里摄入量
-				double calIntakeTotal = Double.parseDouble(userDeviceBo
-						.getValue())
+				double calIntakeTotal = Double.parseDouble(userDeviceBo.getValue())
 						+ Double.parseDouble(wristbandVo.getCalorieIntake());
-				resu = wristbandService.updateCalIntake(userDeviceBo.getUserDeviceId(), String.valueOf(calIntakeTotal));
+				resu = wristbandService.updateRecord(userDeviceBo.getUserDeviceId(), String.valueOf(calIntakeTotal),wristbandVo.getCalorieIntakeTime());
 			}
 			if (resu > 0) {
 				i = 1;
