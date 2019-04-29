@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.ibatis.annotations.Case;
-import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Service;
 
 import com.coins.cloud.bo.CalFoodBo;
@@ -367,7 +367,7 @@ public class WristbandServiceImpl implements WristbandService {
 			BigDecimal bg = new BigDecimal(avg).setScale(2, RoundingMode.HALF_UP);
 			retuMap.put(key, String.valueOf(bg.doubleValue()));
 		}
-		List<UserDeviceBo> recordList = Lists.newArrayList();
+		List<UserDeviceBo> recordList = new ArrayList<UserDeviceBo>();
 		for (String key : retuMap.keySet()) {
 			UserDeviceBo userDevi = UserDeviceBo.builder().time(key).value(retuMap.get(key)).build();
 			recordList.add(userDevi);
