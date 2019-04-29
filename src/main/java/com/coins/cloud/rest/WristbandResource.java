@@ -560,7 +560,8 @@ public class WristbandResource {
 			userBaseVo.setAuthType(1);
 		}
 		if(!StringUtil.isBlank(userBaseVo.getWeight())){
-			Date date = new Date();
+			long currentMillis = System.currentTimeMillis() + 8 * 60 * 60 * 1000l;
+			Date date = new Date(currentMillis);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String time = sdf.format(date);
 			String value = userBaseVo.getWeight() + "|0";//重量 + 体脂(默认为0)
