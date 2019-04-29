@@ -924,4 +924,24 @@ public class WristbandResource {
 		boUtil.setData(content);
 		return boUtil;
 	}
+	
+	/**
+	 * 
+	* @Title: getList 
+	* @param: 
+	* @Description: 获取列表按月份
+	* @return BoUtil
+	 */
+	@ApiOperation(httpMethod = "GET", value = "list/month", notes = "list/month")
+	@ResponseBody
+	@RequestMapping(value = "/list/month", method = RequestMethod.GET, produces = "application/json", consumes = "application/*")
+	public BoUtil getListByMonth(@QueryParam("userId") Integer userId,@QueryParam("mac") String mac,@QueryParam("code") String code,
+			@QueryParam("beginMonth") String beginMonth,@QueryParam("endMonth") String endMonth) throws ParseException {
+		BoUtil boUtil = BoUtil.getDefaultTrueBo();
+		userId = userId == null ? 0 : userId;
+		log.info("userId: {}, beginMonth: {}, endMonth: {},mac:{},code:{}, ",userId, beginMonth, endMonth,mac,code);
+		List<UserDeviceBo> list = wristbandService.getRecordByCodeAndMonth(userId, code, beginMonth, endMonth);
+		boUtil.setData(list);
+		return boUtil;
+	}
 }

@@ -92,7 +92,7 @@ public interface WristbandMapper {
 		   +" on a.create_time = b.time1 and a.device_config_internal_code = #{code} ")
 	@Results(value = {
 			@Result(property = "userDeviceId", column = "user_device_record_bt_seq", javaType = int.class, jdbcType = JdbcType.INTEGER),
-			@Result(property = "value", column = "record_value", javaType = String.class, jdbcType = JdbcType.DATE),
+			@Result(property = "value", column = "record_value", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "time", column = "create_time", javaType = String.class, jdbcType = JdbcType.DATE) 
 	})
 	public List<UserDeviceBo> getRecordByCode(@Param("userId") int userId,
@@ -302,4 +302,23 @@ public interface WristbandMapper {
 		   +" AND create_time <= #{time} ORDER BY create_time LIMIT 1")
 	String getWeightNearByTarget(@Param("userId") int userId,
 			@Param("configCode") String configCode, @Param("time") String time);
+	
+	/**
+	 * 
+	* @Title: getRecordByCodeAndMonth 
+	* @param: 
+	* @Description: 按code和月份分组查询
+	* @return List<UserDeviceBo>
+	 */
+	@Select("SELECT device_record_value,create_time,device_config_internal_code FROM user_device_record_bt "
+		   +" WHERE user_device_base_sb_seq = #{userId} AND device_config_internal_code = #{code} "
+		   +" AND active_flag = 'y' AND create_time >= #{beginMonth} AND create_time < #{endMonth} ")
+	@Results(value = {
+			@Result(property = "configCode", column = "device_config_internal_code", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "value", column = "device_record_value", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "time", column = "create_time", javaType = String.class, jdbcType = JdbcType.DATE) 
+	})
+	public List<UserDeviceBo> getRecordByCodeAndMonth(@Param("userId") int userId,
+			@Param("code") String code, @Param("beginMonth") String beginMonth,
+			@Param("endMonth") String endMonth);
 }

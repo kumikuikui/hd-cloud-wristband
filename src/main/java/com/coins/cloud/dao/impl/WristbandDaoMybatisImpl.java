@@ -143,4 +143,10 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 		return wristbandMapper.getWeightNearByTarget(userId, configCode, time);
 	}
 
+	@Override
+	public List<UserDeviceBo> getRecordByCodeAndMonth(int userId, String code,
+			String beginMonth, String endMonth) {
+		return wristbandMapper.getRecordByCodeAndMonth(userId, code, beginMonth, endMonth);
+	}
+
 }

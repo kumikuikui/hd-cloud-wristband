@@ -11,6 +11,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.ibatis.annotations.Case;
+import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Service;
 
 import com.coins.cloud.bo.CalFoodBo;
@@ -322,4 +323,67 @@ public class WristbandServiceImpl implements WristbandService {
 		return wristbandDao.getTarget(userId);
 	}
 
+	@Override
+	public List<UserDeviceBo> getRecordByCodeAndMonth(int userId, String code,
+			String beginMonth, String endMonth) {
+		String temp = code;
+		if(code.equals(DeviceConfig.con000_1)){//距离
+			code = DeviceConfig.con001;
+		}
+		int height = 0;
+		if(code.equals(DeviceConfig.con000_2)){//BMI
+			code = DeviceConfig.con004;
+			//查询用户信息
+			UserBaseBo userBaseBo = this.getUserById(userId);
+			height = userBaseBo.getHeight();
+		}
+		SimpleDateFormat monthSdf = new SimpleDateFormat("yyyy-MM");
+		HashMap<String, String> map = new HashMap<>();
+		List<UserDeviceBo> list = wristbandDao.getRecordByCodeAndMonth(userId, code, beginMonth, endMonth);
+		for (UserDeviceBo userDeviceBo : list) {
+			try {
+				String time = monthSdf.format(monthSdf.parse(userDeviceBo.getTime()));
+				userDeviceBo.setTime(time);
+				userDeviceBo.setValue(userDeviceBo.getValue().split("\\|")[0]);
+				if(!map.containsKey(time)){
+					map.put(time, "");
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		HashMap<String, String> retuMap = new HashMap<>();
+		for (String key : map.keySet()) {
+			double sum = 0.0;
+			double avg = 0.0;
+			int i = 0;
+			for (UserDeviceBo userDeviceBo : list) {
+				if(key.equals(userDeviceBo.getTime())){
+					i++;
+					sum += Double.parseDouble(userDeviceBo.getValue());
+				}
+			}
+			avg = sum / i;
+			BigDecimal bg = new BigDecimal(avg).setScale(2, RoundingMode.HALF_UP);
+			retuMap.put(key, String.valueOf(bg.doubleValue()));
+		}
+		List<UserDeviceBo> recordList = Lists.newArrayList();
+		for (String key : retuMap.keySet()) {
+			UserDeviceBo userDevi = UserDeviceBo.builder().time(key).value(retuMap.get(key)).build();
+			recordList.add(userDevi);
+		}
+		for (UserDeviceBo userDeviceBo : recordList) {
+			if(temp.equals(DeviceConfig.con000_2)){//BMI
+				//计算BMI(BMI 体重公斤数除以身高米数平方)
+				if(height > 0){
+					double h = height / 100.0;
+					double weight =Double.parseDouble(userDeviceBo.getValue());
+					double bmi = weight / h / h;
+					BigDecimal bg = new BigDecimal(bmi).setScale(2, RoundingMode.HALF_UP);
+					userDeviceBo.setValue(String.valueOf(bg.doubleValue()));
+				}
+			}
+		}
+		return recordList;
+	}
 }

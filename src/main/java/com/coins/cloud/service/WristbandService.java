@@ -199,4 +199,13 @@ public interface WristbandService {
 	* @return List<UserDeviceBo>
 	 */
 	List<UserDeviceBo> getTarget(int userId);
+	
+	/**
+	 * 
+	* @Title: getRecordByCodeAndMonth 
+	* @param: 
+	* @Description: 按code和月份分组查询
+	* @return List<UserDeviceBo>
+	 */
+	public List<UserDeviceBo> getRecordByCodeAndMonth(int userId,String code,String beginMonth, String endMonth);
 }
