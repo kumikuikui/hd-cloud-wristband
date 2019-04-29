@@ -986,6 +986,12 @@ public class WristbandResource {
 			@QueryParam("beginMonth") String beginMonth,@QueryParam("endMonth") String endMonth) throws ParseException {
 		BoUtil boUtil = BoUtil.getDefaultTrueBo();
 		userId = userId == null ? 0 : userId;
+		
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		cal.setTime(sdf.parse(endMonth));
+		cal.add(Calendar.MONTH, 1);
+		endMonth = sdf.format(cal.getTime());
 		log.info("userId: {}, beginMonth: {}, endMonth: {},mac:{},code:{}, ",userId, beginMonth, endMonth,mac,code);
 		List<UserDeviceBo> list = wristbandService.getRecordByCodeAndMonth(userId, code, beginMonth, endMonth);
 		boUtil.setData(list);
