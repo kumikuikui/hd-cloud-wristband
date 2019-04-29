@@ -259,8 +259,8 @@ public class WristbandResource {
 				UserDeviceBo userDeviceBo = stepList.get(0);
 				userDeviceId = userDeviceBo.getUserDeviceId();
 				//更新步数
-				double stepTotal = Double.parseDouble(userDeviceBo.getValue())
-						+ Double.parseDouble(wristbandVo.getStep());
+				int stepTotal = Integer.parseInt(userDeviceBo.getValue())
+						+ Integer.parseInt(wristbandVo.getStep());
 				resu = wristbandService.updateRecord(userDeviceId, String.valueOf(stepTotal),wristbandVo.getStepTime());
 			}
 			if(resu > 0){
