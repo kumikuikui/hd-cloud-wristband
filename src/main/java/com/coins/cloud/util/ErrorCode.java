@@ -71,4 +71,9 @@ public class ErrorCode {
 	 * 饮水量不合规
 	 */
 	public final static String DRINKWATER_IS_ERROR = "1000011";
+	
+	/**
+	 * 心率不合规
+	 */
+	public final static String HEART_IS_ERROR = "1000012";
 }

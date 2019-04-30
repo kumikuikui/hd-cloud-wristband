@@ -273,6 +273,13 @@ public class WristbandResource {
 		}
 		// 心率上传
 		if (!StringUtil.isBlank(wristbandVo.getHeart())) {
+			int heart = Integer.parseInt(wristbandVo.getHeart());
+			if(heart < 20 || heart > 200){
+				boUtil = BoUtil.getDefaultFalseBo();
+				boUtil.setCode(ErrorCode.HEART_IS_ERROR);
+				boUtil.setMsg("Heart rate non-compliance");
+				return boUtil;
+			}
 			//查询今日心率添加次数
 			int count = wristbandService.getHeartCountByToday(userId, DeviceConfig.con009,wristbandVo.getHeartTime());
 			if(count >= 5){
