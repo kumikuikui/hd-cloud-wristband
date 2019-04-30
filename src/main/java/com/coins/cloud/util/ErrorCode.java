@@ -56,4 +56,19 @@ public class ErrorCode {
 	 * 心率添加已达上限
 	 */
 	public final static String HEART_ADDITION_UPPER_LIMIT = "1000008";
+	
+	/**
+	 * 账号不能为空
+	 */
+	public final static String ACCOUNT_IS_EMPTY = "1000009";
+	
+	/**
+	 * 邮箱不合法
+	 */
+	public final static String EMAIL_IS_ERROR = "1000010";
+	
+	/**
+	 * 饮水量不合规
+	 */
+	public final static String DRINKWATER_IS_ERROR = "1000011";
 }

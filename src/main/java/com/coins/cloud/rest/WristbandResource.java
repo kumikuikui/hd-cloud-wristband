@@ -374,10 +374,23 @@ public class WristbandResource {
 				&& !StringUtil.isBlank(wristbandVo.getSleepEndTime())) {
 			String value = wristbandVo.getSleepStartTime() + "|"
 					+ wristbandVo.getSleepEndTime();
-			UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
-					.configCode(DeviceConfig.con005)
-					.value(value).time(wristbandVo.getSleepEndTime()).build();
-			int resu = wristbandService.save(userDeviceVo);
+			int resu = 0;
+			int userDeviceId = 0;
+			//查询是否已记录睡眠，有则替换，无则新增
+			List<UserDeviceBo> sleepList = wristbandService.getTodayInfo(userId, DeviceConfig.con005,wristbandVo.getSleepEndTime());
+			log.info(" sleepList : {} ",sleepList);
+			if(sleepList == null || sleepList.isEmpty()){
+				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
+						.configCode(DeviceConfig.con005)
+						.value(value).time(wristbandVo.getSleepEndTime()).build();
+				resu = wristbandService.save(userDeviceVo);
+				userDeviceId = userDeviceVo.getUserDeviceId();
+				log.info(" userDeviceId : {} ",userDeviceId);
+			}else{
+				UserDeviceBo userDeviceBo = sleepList.get(0);
+				userDeviceId = userDeviceBo.getUserDeviceId();
+				resu = wristbandService.updateRecord(userDeviceId, value,wristbandVo.getSleepEndTime());
+			}
 			if (resu > 0) {
 				i = 1;
 			}
@@ -392,7 +405,30 @@ public class WristbandResource {
 			int userDeviceId = 0;
 			List<UserDeviceBo> waterList = wristbandService.getTodayInfo(userId, DeviceConfig.con007,wristbandVo.getDrinkTime());
 			log.info(" waterList : {} ",waterList);
+			//查询用户性别 女范围：0-12   男范围：0-16
+			UserBaseBo userBase = wristbandService.getUserById(userId);
+			//性别，1男2女
+			int genderType = 0;
+			if(userBase != null){
+				genderType = userBase.getGenderType();
+			}
 			if(waterList == null || waterList.isEmpty()){
+				double drinkWater = Double.parseDouble(wristbandVo.getDrinkWater());
+				if(genderType == 1){
+					if(drinkWater <= 0.0 || drinkWater > 16.0){
+						boUtil = BoUtil.getDefaultFalseBo();
+						boUtil.setCode(ErrorCode.DRINKWATER_IS_ERROR);
+						boUtil.setMsg("Drinking water is not compliant");
+						return boUtil;
+					}
+				}else{
+					if(drinkWater <= 0.0 || drinkWater > 12.0){
+						boUtil = BoUtil.getDefaultFalseBo();
+						boUtil.setCode(ErrorCode.DRINKWATER_IS_ERROR);
+						boUtil.setMsg("Drinking water is not compliant");
+						return boUtil;
+					}
+				}
 				UserDeviceVo userDeviceVo = UserDeviceVo.builder().userId(userId)
 						.configCode(DeviceConfig.con007)
 						.value(wristbandVo.getDrinkWater())
@@ -406,6 +442,21 @@ public class WristbandResource {
 				//更新饮水量
 				double waterTotal = Double.parseDouble(userDeviceBo.getValue())
 						+ Double.parseDouble(wristbandVo.getDrinkWater());
+				if(genderType == 1){
+					if(waterTotal <= 0.0 || waterTotal > 16.0){
+						boUtil = BoUtil.getDefaultFalseBo();
+						boUtil.setCode(ErrorCode.DRINKWATER_IS_ERROR);
+						boUtil.setMsg("Drinking water is not compliant");
+						return boUtil;
+					}
+				}else{
+					if(waterTotal <= 0.0 || waterTotal > 12.0){
+						boUtil = BoUtil.getDefaultFalseBo();
+						boUtil.setCode(ErrorCode.DRINKWATER_IS_ERROR);
+						boUtil.setMsg("Drinking water is not compliant");
+						return boUtil;
+					}
+				}
 				resu = wristbandService.updateRecord(userDeviceId, String.valueOf(waterTotal),wristbandVo.getDrinkTime());
 			}
 			if (resu > 0) {
@@ -803,8 +854,22 @@ public class WristbandResource {
 		log.info("##########regJson:{}", regJson);
 		JSONObject regObj = JSONObject.fromObject(regJson);
 		UserBaseVo userBaseVo = (UserBaseVo) JSONObject.toBean(regObj, UserBaseVo.class);
-		
-		int userId = wristbandService.existAccount(userBaseVo.getAccount());
+		String account = userBaseVo.getAccount();
+		if(StringUtil.isBlank(account)){
+			boUtil = BoUtil.getDefaultFalseBo();
+			boUtil.setCode(ErrorCode.ACCOUNT_IS_EMPTY);
+			boUtil.setMsg("Account is empty");
+			return boUtil;
+		}else{
+			String regex = "[\\w\\.\\-]+@([\\w\\-]+\\.)+[\\w\\-]+";
+			if(!account.matches(regex)){
+				boUtil = BoUtil.getDefaultFalseBo();
+				boUtil.setCode(ErrorCode.EMAIL_IS_ERROR);
+				boUtil.setMsg("Account format error");
+				return boUtil;
+			}
+		}
+		int userId = wristbandService.existAccount(account);
 		if(userId > 0){
 			boUtil = BoUtil.getDefaultFalseBo();
 			boUtil.setCode(ErrorCode.ACCOUNT_REGISTERED);
