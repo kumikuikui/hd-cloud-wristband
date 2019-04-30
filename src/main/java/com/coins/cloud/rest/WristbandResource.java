@@ -1088,6 +1088,8 @@ public class WristbandResource {
 		List<UserDeviceBo> list = wristbandService.getTodayInfo(userId, code, date);
 		if(list != null && !list.isEmpty()){
 			boUtil.setData(list.get(0));
+		}else{
+			boUtil.setData("");
 		}
 		return boUtil;
 	}
