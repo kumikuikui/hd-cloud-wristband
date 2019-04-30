@@ -1069,4 +1069,26 @@ public class WristbandResource {
 		boUtil.setData(list);
 		return boUtil;
 	}
+	
+	/**
+	 * 
+	* @Title: getSingleInfo 
+	* @param: 
+	* @Description: 查询指定一天是否有数据
+	* @return BoUtil
+	 */
+	@ApiOperation(httpMethod = "GET", value = "single/info", notes = "single/info")
+	@ResponseBody
+	@RequestMapping(value = "/single/info", method = RequestMethod.GET, produces = "application/json", consumes = "application/*")
+	public BoUtil getSingleInfo(@QueryParam("userId") Integer userId,@QueryParam("code") String code,
+			@QueryParam("date") String date) throws ParseException {
+		BoUtil boUtil = BoUtil.getDefaultTrueBo();
+		userId = userId == null ? 0 : userId;
+		log.info("userId: {}, code: {}, date: {}",userId, code, date);
+		List<UserDeviceBo> list = wristbandService.getTodayInfo(userId, code, date);
+		if(list != null && !list.isEmpty()){
+			boUtil.setData(list.get(0));
+		}
+		return boUtil;
+	}
 }
