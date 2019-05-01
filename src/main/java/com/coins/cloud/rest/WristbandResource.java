@@ -588,6 +588,9 @@ public class WristbandResource {
 	public BoUtil info(@QueryParam("userId") Integer userId){
 		BoUtil boUtil = BoUtil.getDefaultTrueBo();
 		UserBaseBo userBaseBo = wristbandService.getUserById(userId);
+		if(userBaseBo==null) {
+			userBaseBo=UserBaseBo.builder().build();
+		}
 		boUtil.setData(userBaseBo);
 		return boUtil;
 	}
