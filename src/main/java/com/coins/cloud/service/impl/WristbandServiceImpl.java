@@ -84,8 +84,9 @@ public class WristbandServiceImpl implements WristbandService {
 				wristbandBo.setStep(userDeviceBo.getValue());
 				wristbandBo.setStepTime(userDeviceBo.getTime());
 				//计算距离
-				double distance = Integer.parseInt(wristbandBo.getStep()) * 0.5;
-				wristbandBo.setDistance(distance);
+				double distance = Integer.parseInt(wristbandBo.getStep()) * 0.5 / 1000.0;
+				BigDecimal bg = new BigDecimal(distance).setScale(1, RoundingMode.HALF_UP);
+				wristbandBo.setDistance(bg.doubleValue());
 				wristbandBo.setTargetStep(map.get(userDeviceBo.getConfigCode()));
 			}
 			if(userDeviceBo.getConfigCode().equals(DeviceConfig.con002)){//卡路里燃烧
@@ -184,8 +185,9 @@ public class WristbandServiceImpl implements WristbandService {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		for (UserDeviceBo userDeviceBo : list) {
 			if(temp.equals(DeviceConfig.con000_1)){//距离
-				double distance = Integer.parseInt(userDeviceBo.getValue()) * 0.5;
-				userDeviceBo.setValue(String.valueOf(distance));
+				double distance = Integer.parseInt(userDeviceBo.getValue()) * 0.5 / 1000.0;
+				BigDecimal bg = new BigDecimal(distance).setScale(1, RoundingMode.HALF_UP);
+				userDeviceBo.setValue(String.valueOf(bg.doubleValue()));
 			}
 			if(temp.equals(DeviceConfig.con000_2)){//BMI
 				//计算BMI(BMI 体重公斤数除以身高米数平方)
