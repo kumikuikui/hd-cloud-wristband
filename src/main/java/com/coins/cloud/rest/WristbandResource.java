@@ -1089,7 +1089,7 @@ public class WristbandResource {
 		if(list != null && !list.isEmpty()){
 			boUtil.setData(list.get(0));
 		}else{
-			boUtil.setData("");
+			boUtil.setData(null);
 		}
 		return boUtil;
 	}
