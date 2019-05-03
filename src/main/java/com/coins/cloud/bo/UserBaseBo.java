@@ -32,7 +32,7 @@ public class UserBaseBo {
 	//钱包余额
 	private double balance;
 	//身高,cm
-	private int height;
+	private double height;
 	//体重
 	private String weight;
 	//生日

@@ -67,7 +67,7 @@ public interface WristbandMapper {
 			@Result(property = "avatar", column = "device_base_avatar_url", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "walletAccount", column = "entity_wallet_account", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "balance", column = "entity_wallet_cnt", javaType = double.class, jdbcType = JdbcType.DECIMAL),
-			@Result(property = "height", column = "device_base_height", javaType = int.class, jdbcType = JdbcType.INTEGER),
+			@Result(property = "height", column = "device_base_height", javaType = double.class, jdbcType = JdbcType.DECIMAL),
 			@Result(property = "birthdate", column = "device_base_birthdate", javaType = String.class, jdbcType = JdbcType.DATE),
 			@Result(property = "genderType", column = "device_base_gender_itype", javaType = int.class, jdbcType = JdbcType.INTEGER),
 			@Result(property = "firstName", column = "device_base_first_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),

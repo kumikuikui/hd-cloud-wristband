@@ -26,7 +26,7 @@ public class UserBaseVo {
 	//头像
 	private String avatar;
 	//身高,cm
-	private int height;
+	private double height;
 	//生日
 	private String birthdate;
 	//性别，1男2女

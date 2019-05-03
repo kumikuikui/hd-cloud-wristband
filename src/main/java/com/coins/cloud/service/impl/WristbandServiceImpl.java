@@ -105,7 +105,7 @@ public class WristbandServiceImpl implements WristbandService {
 				wristbandBo.setFat(userDeviceBo.getValue().split("\\|")[1]);
 				wristbandBo.setWeightTime(userDeviceBo.getTime());
 				//计算BMI(BMI 体重公斤数除以身高米数平方)
-				int height = userBaseBo.getHeight();
+				double height = userBaseBo.getHeight();
 				if(height > 0){
 					double h = height / 100.0;
 					double weight =Double.parseDouble(wristbandBo.getWeight());
@@ -174,7 +174,7 @@ public class WristbandServiceImpl implements WristbandService {
 		if(code.equals(DeviceConfig.con000_1)){//距离
 			code = DeviceConfig.con001;
 		}
-		int height = 0;
+		double height = 0.0;
 		if(code.equals(DeviceConfig.con000_2)){//BMI
 			code = DeviceConfig.con004;
 			//查询用户信息
@@ -191,7 +191,7 @@ public class WristbandServiceImpl implements WristbandService {
 			}
 			if(temp.equals(DeviceConfig.con000_2)){//BMI
 				//计算BMI(BMI 体重公斤数除以身高米数平方)
-				if(height > 0){
+				if(height > 0.0){
 					double h = height / 100.0;
 					double weight =Double.parseDouble(userDeviceBo.getValue().split("\\|")[0]);
 					double bmi = weight / h / h;
@@ -332,7 +332,7 @@ public class WristbandServiceImpl implements WristbandService {
 		if(code.equals(DeviceConfig.con000_1)){//距离
 			code = DeviceConfig.con001;
 		}
-		int height = 0;
+		double height = 0.0;
 		if(code.equals(DeviceConfig.con000_2)){//BMI
 			code = DeviceConfig.con004;
 			//查询用户信息
@@ -377,7 +377,7 @@ public class WristbandServiceImpl implements WristbandService {
 		for (UserDeviceBo userDeviceBo : recordList) {
 			if(temp.equals(DeviceConfig.con000_2)){//BMI
 				//计算BMI(BMI 体重公斤数除以身高米数平方)
-				if(height > 0){
+				if(height > 0.0){
 					double h = height / 100.0;
 					double weight =Double.parseDouble(userDeviceBo.getValue());
 					double bmi = weight / h / h;
