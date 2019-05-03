@@ -48,7 +48,7 @@ public class UserBaseVo {
 	//密码
 	private String password;
 	//体重
-	private String weight;
+	private double weight;
 	////保险状态，0未认证，1认证中，2认证成功，3认证失败
 	private int authType;
 }

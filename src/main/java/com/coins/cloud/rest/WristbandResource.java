@@ -617,7 +617,7 @@ public class WristbandResource {
 			}
 			userBaseVo.setAuthType(1);
 		}
-		if(!StringUtil.isBlank(userBaseVo.getWeight())){
+		if(userBaseVo.getWeight() > 0.0){
 			long currentMillis = System.currentTimeMillis() + 8 * 60 * 60 * 1000l;
 			Date date = new Date(currentMillis);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -640,7 +640,7 @@ public class WristbandResource {
 				//注册完善信息后，目标数据给予默认值
 				if (!StringUtil.isBlank(userBaseVo.getName())
 						&& !StringUtil.isBlank(userBaseVo.getBirthdate())
-						&& !StringUtil.isBlank(userBaseVo.getWeight())
+						&& userBaseVo.getWeight() > 0.0
 						&& userBaseVo.getHeight() > 0 && userBaseVo.getGenderType() > 0) {
 					//查询是否有目标数据
 					List<UserDeviceBo> targetList = wristbandService.getTarget(userBaseVo.getUserId());
@@ -678,11 +678,11 @@ public class WristbandResource {
 						bir.setTime(sdf.parse(userBaseVo.getBirthdate()));
 						int age = cal.get(Calendar.YEAR) - bir.get(Calendar.YEAR);
 						if(userBaseVo.getGenderType() == 1){//1男2女
-							targetIntakeCal = (int) (67	+ 13.71 * Double.parseDouble(userBaseVo.getWeight())
+							targetIntakeCal = (int) (67	+ 13.71 * userBaseVo.getWeight()
 									+ 5 * userBaseVo.getHeight() - 6.9 * age);
 						}
 						if(userBaseVo.getGenderType() == 2){//1男2女
-							targetIntakeCal = (int) (661 + 9.6 * Double.parseDouble(userBaseVo.getWeight())
+							targetIntakeCal = (int) (661 + 9.6 * userBaseVo.getWeight()
 									+ 1.72 * userBaseVo.getHeight() - 4.7 * age);
 						}
 						userDeviceVo.setConfigCode(DeviceConfig.con006);
