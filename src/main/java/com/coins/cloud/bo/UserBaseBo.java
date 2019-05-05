@@ -55,4 +55,6 @@ public class UserBaseBo {
 	private String idcardUrl;
 	//认证状态0未认证，1认证中，2认证成功，3认证失败
 	private int authType;
+	//注册时间
+	private String registTime;
 }

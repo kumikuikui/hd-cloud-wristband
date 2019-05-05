@@ -162,6 +162,13 @@ public class WristbandServiceImpl implements WristbandService {
 			if(!StringUtil.isBlank(value)){
 				userBaseBo.setWeight(value.split("\\|")[0]);
 			}
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			try {
+				String time = sdf.format(sdf.parse(userBaseBo.getRegistTime()));
+				userBaseBo.setRegistTime(time);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 		}
 		return userBaseBo;
 	}

@@ -76,7 +76,8 @@ public interface WristbandMapper {
 			@Result(property = "insuranceName", column = "device_base_insurance_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "idcard", column = "device_base_idcard", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "idcardUrl", column = "device_base_idcard_urls", javaType = String.class, jdbcType = JdbcType.VARCHAR),
-			@Result(property = "authType", column = "device_base_auth_itype", javaType = int.class, jdbcType = JdbcType.INTEGER)
+			@Result(property = "authType", column = "device_base_auth_itype", javaType = int.class, jdbcType = JdbcType.INTEGER),
+			@Result(property = "registTime", column = "create_time", javaType = String.class, jdbcType = JdbcType.DATE)
 	})
 	public UserBaseBo getUserById(@Param("userId") int userId);
 	
