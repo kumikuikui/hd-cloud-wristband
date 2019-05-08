@@ -75,4 +75,6 @@ public class WristbandVo {
 	private String foodFat;
 	//餐别，1早餐，2中餐，3晚餐，4其它
 	private int eatType;
+	//食物图片 多张用|拼接
+	private String foodUrls;
 }

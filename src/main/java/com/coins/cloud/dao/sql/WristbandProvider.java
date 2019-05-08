@@ -148,6 +148,7 @@ public class WristbandProvider {
 				VALUES("food_intake_size", "#{foodSize}");
 				VALUES("food_intake_cal", "#{calorieIntake}");
 				VALUES("food_intake_fat", "#{foodFat}");
+				VALUES("food_intake_urls", "#{foodUrls}");
 				VALUES("create_by", "#{userId}");
 				VALUES("create_time", "#{calorieIntakeTime}");
 				VALUES("update_by", "#{userId}");
