@@ -708,6 +708,7 @@ public class TestResource {
 	public BoUtil regist(final @RequestBody UserBaseVo userBaseVo) throws Exception {
 		BoUtil boUtil = BoUtil.getDefaultTrueBo();
 		String account = userBaseVo.getAccount();
+		log.info(" userBaseVo : {} ", userBaseVo);
 		if(StringUtil.isBlank(account)){
 			boUtil = BoUtil.getDefaultFalseBo();
 			boUtil.setCode(ErrorCode.ACCOUNT_IS_EMPTY);
@@ -752,6 +753,7 @@ public class TestResource {
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public BoUtil login(final @RequestBody UserBaseVo userBaseVo) throws Exception {
 		BoUtil boUtil = BoUtil.getDefaultTrueBo();
+		log.info(" userBaseVo : {} ", userBaseVo);
 		int userId = wristbandService.login(userBaseVo);
 		if(userId > 0){
 			boUtil.setData(userId);
