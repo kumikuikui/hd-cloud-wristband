@@ -25,5 +25,6 @@ public class UserDeviceBo {
 	private String configCode;
 	private String value;
 	private String time;
+	private String calsOut;
 	private List<CalFoodBo> foodList;
 }

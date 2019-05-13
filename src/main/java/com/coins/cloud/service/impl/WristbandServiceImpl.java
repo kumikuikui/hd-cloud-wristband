@@ -219,6 +219,14 @@ public class WristbandServiceImpl implements WristbandService {
 					}
 				}
 				userDeviceBo.setFoodList(foodList);
+				//查询卡路里消耗
+				List<UserDeviceBo> calsOutList = wristbandDao.getTodayInfo(
+						userId, DeviceConfig.con002, userDeviceBo.getTime());
+				if(calsOutList != null && !calsOutList.isEmpty()){
+					userDeviceBo.setCalsOut(calsOutList.get(0).getValue());
+				}else{
+					userDeviceBo.setCalsOut("");
+				}
 			}
 			String time = "";
 			try {
