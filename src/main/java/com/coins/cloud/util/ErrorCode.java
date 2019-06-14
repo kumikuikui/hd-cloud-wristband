@@ -76,4 +76,25 @@ public class ErrorCode {
 	 * 心率不合规
 	 */
 	public final static String HEART_IS_ERROR = "1000012";
+	
+	/**
+	 * 已是好友，不能重复添加
+	 */
+	public final static String FRIEND_IS_EXIS = "1000013";
+	
+	/**
+	 * 已请求添加好友
+	 */
+	public final static String ADD_RECORD_IS_EXIS = "1000014";
+	
+	/**
+	 * 已点赞，不能重复
+	 */
+	public final static String IT_HAD_STAR = "1000015";
+	
+	/**
+	 * 还没点赞，不能取消
+	 */
+	public final static String IT_HAD_NOT_STAR = "1000016";
+
 }

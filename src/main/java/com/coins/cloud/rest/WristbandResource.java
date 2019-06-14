@@ -258,9 +258,9 @@ public class WristbandResource {
 			}else{
 				UserDeviceBo userDeviceBo = stepList.get(0);
 				userDeviceId = userDeviceBo.getUserDeviceId();
-				//更新步数
-				int stepTotal = Integer.parseInt(userDeviceBo.getValue())
-						+ Integer.parseInt(wristbandVo.getStep());
+				//更新步数 /手机步数覆盖，手环步数累加 ，暂时没有手环，先覆盖
+				int stepTotal = Integer.parseInt(wristbandVo.getStep());
+						//+ Integer.parseInt(userDeviceBo.getValue());
 				resu = wristbandService.updateRecord(userDeviceId, String.valueOf(stepTotal),wristbandVo.getStepTime());
 			}
 			if(resu > 0){
@@ -1093,4 +1093,5 @@ public class WristbandResource {
 		}
 		return boUtil;
 	}
+
 }
