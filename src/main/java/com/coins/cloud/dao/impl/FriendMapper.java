@@ -88,7 +88,7 @@ public interface FriendMapper {
 	* @Description: 好友申请列表
 	* @return List<FriendBo>
 	 */
-	@Select("SELECT * FROM user_add_friend_bt WHERE user_device_base_sb_seq = 1 AND active_flag = 'y' "
+	@Select("SELECT * FROM user_add_friend_bt WHERE user_device_base_sb_seq = #{userId} AND active_flag = 'y' "
 			+ "ORDER BY create_time DESC")
 	@Results(value = {
 			@Result(property = "friendUserId", column = "user_device_base_sb_to", javaType = int.class, jdbcType = JdbcType.INTEGER),
