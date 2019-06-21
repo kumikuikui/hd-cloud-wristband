@@ -170,7 +170,7 @@ public interface FriendMapper {
 		   +" and z.device_config_internal_code = 'con001' "
 		   +" order by z.device_record_value DESC")
 	@Results(value = {
-			@Result(property = "friendUserId", column = "user_device_base_sb_seq", javaType = int.class, jdbcType = JdbcType.INTEGER),
+			@Result(property = "friendUserId", column = "seqs", javaType = int.class, jdbcType = JdbcType.INTEGER),
 			@Result(property = "name", column = "device_base_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "avatar", column = "device_base_avatar_url", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "time", column = "create_time", javaType = String.class, jdbcType = JdbcType.DATE),
