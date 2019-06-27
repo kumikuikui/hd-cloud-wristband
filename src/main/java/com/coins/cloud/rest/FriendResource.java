@@ -239,8 +239,10 @@ public class FriendResource {
 			//i-1-1  -1是下标从0开始，-1是获取上一名的步数
 			int stepDiff = Integer.parseInt(list.get(i-1-1).getStep()) - myStep;
 			map.put("stepDiff", stepDiff);
+			map.put("previousName", list.get(i-1-1).getName());
 		}else{//排第一名,距离上一名步数相差为0
 			map.put("stepDiff", 0);
+			map.put("previousName", "");
 		}
 		map.put("list", list);
 		boUtil.setData(map);
