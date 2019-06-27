@@ -140,8 +140,8 @@ public interface FriendMapper {
 	* @return List<FriendBo>
 	 */
 	@Select("SELECT * FROM user_device_base_sb "
-		   +" WHERE locate(CONCAT(user_device_base_sb_seq,','),( "
-		   +" SELECT CONCAT(REPLACE(device_base_sb_seqs,'|',','),',')  FROM user_friend_relation_bt WHERE user_device_base_sb_seq = #{userId}))")
+		   +" WHERE locate(user_device_base_sb_seq,( "
+		   +" SELECT REPLACE(device_base_sb_seqs,'|',',')  FROM user_friend_relation_bt WHERE user_device_base_sb_seq = #{userId}))")
 	@Results(value = {
 			@Result(property = "friendUserId", column = "user_device_base_sb_seq", javaType = int.class, jdbcType = JdbcType.INTEGER),
 			@Result(property = "name", column = "device_base_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
