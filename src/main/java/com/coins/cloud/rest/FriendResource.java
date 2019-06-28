@@ -235,11 +235,13 @@ public class FriendResource {
 				myStep = Integer.parseInt(friendBo.getStep());
 			}
 		}
-		if(i > 1){//不是排第一名
-			//i-1-1  -1是下标从0开始，-1是获取上一名的步数
-			int stepDiff = Integer.parseInt(list.get(i-1-1).getStep()) - myStep;
+		//自己的排名
+		int rank = map.get("rank") != null ? Integer.parseInt(map.get("rank").toString()) : 0;
+		if(rank > 1){//不是排第一名
+			//rank-1-1  -1是下标从0开始，-1是获取上一名的步数
+			int stepDiff = Integer.parseInt(list.get(rank-1-1).getStep()) - myStep;
 			map.put("stepDiff", stepDiff);
-			map.put("previousName", list.get(i-1-1).getName());
+			map.put("previousName", list.get(rank-1-1).getName());
 		}else{//排第一名,距离上一名步数相差为0
 			map.put("stepDiff", 0);
 			map.put("previousName", "");
