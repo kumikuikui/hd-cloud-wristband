@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.coins.cloud.WristbandServiceApplication.RSAConfig;
 import com.coins.cloud.bo.UserBaseBo;
 import com.coins.cloud.bo.UserDeviceBo;
+import com.coins.cloud.bo.WarrantyUser;
 import com.coins.cloud.bo.WristbandBo;
 import com.coins.cloud.service.WristbandService;
 import com.coins.cloud.util.AESUtil;
@@ -607,6 +608,22 @@ public class WristbandResource {
 		BoUtil boUtil = BoUtil.getDefaultTrueBo();
 		//保险号不为空，更新保险认证
 		if(!StringUtil.isBlank(userBaseVo.getInsuranceNo())){
+			//验证保单号是否存在
+			int existResu = wristbandService.checkExist(userBaseVo.getInsuranceNo());
+			if(existResu == 0){
+				boUtil = BoUtil.getDefaultFalseBo();
+				boUtil.setCode(ErrorCode.INSURANCENO_IS_NOT_EXIST);
+				boUtil.setMsg("Insurance no does not exist");
+				return boUtil;
+			}
+			//验证保单号是否被其他人关联
+			int usedResu = wristbandService.checkUsed(userBaseVo.getInsuranceNo(), userBaseVo.getUserId());
+			if(usedResu > 0){
+				boUtil = BoUtil.getDefaultFalseBo();
+				boUtil.setCode(ErrorCode.INSURANCENO_IS_USED);
+				boUtil.setMsg("Insurance no has been associated with someone else");
+				return boUtil;
+			}
 			//查询认证状态
 			int authType = wristbandService.getUserById(userBaseVo.getUserId()).getAuthType();
 			if(authType == 1 || authType == 2){//保险状态，0未认证，1认证中，2认证成功，3认证失败
@@ -1094,4 +1111,21 @@ public class WristbandResource {
 		return boUtil;
 	}
 
+	/**
+	 * 
+	* @Title: getSingleInfo 
+	* @param: 
+	* @Description: 查询保单详情
+	* @return BoUtil
+	 */
+	@ApiOperation(httpMethod = "GET", value = "warranty/info", notes = "warranty/info")
+	@ResponseBody
+	@RequestMapping(value = "/warranty/info", method = RequestMethod.GET, produces = "application/json", consumes = "application/*")
+	public BoUtil getSingleInfo(@QueryParam("insuranceNo") String insuranceNo) throws ParseException {
+		BoUtil boUtil = BoUtil.getDefaultTrueBo();
+		log.info("insuranceNo: {}",insuranceNo);
+		WarrantyUser warrantyUser = wristbandService.getWarrantyUserDetail(insuranceNo);
+		boUtil.setData(warrantyUser);
+		return boUtil;
+	}
 }

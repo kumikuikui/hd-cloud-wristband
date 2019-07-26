@@ -19,6 +19,7 @@ import org.apache.ibatis.type.JdbcType;
 import com.coins.cloud.bo.CalFoodBo;
 import com.coins.cloud.bo.UserBaseBo;
 import com.coins.cloud.bo.UserDeviceBo;
+import com.coins.cloud.bo.WarrantyUser;
 import com.coins.cloud.dao.sql.WristbandProvider;
 import com.coins.cloud.vo.UserBaseVo;
 import com.coins.cloud.vo.UserDeviceVo;
@@ -322,4 +323,63 @@ public interface WristbandMapper {
 	public List<UserDeviceBo> getRecordByCodeAndMonth(@Param("userId") int userId,
 			@Param("code") String code, @Param("beginMonth") String beginMonth,
 			@Param("endMonth") String endMonth);
+	
+	/**
+	 * 
+	* @Title: checkExist 
+	* @param: 
+	* @Description: 验证保单号是否存在
+	* @return int
+	 */
+	@Select("SELECT COUNT(1) FROM user_warranty_case_bt WHERE active_flag = 'y' AND memberid = #{insuranceNo}")
+	public int checkExist(@Param("insuranceNo") String insuranceNo);
+	
+	/**
+	 * 
+	* @Title: checkUsed 
+	* @param: 
+	* @Description: 验证保单号是否被使用
+	* @return int
+	 */
+	@Select("SELECT COUNT(1) FROM user_device_base_sb WHERE active_flag = 'y' "
+			+" AND device_base_insurance_no = #{insuranceNo} AND user_device_base_sb_seq != #{userId}")
+	public int checkUsed(@Param("insuranceNo") String insuranceNo,@Param("userId") int userId);
+	
+	/**
+	 * 
+	* @Title: getWarrantyUserDetail 
+	* @param: 
+	* @Description: 保单详情
+	* @return WarrantyUser
+	 */
+	@Select("SELECT * FROM user_warranty_case_bt WHERE active_flag = 'y' AND memberid = #{insuranceNo}")
+	@Results(value = {
+			@Result(property = "id",column = "user_warranty_case_bt_seq", javaType = int.class, jdbcType = JdbcType.INTEGER),
+			@Result(property = "casetype",column = "casetype", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "memberid",column = "memberid", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "inpname",column = "inpname", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "inpnric",column = "inpnric", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "inpdob",column = "inpdob", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "inpsex",column = "inpsex", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "inpnat",column = "inpnat", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "inprace",column = "inprace", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "inphgt",column = "inphgt", javaType = int.class, jdbcType = JdbcType.INTEGER),
+			@Result(property = "inpwgt",column = "inpwgt", javaType = int.class, jdbcType = JdbcType.INTEGER),
+			@Result(property = "inpjob",column = "inpjob", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "natureofwork",column = "natureofwork", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "add001",column = "add001", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "add002",column = "add002", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "add003",column = "add003", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "postcode",column = "postcode", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "telhome",column = "telhome", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "hpno",column = "hpno", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "bplan",column = "bplan", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "loading",column = "loading", javaType = int.class, jdbcType = JdbcType.INTEGER),
+			@Result(property = "payfreq",column = "payfreq", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "submissiondate",column = "submissiondate", javaType = String.class, jdbcType = JdbcType.DATE),
+			@Result(property = "prodate",column = "prodate", javaType = String.class, jdbcType = JdbcType.DATE),
+			@Result(property = "inceptiondate",column = "inceptiondate", javaType = String.class, jdbcType = JdbcType.DATE),
+			@Result(property = "policystatus",column = "policystatus", javaType = int.class, jdbcType = JdbcType.INTEGER)
+	})
+	public WarrantyUser getWarrantyUserDetail(@Param("insuranceNo") String insuranceNo);
 }

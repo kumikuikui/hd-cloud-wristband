@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.coins.cloud.bo.CalFoodBo;
 import com.coins.cloud.bo.UserBaseBo;
 import com.coins.cloud.bo.UserDeviceBo;
+import com.coins.cloud.bo.WarrantyUser;
 import com.coins.cloud.dao.WristbandDao;
 import com.coins.cloud.vo.UserBaseVo;
 import com.coins.cloud.vo.UserDeviceVo;
@@ -147,6 +148,21 @@ public class WristbandDaoMybatisImpl implements WristbandDao {
 	public List<UserDeviceBo> getRecordByCodeAndMonth(int userId, String code,
 			String beginMonth, String endMonth) {
 		return wristbandMapper.getRecordByCodeAndMonth(userId, code, beginMonth, endMonth);
+	}
+
+	@Override
+	public int checkExist(String insuranceNo) {
+		return wristbandMapper.checkExist(insuranceNo);
+	}
+
+	@Override
+	public int checkUsed(String insuranceNo,int userId) {
+		return wristbandMapper.checkUsed(insuranceNo, userId);
+	}
+
+	@Override
+	public WarrantyUser getWarrantyUserDetail(String insuranceNo) {
+		return wristbandMapper.getWarrantyUserDetail(insuranceNo);
 	}
 
 }

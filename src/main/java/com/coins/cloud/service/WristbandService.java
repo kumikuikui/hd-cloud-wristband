@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.coins.cloud.bo.UserBaseBo;
 import com.coins.cloud.bo.UserDeviceBo;
+import com.coins.cloud.bo.WarrantyUser;
 import com.coins.cloud.bo.WristbandBo;
 import com.coins.cloud.vo.UserBaseVo;
 import com.coins.cloud.vo.UserDeviceVo;
@@ -208,4 +209,31 @@ public interface WristbandService {
 	* @return List<UserDeviceBo>
 	 */
 	public List<UserDeviceBo> getRecordByCodeAndMonth(int userId,String code,String beginMonth, String endMonth);
+	
+	/**
+	 * 
+	* @Title: checkExist 
+	* @param: 
+	* @Description: 验证保单号是否存在
+	* @return int
+	 */
+	public int checkExist(String insuranceNo);
+	
+	/**
+	 * 
+	* @Title: checkUsed 
+	* @param: 
+	* @Description: 验证保单号是否被使用
+	* @return int
+	 */
+	public int checkUsed(String insuranceNo,int userId);
+	
+	/**
+	 * 
+	* @Title: getWarrantyUserDetail 
+	* @param: 
+	* @Description: 保单详情
+	* @return WarrantyUser
+	 */
+	public WarrantyUser getWarrantyUserDetail(String insuranceNo);
 }

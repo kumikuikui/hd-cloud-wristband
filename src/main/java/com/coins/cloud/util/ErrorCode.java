@@ -96,5 +96,15 @@ public class ErrorCode {
 	 * 还没点赞，不能取消
 	 */
 	public final static String IT_HAD_NOT_STAR = "1000016";
+	
+	/**
+	 * 保单号不存在
+	 */
+	public final static String INSURANCENO_IS_NOT_EXIST = "1000017";
+	
+	/**
+	 * 保单号已被其他用户关联
+	 */
+	public final static String INSURANCENO_IS_USED = "1000018";
 
 }

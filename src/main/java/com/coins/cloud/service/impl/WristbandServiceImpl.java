@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.coins.cloud.bo.CalFoodBo;
 import com.coins.cloud.bo.UserBaseBo;
 import com.coins.cloud.bo.UserDeviceBo;
+import com.coins.cloud.bo.WarrantyUser;
 import com.coins.cloud.bo.WristbandBo;
 import com.coins.cloud.dao.WristbandDao;
 import com.coins.cloud.service.WristbandService;
@@ -402,5 +403,20 @@ public class WristbandServiceImpl implements WristbandService {
 			}
 		}
 		return recordList;
+	}
+
+	@Override
+	public int checkExist(String insuranceNo) {
+		return wristbandDao.checkExist(insuranceNo);
+	}
+
+	@Override
+	public int checkUsed(String insuranceNo, int userId) {
+		return wristbandDao.checkUsed(insuranceNo, userId);
+	}
+
+	@Override
+	public WarrantyUser getWarrantyUserDetail(String insuranceNo) {
+		return wristbandDao.getWarrantyUserDetail(insuranceNo);
 	}
 }
