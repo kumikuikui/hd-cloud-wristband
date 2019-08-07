@@ -128,7 +128,7 @@ public interface FriendMapper {
 	* @return int
 	 */
 	@Update("UPDATE user_add_friend_bt SET add_friend_itype = #{status},update_time = NOW() "
-			+ "WHERE user_device_base_sb_seq = #{userId} AND user_device_base_sb_to = #{targetUserId}")
+			+ "WHERE user_device_base_sb_seq = #{userId} AND user_device_base_sb_to = #{targetUserId} and add_friend_itype = 1")
 	public int updateRecordStatus(@Param("userId") int userId,
 			@Param("targetUserId") int targetUserId, @Param("status") int status);
 	
