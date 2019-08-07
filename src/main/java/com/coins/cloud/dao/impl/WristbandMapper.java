@@ -91,7 +91,7 @@ public interface WristbandMapper {
 		   +" AND active_flag = 'y' AND device_config_internal_code = #{code} "
 		   +" AND create_time >= #{beginTime} AND create_time <= #{endTime} "
 		   +" group by DATE_FORMAT(create_time,'%Y-%m-%d')) b "
-		   +" on a.create_time = b.time1 and a.device_config_internal_code = #{code} and a.user_device_base_sb_seq = #{userId} ORDER BY a.create_time DESC ")
+		   +" on a.create_time = b.time1 and a.device_config_internal_code = #{code} and a.user_device_base_sb_seq = #{userId} ORDER BY a.create_time ASC ")
 	@Results(value = {
 			@Result(property = "userDeviceId", column = "user_device_record_bt_seq", javaType = int.class, jdbcType = JdbcType.INTEGER),
 			@Result(property = "value", column = "record_value", javaType = String.class, jdbcType = JdbcType.VARCHAR),
