@@ -139,9 +139,11 @@ public interface FriendMapper {
 	* @Description: 获取我的所有好友
 	* @return List<FriendBo>
 	 */
-	@Select("SELECT * FROM user_device_base_sb "
-		   +" WHERE locate((SELECT REPLACE(device_base_sb_seqs,'|',',')  FROM user_friend_relation_bt WHERE user_device_base_sb_seq = #{userId}), "
-		   +" user_device_base_sb_seq)")
+	@Select("SELECT * FROM user_device_base_sb WHERE user_device_base_sb_seq IN "
+		  +" (SELECT substring_index(substring_index(a.device_base_sb_seqs,'|',b.ids+1),'|',-1) seqs "
+		  +" FROM user_friend_relation_bt a join aux b "
+		  +" on b.ids < (length(a.device_base_sb_seqs) - length(replace(a.device_base_sb_seqs,'|',''))+1) "
+		  +" where user_device_base_sb_seq = #{userId})")
 	@Results(value = {
 			@Result(property = "friendUserId", column = "user_device_base_sb_seq", javaType = int.class, jdbcType = JdbcType.INTEGER),
 			@Result(property = "name", column = "device_base_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
