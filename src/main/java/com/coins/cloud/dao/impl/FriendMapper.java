@@ -170,7 +170,7 @@ public interface FriendMapper {
 		   +" on x.seqs = z.user_device_base_sb_seq "
 		   +" and DATE_FORMAT(z.create_time,'%Y-%m-%d') = #{time} "
 		   +" and z.device_config_internal_code = 'con001' "
-		   +" order by z.device_record_value DESC")
+		   +" order by cast(z.device_record_value as UNSIGNED INTEGER) DESC")
 	@Results(value = {
 			@Result(property = "friendUserId", column = "seqs", javaType = int.class, jdbcType = JdbcType.INTEGER),
 			@Result(property = "name", column = "device_base_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
