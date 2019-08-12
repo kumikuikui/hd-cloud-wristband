@@ -119,7 +119,11 @@ public class WristbandServiceImpl implements WristbandService {
 				wristbandBo.setTargetWeightTime(targetWeightTime);
 				//查询设定目标体重时的体重
 				String targetCurrWeight = wristbandDao.getWeightNearByTarget(userId, userDeviceBo.getConfigCode(), targetWeightTime);
-				wristbandBo.setTargetCurrWeight(targetCurrWeight.split("\\|")[0]);
+				if(StringUtil.isBlank(targetCurrWeight)){
+					wristbandBo.setTargetCurrWeight("0");
+				}else{
+					wristbandBo.setTargetCurrWeight(targetCurrWeight.split("\\|")[0]);
+				}
 			}
 			if(userDeviceBo.getConfigCode().equals(DeviceConfig.con005)){//睡觉
 				wristbandBo.setSleepStartTime(userDeviceBo.getValue().split("\\|")[0]);
