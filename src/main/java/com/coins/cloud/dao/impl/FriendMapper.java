@@ -195,6 +195,13 @@ public interface FriendMapper {
 		  +" and DATE_FORMAT(z.create_time,'%Y-%m-%d') = #{time} "
 		  +" and z.device_config_internal_code = 'con001' "
 		  +" WHERE y.user_device_base_sb_seq = #{userId} and y.active_flag = 'y' ")
+	@Results(value = {
+			@Result(property = "friendUserId", column = "seqs", javaType = int.class, jdbcType = JdbcType.INTEGER),
+			@Result(property = "name", column = "device_base_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "avatar", column = "device_base_avatar_url", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "time", column = "create_time", javaType = String.class, jdbcType = JdbcType.DATE),
+			@Result(property = "step", column = "device_record_value", javaType = String.class, jdbcType = JdbcType.VARCHAR)
+	})
 	public List<FriendBo> getMyStep(@Param("userId") int userId,@Param("time") String time);
 	/**
 	 * 
