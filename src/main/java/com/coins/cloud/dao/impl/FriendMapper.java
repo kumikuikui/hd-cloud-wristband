@@ -180,6 +180,22 @@ public interface FriendMapper {
 	})
 	public List<FriendBo> getStepRank(@Param("userId") int userId,@Param("time") String time);
 	
+	
+	/**
+	 * 
+	* @Title: getMyStep 
+	* @param: 
+	* @Description: 获取我的步数
+	* @return List<FriendBo>
+	 */
+	@Select("select z.device_record_value,y.user_device_base_sb_seq seqs,y.device_base_name,y.device_base_avatar_url,z.create_time "
+		  +" from user_device_base_sb y "
+		  +" inner join user_device_record_bt z "
+		  +" on y.user_device_base_sb_seq = z.user_device_base_sb_seq "
+		  +" and DATE_FORMAT(z.create_time,'%Y-%m-%d') = #{time} "
+		  +" and z.device_config_internal_code = 'con001' "
+		  +" WHERE y.user_device_base_sb_seq = #{userId} and y.active_flag = 'y' ")
+	public List<FriendBo> getMyStep(@Param("userId") int userId,@Param("time") String time);
 	/**
 	 * 
 	* @Title: getStepStarTotal 

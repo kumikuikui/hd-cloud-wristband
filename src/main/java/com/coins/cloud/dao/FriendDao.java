@@ -108,6 +108,15 @@ public interface FriendDao {
 	
 	/**
 	 * 
+	* @Title: getMyStep 
+	* @param: 
+	* @Description: 获取我的步数
+	* @return List<FriendBo>
+	 */
+	public List<FriendBo> getMyStep(int userId, String time);
+	
+	/**
+	 * 
 	* @Title: getStepStarTotal 
 	* @param: 
 	* @Description: 获取步数点赞总数

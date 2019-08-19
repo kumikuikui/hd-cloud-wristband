@@ -70,6 +70,11 @@ public class FriendDaoMybatisImpl implements FriendDao {
 	public List<FriendBo> getStepRank(int userId, String time) {
 		return friendMapper.getStepRank(userId,time);
 	}
+	
+	@Override
+	public List<FriendBo> getMyStep(int userId, String time) {
+		return friendMapper.getMyStep(userId, time);
+	}
 
 	@Override
 	public int getStepStarTotal(int userId, String time) {

@@ -82,7 +82,11 @@ public class FriendServiceImpl implements FriendService {
 
 	@Override
 	public List<FriendBo> getStepRank(int userId, String time) {
-		return friendDao.getStepRank(userId, time);
+		List<FriendBo> list = friendDao.getStepRank(userId, time);
+		if(list == null || list.isEmpty()){//好友步数为空，获取个人步数
+			list = friendDao.getMyStep(userId, time);
+		}
+		return list;
 	}
 
 	@Override
