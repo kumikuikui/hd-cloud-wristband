@@ -137,8 +137,8 @@ public class WristbandServiceImpl implements WristbandService {
 			}
 			if(userDeviceBo.getConfigCode().equals(DeviceConfig.con007)){//水
 				wristbandBo.setDrinkWater(userDeviceBo.getValue());
-				wristbandBo.setTargetWater(map.get(userDeviceBo.getConfigCode()));
 				wristbandBo.setDrinkWaterTime(userDeviceBo.getTime());
+				wristbandBo.setTargetWater(map.get(userDeviceBo.getConfigCode()));
 			}
 			if(userDeviceBo.getConfigCode().equals(DeviceConfig.con008)){//身高
 			}
@@ -152,6 +152,11 @@ public class WristbandServiceImpl implements WristbandService {
 				wristbandBo.setBloodTime(userDeviceBo.getTime());
 			}
 		}
+		wristbandBo.setTargetStep(map.get(DeviceConfig.con001));
+		wristbandBo.setTargetCalorie(map.get(DeviceConfig.con002));
+		wristbandBo.setTargetSleep(map.get(DeviceConfig.con005));
+		wristbandBo.setTargetCalorieIntake(map.get(DeviceConfig.con006));
+		wristbandBo.setTargetWater(map.get(DeviceConfig.con007));
 		return wristbandBo;
 	}
 
