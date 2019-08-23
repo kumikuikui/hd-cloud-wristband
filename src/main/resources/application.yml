@@ -1,5 +1,5 @@
 spring.datasource:
-  url: jdbc:mysql://mysql:3306/inuurance_wbad?characterEncoding=UTF-8&allowMultiQueries=true
+  url: jdbc:mysql://mysql:3306/insurance_wbad?characterEncoding=UTF-8&allowMultiQueries=true
   username: wbadadmin
   password: wbad_admin@#987654
   type: com.zaxxer.hikari.HikariDataSource
