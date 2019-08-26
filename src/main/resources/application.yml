@@ -19,4 +19,4 @@ rsa.json:
    aeskey: fe96b52790adaefe
 spring.fileupload.config:
    basepath: /opt/imagesdata
-   domain: http://vivaimage.hedu.mobi
+   domain: http://image.vivacitydigihealth.com
