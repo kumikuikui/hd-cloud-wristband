@@ -16,4 +16,13 @@ public class ConstantUtil {
 
 	// Hotline number
 	public final static String HOTLINE_NUMBER = "sys002";
+
+	// phone
+	public final static String PHONE = "sys003";
+
+	// email
+	public final static String EMAIL = "sys004";
+
+	// domain
+	public final static String DOMAIN = "sys005";
 }
