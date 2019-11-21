@@ -25,7 +25,11 @@ spring:
     mode: LEGACYHTML5
     encoding: UTF-8
     content-type: text/html
-    cache: false        
+    cache: false
+  mail:
+    host: mail.archipelagogrp.com
+    username: vivacity@archipelagogrp.com
+    password: '%v~mMQZ$amGX'             
   http:
     multipart:
       enabled: true
@@ -73,6 +77,10 @@ spring:
     encoding: UTF-8
     content-type: text/html
     cache: false
+  mail:
+    host: mail.archipelagogrp.com
+    username: vivacity@archipelagogrp.com
+    password: '%v~mMQZ$amGX'     
   http:
     multipart:
       enabled: true
