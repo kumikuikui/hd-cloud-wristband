@@ -927,6 +927,7 @@ public class WristbandResource {
 		log.info("##########regJson:{}", regJson);
 		JSONObject regObj = JSONObject.fromObject(regJson);
 		UserBaseVo userBaseVo = (UserBaseVo) JSONObject.toBean(regObj, UserBaseVo.class);
+		log.info("##########userBaseVo:{}", userBaseVo);
 		int existAccount=wristbandService.existAccount(userBaseVo.getAccount());
 		if(existAccount==0) {
 			boUtil = BoUtil.getDefaultFalseBo();
