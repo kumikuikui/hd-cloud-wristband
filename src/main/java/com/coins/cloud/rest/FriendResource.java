@@ -201,6 +201,7 @@ public class FriendResource {
 
 		// 查询我的好友列表
 		String friendIds = friendService.getMyFriends(userId);
+		log.info("##########friendIds:{}",friendIds);
 		if (!StringUtil.isBlank(friendIds)) {
 			List<String> idList = Arrays.asList(friendIds.split("\\|"));
 			for (int i = idList.size() - 1; i >= 0; i--) {
@@ -209,11 +210,13 @@ public class FriendResource {
 					idList.remove(str);
 				}
 			}
+			log.info("##########useridList:{},Str:{}",idList,StringUtils.join(idList, "|"));
 			// 更新我的好友列表
 			friendService.updateFriend(userId, StringUtils.join(idList, "|"));
 		}
 		// 查询目标用户的好友列表
 		String targetFriendIds = friendService.getMyFriends(targetUserId);
+		log.info("##########targetFriendIds:{}",targetFriendIds);
 		if (!StringUtil.isBlank(targetFriendIds)) {
 			List<String> idList = Arrays.asList(targetFriendIds.split("\\|"));
 			for (int i = idList.size() - 1; i >= 0; i--) {
@@ -222,6 +225,7 @@ public class FriendResource {
 					idList.remove(str);
 				}
 			}
+			log.info("##########targetUseridList:{},Str:{}",idList,StringUtils.join(idList, "|"));
 			// 更新目标用户的好友列表
 			friendService.updateFriend(targetUserId, StringUtils.join(idList, "|"));
 		}  
