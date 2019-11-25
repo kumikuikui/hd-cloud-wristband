@@ -218,12 +218,12 @@ public class FriendResource {
 			List<String> idList = Arrays.asList(targetFriendIds.split("\\|"));
 			for (int i = idList.size() - 1; i >= 0; i--) {
 				String str = idList.get(i);
-				if (Integer.valueOf(targetUserId).equals(str)) {
+				if (Integer.valueOf(userId).equals(str)) {
 					idList.remove(str);
 				}
 			}
 			// 更新目标用户的好友列表
-			friendService.updateFriend(userId, StringUtils.join(idList, "|"));
+			friendService.updateFriend(targetUserId, StringUtils.join(idList, "|"));
 		}  
 		return boUtil;
 	}
