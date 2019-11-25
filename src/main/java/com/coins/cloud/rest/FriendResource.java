@@ -212,6 +212,19 @@ public class FriendResource {
 			// 更新我的好友列表
 			friendService.updateFriend(userId, StringUtils.join(idList, "|"));
 		}
+		// 查询目标用户的好友列表
+		String targetFriendIds = friendService.getMyFriends(targetUserId);
+		if (!StringUtil.isBlank(targetFriendIds)) {
+			List<String> idList = Arrays.asList(targetFriendIds.split("\\|"));
+			for (int i = idList.size() - 1; i >= 0; i--) {
+				String str = idList.get(i);
+				if (Integer.valueOf(targetUserId).equals(str)) {
+					idList.remove(str);
+				}
+			}
+			// 更新目标用户的好友列表
+			friendService.updateFriend(userId, StringUtils.join(idList, "|"));
+		}  
 		return boUtil;
 	}
 
