@@ -206,7 +206,7 @@ public class FriendResource {
 			List<String> idList = Arrays.asList(friendIds.split("\\|"));
 			for (int i = idList.size() - 1; i >= 0; i--) {
 				String str = idList.get(i);
-				if (Integer.valueOf(targetUserId).equals(str)) {
+				if (String.valueOf(targetUserId).equals(str)) {
 					idList.remove(str);
 				}
 			}
@@ -221,7 +221,7 @@ public class FriendResource {
 			List<String> idList = Arrays.asList(targetFriendIds.split("\\|"));
 			for (int i = idList.size() - 1; i >= 0; i--) {
 				String str = idList.get(i);
-				if (Integer.valueOf(userId).equals(str)) {
+				if (String.valueOf(userId).equals(str)) {
 					idList.remove(str);
 				}
 			}
