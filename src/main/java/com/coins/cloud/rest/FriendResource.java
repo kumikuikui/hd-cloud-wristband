@@ -2,6 +2,7 @@ package com.coins.cloud.rest;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -203,7 +204,7 @@ public class FriendResource {
 		String friendIds = friendService.getMyFriends(userId);
 		log.info("##########friendIds:{}",friendIds);
 		if (!StringUtil.isBlank(friendIds)) {
-			List<String> idList = Arrays.asList(friendIds.split("\\|"));
+			List<String> idList = new ArrayList<>(Arrays.asList(friendIds.split("\\|")));
 			for (int i = idList.size() - 1; i >= 0; i--) {
 				String str = idList.get(i);
 				if (String.valueOf(targetUserId).equals(str)) {
@@ -218,7 +219,7 @@ public class FriendResource {
 		String targetFriendIds = friendService.getMyFriends(targetUserId);
 		log.info("##########targetFriendIds:{}",targetFriendIds);
 		if (!StringUtil.isBlank(targetFriendIds)) {
-			List<String> idList = Arrays.asList(targetFriendIds.split("\\|"));
+			List<String> idList = new ArrayList<>(Arrays.asList(targetFriendIds.split("\\|")));
 			for (int i = idList.size() - 1; i >= 0; i--) {
 				String str = idList.get(i);
 				if (String.valueOf(userId).equals(str)) {
@@ -231,7 +232,7 @@ public class FriendResource {
 		}  
 		return boUtil;
 	}
-
+	 
 	/**
 	 * 
 	 * @Title: getAllFriends
