@@ -5,7 +5,11 @@ import io.swagger.annotations.ApiOperation;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import javax.inject.Inject;
 import javax.ws.rs.QueryParam;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +29,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.coins.cloud.bo.FoodBo;
+import com.coins.cloud.dao.FoodDao;
+import com.coins.cloud.vo.FoodVo;
 import com.hlb.cloud.bo.BoUtil;
 import com.hlb.cloud.util.StringUtil;
 
@@ -38,6 +45,9 @@ public class ThirdFoodResource {
 	private final String APP_KEY = "dfca6483ff7e49d9f3b405ca3dc20ee5";
 	private final String URL = "https://api.edamam.com/api/food-database/parser";
 
+	@Inject
+	private FoodDao foodDao;
+	
 	/**
 	 * 
 	 * @Title: searchFood
@@ -102,7 +112,13 @@ public class ThirdFoodResource {
 				e.printStackTrace();
 			}
 		}
-		boUtil.setData(json);
+		
+		FoodVo foodVo=FoodVo.builder().name(ingr).offset(0).pageSize(10000).build();
+		List<FoodBo> foodBos= foodDao.getFoodList(foodVo);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("thirdfood", json);
+		map.put("food", foodBos);
+		boUtil.setData(map);
 		return boUtil;
 	}
 }
