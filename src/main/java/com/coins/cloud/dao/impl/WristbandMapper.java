@@ -171,8 +171,11 @@ public interface WristbandMapper {
 	* @Description: 登录
 	* @return int
 	 */
-	@Select("SELECT user_device_base_sb_seq FROM user_device_base_sb "
-			+" WHERE device_base_account = #{account} AND device_base_password = #{password} AND active_flag = 'y'")
+//	@Select("SELECT user_device_base_sb_seq FROM user_device_base_sb "
+//			+" WHERE device_base_account = #{account} AND device_base_password = #{password} AND active_flag = 'y'")
+        
+        @Select("SELECT user_device_base_sb_seq FROM user_device_base_sb "
+			+" WHERE device_base_account = #{account} AND active_flag = 'y'")
 	Integer login(UserBaseVo userBaseVo);
 	
 	/**

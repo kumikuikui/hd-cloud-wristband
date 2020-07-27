@@ -14,7 +14,7 @@ plugins {
     id 'idea'
     id 'eclipse'
     id 'net.researchgate.release' version '2.5.0'
-    id 'com.github.ben-manes.versions' version '0.14.0'
+    id 'com.github.ben-manes.versions' version '0.17.0'
 }
 
 apply plugin: 'project-report'
@@ -28,12 +28,15 @@ repositories{
     maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'} 
     mavenLocal() 
     maven { url "http://nexus.hedu.mobi/nexus/content/groups/public/" }
+    flatDir {
+        dirs 'lib'
+    }
 }
 
 ext.versions = [
     'springweb' : '4.3.6.RELEASE',
     'springsecurity' : '4.2.1.RELEASE',
-    'lombok' : '1.6.14',
+    'lombok' : '1.14.8',
     'pagehelper' : '5.0.0',
     'commonsLang3' : '3.5',
     'commonsIO' : '2.5',
@@ -43,7 +46,7 @@ ext.versions = [
     'protobuf' : '3.2.0',
     'protobufJavaFormat' : '1.4',
     'kafka' :  '0.10.2.0',
-    'lombok' : '1.16.14',
+    'lombok' : '1.14.8',
     'logback' : '1.2.1',
     'log4j' : '2.8',
     'slf4j'   : '1.7.24'
@@ -57,6 +60,22 @@ dependencyManagement {
 }
 
 dependencies {
+    compileOnly 'org.projectlombok:lombok:1.14.8'
+annotationProcessor 'org.projectlombok:lombok:1.14.8'
+// https://mvnrepository.com/artifact/com.alibaba/fastjson
+compile group: 'com.alibaba', name: 'fastjson', version: '1.2.68'
+// https://mvnrepository.com/artifact/net.sf.json-lib/json-lib
+compile group: 'net.sf.json-lib', name: 'json-lib', version: '2.4', classifier: 'jdk15'
+// https://mvnrepository.com/artifact/javax.inject/javax.inject
+compile group: 'javax.inject', name: 'javax.inject', version: '1'
+// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
+// https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api
+compile group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1'
+// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.1'
+
+
     compile('org.springframework.cloud:spring-cloud-starter-eureka'){
     	exclude module : 'logback-classic'
     }
@@ -155,7 +174,7 @@ dependencies {
     compile "org.apache.poi:poi:3.12"
     compile "org.apache.poi:poi-ooxml:3.12"
     compile "net.sourceforge.javacsv:javacsv:2.0"
-    compile "cloopen:httpclient:1.0"
+//    compile "cloopen:httpclient:1.0"
     
     compile "com.google.code.gson:gson:2.4"
     
